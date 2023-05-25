@@ -1,8 +1,8 @@
 {
-  "name": "user-module",
+  "name": "express_backend",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/server.js",
+  "main": "./user_modules/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

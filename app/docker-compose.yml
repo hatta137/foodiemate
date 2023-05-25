@@ -1,0 +1,60 @@
+version: "3.7"
+
+services:
+
+#  frontend:
+#    build: react_frontend
+#    container_name: frontend_ss2023_wa_foodiemate
+#    restart: on-failure:5
+#    environment:
+#      - PORT=10054
+#    ports:
+#      - 10054:10054
+#    networks:
+#      - public
+#    depends_on:
+#      - backend
+#
+  backend:
+    build: express_backend
+    container_name: backend_ss2023_wa_foodiemate
+    restart: always
+    environment:
+      - MONGO_API_DATABASE=${MONGO_API_DATABASE}
+      - MONGO_API_USER=${MONGO_API_USER}
+      - MONGO_API_PASSWORD=${MONGO_API_PASSWORD}
+#    ports:
+#      - 10051:10051
+#      - 10052:10052
+#      - 10053:10053
+    networks:
+      - public
+      - private
+#    depends_on:
+#      - database_web
+#
+#
+  database:
+    image: mongo:4.4.5
+    container_name: database_ss2023_wa_foodiemate
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_API_DATABASE}
+
+      # variables to use in mongo-init files
+      MONGO_API_USER: ${MONGO_API_USER}
+      MONGO_API_PASSWORD: ${MONGO_API_PASSWORD}
+#    volumes:
+#      - ./mongodb_data/initdb.d/:/docker-entrypoint-initdb.d/
+#      - ./mongodb_data/data/db_data_ss2023_wa_foodiemate:/var/lib/db_data_ss2023_wa_foodiemate
+#    ports:
+#      - 10055:27017
+    networks:
+      - private
+      - public
+
+networks:
+  private:
+  public:
