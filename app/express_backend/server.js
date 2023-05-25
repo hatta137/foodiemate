@@ -1,7 +1,7 @@
 'use strict'
 
 import express from 'express'
-import { router as usersRouter } from "./routes/users.js";
+import { router as usersRouter } from "./user_module/src/routes/users.js";
 import mongoose from "mongoose";
 
 
