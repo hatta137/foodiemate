@@ -1,8 +1,11 @@
 'use strict'
 
 import express from 'express'
-import { router as usersRouter } from "./user_module/src/routes/users.js";
-import mongoose from "mongoose";
+import { router as usersRouter } from "./routes/users.js";
+import mongoose from "mongoose"
+
+mongoose.connect("mongodb://database/example_db");
+
 
 
 const app = express()
@@ -10,7 +13,6 @@ app.use(express.json())
 
 const port = 3000
 
-mongoose.connect('mongodb://127.0.0.1:27017/foodiemate')
 
 app.use("/users", usersRouter);
 
