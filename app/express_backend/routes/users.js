@@ -37,6 +37,7 @@ router.get("/allUsers", async (_req, res) => {
 /**
  *
  */
+//TODO @Hendrik Password Hash einbauen und Token zurückgeben
 router.post("/login", async (req, res) => {
     try {
         const { userName, password } = req.body;

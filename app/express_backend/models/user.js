@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 const { Schema } = mongoose;
 
+//TODO @Hendrik Followerstruktur abbilden
 const userSchema = new Schema({
 
     firstName: String,
