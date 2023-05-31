@@ -10,8 +10,8 @@ const router = Router();
  *
  */
 router.get("/", async (req, res) => {
-    res.send("users entry");
-});
+    res.send("users entry")
+})
 
 
 
@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 router.get("/allUsers", async (_req, res) => {
     const data = await User.find()
     res.json(data)
-});
+})
 
 
 
@@ -225,5 +225,9 @@ router.delete("/deleteUser/:userId", async (req, res) => {
         })
     res.send(userId)
 })
+
+
+// TODO newRecipe
+// post newRecipe
 
 export { router }

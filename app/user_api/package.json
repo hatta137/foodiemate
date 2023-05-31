@@ -1,5 +1,5 @@
 {
-  "name": "express_backend",
+  "name": "user_api",
   "version": "1.0.0",
   "description": "",
   "main": "./server.js",

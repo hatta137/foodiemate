@@ -4,7 +4,7 @@ import express from 'express'
 import { router as usersRouter } from "./routes/users.js";
 import mongoose from "mongoose"
 
-mongoose.connect("mongodb://database/example_db");
+mongoose.connect("mongodb://database/foodiemate");
 
 
 

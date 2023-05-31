@@ -1,9 +1,9 @@
 version: "3.7"
 
 services:
-  backend:
-    build: express_backend
-    container_name: backend_ss2023_wa_foodiemate
+  user_api:
+    build: user_api
+    container_name: user_api
     restart: always
     ports:
       - 3000:3000
@@ -12,14 +12,30 @@ services:
     environment:
       - MONGO_URI=mongodb://database:27017/example_db
     volumes:
-      - ./express_backend:/usr/src/app
+      - ./user_api:/usr/src/app
+
+    networks:
+      - private
+
+  recipe_api:
+    build: recipe_api
+    container_name: recipe_api
+    restart: always
+    ports:
+      - 3001:3001
+    depends_on:
+      - database
+    environment:
+      - MONGO_URI=mongodb://database:27017/example_db
+    volumes:
+      - ./recipe_api:/usr/src/app
 
     networks:
       - private
 
   database:
     image: mongo:4.4.5
-    container_name: database_ss2023_wa_foodiemate
+    container_name: database
     restart: always
     ports:
       - 27017:27017

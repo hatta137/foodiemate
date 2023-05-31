@@ -8,17 +8,19 @@ COPY package*.json ./
 
 RUN npm install
 
-RUN npm i --save express
+RUN npm i express
 
 RUN npm i mongoose
 
 RUN npm i bcryptjs
 
-RUN npm i --save jsonwebtoken
+RUN npm i jsonwebtoken
+
+RUN npm i -g nodemon
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3001
 
 
 CMD ["npm", "start"]
