@@ -2,12 +2,7 @@ import {Router} from "express";
 import User from "../models/user.js";
 
 
-
-
-
 const router = Router();
-
-
 
 
 
@@ -108,6 +103,46 @@ router.put("/update/:userId", async (req, res) => {
         }
     } catch (err) {
         console.error('Fehler bei Aktualisierung der Daten', err)
+        res.status(500).json({ error: 'Serverfehler' })
+    }
+})
+
+
+/**
+ * UserId -> ID von dem User der jemandem folgen möchte
+ * FollowerId -> ID von der Person der gefolgt werden soll
+ */
+router.post('/:userId/follow', async (req, res) => {
+    try {
+        const userId = req.params["userId"]
+        const followerId = req.body["followerId"]
+
+        // User dem der Follower hinzugefügt werden soll
+        const user = await User.findById(userId)
+
+        if(!user) {
+            return res.status(404).json({message: 'User nicht gefunden'})
+        }
+
+        const follower = await User.findById(followerId)
+
+        if(!follower) {
+            return res.status(404).json({message: 'Follower nicht gefunden'})
+        }
+
+        if(user.followers.includes(followerId)) {
+            return res.status(404).json({message: 'Follower bereits existent'})
+        }
+        await user.followers.push(follower)
+
+        await user.save()
+
+        res.status(200).json({ message: 'Follower erfolgreich hinzugefügt' })
+
+
+
+    } catch (err) {
+        console.error('Fehler beim Hinzufügen des Followers', err)
         res.status(500).json({ error: 'Serverfehler' })
     }
 })

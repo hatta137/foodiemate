@@ -9,6 +9,13 @@ const userSchema = new Schema({
     userName: String,
     emailAddress: String,
     password: String,
+
+    followers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ]
 })
 
 

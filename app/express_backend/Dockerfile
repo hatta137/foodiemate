@@ -12,9 +12,9 @@ RUN npm i --save express
 
 RUN npm i mongoose
 
-npm install bcrypt
+RUN npm install bcrypt
 
-npm install jsonwebtoken
+RUN npm install jsonwebtoken
 
 COPY . .
 
