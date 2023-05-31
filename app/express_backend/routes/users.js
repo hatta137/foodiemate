@@ -1,6 +1,6 @@
 import {Router} from "express";
 import User from "../models/user.js";
-
+import bcrypt from 'bcryptjs'
 
 const router = Router();
 
@@ -65,17 +65,20 @@ router.post("/login", async (req, res) => {
  */
 router.post("/register", async (req, res) => {
     const data = req.body
+    const saltRounds = 10
 
     try {
+        const password = data["password"]
+
         const newUser = new User({
             firstName: data["firstName"],
             lastName: data["lastName"],
             userName: data["userName"],
             emailAddress: data["emailAddress"],
-            password: data["password"]
+            password: await bcrypt.hash(password, saltRounds)
         })
         await newUser.save()
-        res.status(200).json({ message: 'Daten erfolgreich aktualisiert', user: newUser })
+        res.status(200).json({ message: 'User erfolgreich angelegt', user: newUser })
     } catch (err) {
         console.error('Fehler bei Registrierung', err)
         res.status(500).json({ error: 'Serverfehler' })
@@ -109,8 +112,8 @@ router.put("/update/:userId", async (req, res) => {
 
 
 /**
- * UserId -> ID von dem User der jemandem folgen möchte
- * FollowerId -> ID von der Person der gefolgt werden soll
+ * UserId → ID von dem User der jemandem folgen möchte
+ * FollowerId → ID von der Person der gefolgt werden soll
  */
 router.post('/:userId/follow', async (req, res) => {
     try {
@@ -145,6 +148,57 @@ router.post('/:userId/follow', async (req, res) => {
         console.error('Fehler beim Hinzufügen des Followers', err)
         res.status(500).json({ error: 'Serverfehler' })
     }
+})
+
+
+
+
+router.get('/:userId/followers', async (req, res) => {
+    try {
+        const userId = req.params["userId"]
+
+        const user = await User.findById(userId).populate('followers')
+
+        if(!user) {
+            return res.status(404).json({ message: 'Benutzer nicht gefunden' })
+        }
+
+        const followers = user.followers
+
+        res.status(200).json({ followers })
+    } catch (err) {
+        console.error('Fehler beim Abrufen der Follower', err)
+    }
+})
+
+
+
+
+router.post('/:userId/unfollow', async (req, res) => {
+    const userId = req.params['userId']
+    const followerId = req.body['followerId']
+
+    try {
+        const user = await User.findById(userId)
+
+        if(!user) {
+            return res.status(404).json({ message: 'Benutzer nicht gefunden' })
+        }
+
+        if (!user.followers.includes(followerId)) {
+            return res.status(404).json({ message: 'Benutzer ist nicht unter der Followern' })
+        }
+
+        user.followers.pop(followerId)
+
+        await user.save()
+
+        res.status(200).json({ message: 'Unfollow erfolgreich' })
+    } catch(err) {
+        console.error('Fehler beim Unfollow', error)
+        res.status(500).json({ error: 'Serverfehler' })
+    }
+
 })
 
 

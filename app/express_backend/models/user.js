@@ -1,7 +1,9 @@
 import mongoose from "mongoose"
-const { Schema } = mongoose;
+import bcrypt from 'bcryptjs'
+const { Schema } = mongoose
 
-//TODO @Hendrik Followerstruktur abbilden
+
+
 const userSchema = new Schema({
 
     firstName: String,
@@ -21,7 +23,7 @@ const userSchema = new Schema({
 
 
 
-userSchema.methods.comparePassword = function (passwordX){
-    return passwordX === this.password;
+userSchema.methods.comparePassword = function (passwordHash){
+    return bcrypt.compare(passwordHash, this.password)
 }
 export default mongoose.model("User", userSchema)
