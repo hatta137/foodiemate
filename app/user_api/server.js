@@ -17,7 +17,7 @@ const port = 3000
 
 
 app.use("/users", usersRouter);
-
+console.log('curren working dir', process.cwd())
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -34,13 +34,15 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ["./src/**/*.js"],
+    apis: ["./routes/*.js"],
 };
 
 const specs = swaggerJsDoc(swaggerOptions);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)
 );
+
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
