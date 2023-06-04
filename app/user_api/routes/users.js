@@ -30,9 +30,52 @@ router.get("/allUsers", async (_req, res) => {
 
 
 /**
- *
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Benutzeranmeldung
+ *     description: Authentifiziert den Benutzer und gibt ein JWT-Token zurück.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userName:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Erfolgreiche Anmeldung
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: Eingeloggt
+ *       401:
+ *         description: Ungültige Anmeldeinformationen
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Ungültige Anmeldeinformationen
+ *       500:
+ *         description: Serverfehler
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Serverfehler
  */
-//TODO @Hendrik Password Hash einbauen und Token zurückgeben
+//TODO @HendrikToken zurückgeben
 router.post("/login", async (req, res) => {
     try {
         const { userName, password } = req.body;
