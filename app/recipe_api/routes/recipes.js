@@ -1,5 +1,6 @@
 import {Router} from "express";
 import Recipe from "../models/recipe.js";
+import axios from "axios"
 
 
 
@@ -12,22 +13,21 @@ router.get("/", async (req, res) => (
 // create Recipe and add to Profile
 
 router.post('/new', async (req, res) => {
-    const data = req.body
-
-    const ingredients = data['ingredients']
-
-    let nutriscore = "Test"
-    // Hier Berechnung Nutri Score
-
+    const { title, ingredients, instructions, image, drink } = req.body
 
     try {
+
+        //const nutriScoreRes = await axios.get('https://', { params: {ingredients}})
+
+        //const nutriScore = nutriScoreRes.data.score
+
         const newRecipe = new Recipe({
-            title: data['title'],
-            image: data['image'],
-            ingredients: data['ingredients'],
-            text: data['text'],
-            drink: data['drink'],
-            nutriScore: nutriscore
+            title,
+            image,
+            ingredients,
+            instructions,
+            drink//,
+            //nutriScore
         })
         await newRecipe.save()
         res.status(200).json({ message: 'Rezept erfolgreich angelegt', recipe: newRecipe })
@@ -35,18 +35,39 @@ router.post('/new', async (req, res) => {
         console.error('Fehler bei Anlegen', err)
         res.status(500).json({ error: 'Serverfehler' })
     }
-
     // Call to user API an set Recipe to myRecipes
-
-
 })
 
 
 
-// Get all Recipes
+router.get('/allRecipes', async (req, res) => {
+    try {
+        const data = await Recipe.find()
 
-// Get Recipe by Title
+        res.json(data)
 
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+});
+
+
+
+router.get('/recipeByTitle', async (req, res) => {
+    try {
+        const title = req.query.title;
+
+        const recipe = await Recipe.findOne({ title: title })
+
+        if (!recipe) {
+            return res.status(404).json({ error: 'Rezept nicht gefunden' })
+        }
+
+        res.status(200).json({ recipe })
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+});
 
 
 

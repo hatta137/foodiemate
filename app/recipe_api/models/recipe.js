@@ -10,13 +10,14 @@ const recipeSchema = new Schema({
     image: String,
     ingredients: [
         {
-            name: String,
             amount: String,
+            unit: String,
+            name: String,
         }
     ],
-    text: String,
+    instructions: String,
     drink: String,
-    nutriScore: String
+    //nutriScore: String
 })
 
 

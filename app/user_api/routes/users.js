@@ -6,9 +6,7 @@ const router = Router();
 
 
 
-/**
- *
- */
+
 router.get("/", async (req, res) => {
     res.send("users entry")
 })
@@ -17,9 +15,7 @@ router.get("/", async (req, res) => {
 
 
 
-/**
- *
- */
+
 router.get("/allUsers", async (_req, res) => {
     const data = await User.find()
     res.json(data)
@@ -29,52 +25,7 @@ router.get("/allUsers", async (_req, res) => {
 
 
 
-/**
- * @swagger
- * /login:
- *   post:
- *     summary: Benutzeranmeldung
- *     description: Authentifiziert den Benutzer und gibt ein JWT-Token zurück.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userName:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Erfolgreiche Anmeldung
- *         content:
- *           application/json:
- *             schema:
- *               type: string
- *               example: Eingeloggt
- *       401:
- *         description: Ungültige Anmeldeinformationen
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Ungültige Anmeldeinformationen
- *       500:
- *         description: Serverfehler
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: Serverfehler
- */
+
 //TODO @HendrikToken zurückgeben
 router.post("/login", async (req, res) => {
     try {
@@ -103,75 +54,7 @@ router.post("/login", async (req, res) => {
 
 
 
-/**
- * @swagger
- * /register:
- *   post:
- *     summary: Registrierung eines neuen Benutzers
- *     description: Registriert einen neuen Benutzer mit den angegebenen Daten.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               firstName:
- *                 type: string
- *                 description: Vorname des Benutzers.
- *               lastName:
- *                 type: string
- *                 description: Nachname des Benutzers.
- *               userName:
- *                 type: string
- *                 description: Benutzername des Benutzers.
- *               emailAddress:
- *                 type: string
- *                 format: email
- *                 description: E-Mail-Adresse des Benutzers.
- *               password:
- *                 type: string
- *                 format: password
- *                 description: Passwort des Benutzers.
- *     responses:
- *       200:
- *         description: Erfolgreiche Registrierung.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Erfolgsmeldung.
- *                 user:
- *                   type: object
- *                   description: Informationen über den neu registrierten Benutzer.
- *                   properties:
- *                     firstName:
- *                       type: string
- *                       description: Vorname des Benutzers.
- *                     lastName:
- *                       type: string
- *                       description: Nachname des Benutzers.
- *                     userName:
- *                       type: string
- *                       description: Benutzername des Benutzers.
- *                     emailAddress:
- *                       type: string
- *                       format: email
- *                       description: E-Mail-Adresse des Benutzers.
- *       500:
- *         description: Serverfehler bei der Registrierung.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Fehlernachricht.
- */
+
 router.post("/register", async (req, res) => {
     const data = req.body
     const saltRounds = 10
@@ -198,64 +81,7 @@ router.post("/register", async (req, res) => {
 
 
 
-/**
- * @swagger
- * /update/{userId}:
- *   put:
- *     summary: Aktualisiert die Daten eines Benutzers
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: Die ID des Benutzers, dessen Daten aktualisiert werden sollen
- *         schema:
- *           type: string
- *       - in: body
- *         name: updateData
- *         required: true
- *         description: Die zu aktualisierenden Daten des Benutzers
- *         schema:
- *           type: object
- *           properties:
- *             firstName:
- *               type: string
- *             lastName:
- *               type: string
- *             userName:
- *               type: string
- *             emailAddress:
- *               type: string
- *     responses:
- *       200:
- *         description: Erfolgreiche Aktualisierung der Benutzerdaten
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *       404:
- *         description: Benutzer nicht gefunden
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *       500:
- *         description: Serverfehler
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- */
+
 router.put("/update/:userId", async (req, res) => {
     try {
         const userId = req.params.userId
@@ -391,7 +217,25 @@ router.delete("/deleteUser/:userId", async (req, res) => {
 })
 
 
-// TODO newRecipe
-// post newRecipe
+router.post('/addRecipe/:userId', async (req, res) => {
+    const recipeId = req.body.recipeId
+    const userId = req.params.userId
+
+    try {
+        const user = await User.findById(userId)
+
+        if (!user) {
+            return res.status(404).json({ error: 'Benutzer nicht gefunden' })
+        }
+
+        user.myRecipes.push(recipeId)
+
+        await user.save()
+
+        res.status(200).json({ message: 'Rezept wurde dem Benutzer hinzugefügt' })
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+});
 
 export { router }
