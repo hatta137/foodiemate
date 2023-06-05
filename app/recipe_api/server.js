@@ -17,5 +17,5 @@ const port = 3001
 app.use("/recipe", recipesRouter);
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`RECIPE_API listening at http://localhost:${port}`)
 })
