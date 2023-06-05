@@ -104,7 +104,73 @@ router.post("/login", async (req, res) => {
 
 
 /**
- *
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Registrierung eines neuen Benutzers
+ *     description: Registriert einen neuen Benutzer mit den angegebenen Daten.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: Vorname des Benutzers.
+ *               lastName:
+ *                 type: string
+ *                 description: Nachname des Benutzers.
+ *               userName:
+ *                 type: string
+ *                 description: Benutzername des Benutzers.
+ *               emailAddress:
+ *                 type: string
+ *                 format: email
+ *                 description: E-Mail-Adresse des Benutzers.
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: Passwort des Benutzers.
+ *     responses:
+ *       200:
+ *         description: Erfolgreiche Registrierung.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Erfolgsmeldung.
+ *                 user:
+ *                   type: object
+ *                   description: Informationen über den neu registrierten Benutzer.
+ *                   properties:
+ *                     firstName:
+ *                       type: string
+ *                       description: Vorname des Benutzers.
+ *                     lastName:
+ *                       type: string
+ *                       description: Nachname des Benutzers.
+ *                     userName:
+ *                       type: string
+ *                       description: Benutzername des Benutzers.
+ *                     emailAddress:
+ *                       type: string
+ *                       format: email
+ *                       description: E-Mail-Adresse des Benutzers.
+ *       500:
+ *         description: Serverfehler bei der Registrierung.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Fehlernachricht.
  */
 router.post("/register", async (req, res) => {
     const data = req.body
@@ -133,7 +199,62 @@ router.post("/register", async (req, res) => {
 
 
 /**
- * Updating all Attributes from user
+ * @swagger
+ * /update/{userId}:
+ *   put:
+ *     summary: Aktualisiert die Daten eines Benutzers
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: Die ID des Benutzers, dessen Daten aktualisiert werden sollen
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: updateData
+ *         required: true
+ *         description: Die zu aktualisierenden Daten des Benutzers
+ *         schema:
+ *           type: object
+ *           properties:
+ *             firstName:
+ *               type: string
+ *             lastName:
+ *               type: string
+ *             userName:
+ *               type: string
+ *             emailAddress:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Erfolgreiche Aktualisierung der Benutzerdaten
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       404:
+ *         description: Benutzer nicht gefunden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Serverfehler
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 router.put("/update/:userId", async (req, res) => {
     try {
