@@ -6,11 +6,28 @@ const { Schema } = mongoose
 
 const userSchema = new Schema({
 
-    firstName: String,
-    lastName: String,
-    userName: String,
-    emailAddress: String,
-    password: String,
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
+    userName: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    emailAddress: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
 
     followers: [
         {
@@ -30,7 +47,7 @@ const userSchema = new Schema({
 
 
 
-userSchema.methods.comparePassword = function (passwordHash){
-    return bcrypt.compare(passwordHash, this.password)
+userSchema.methods.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password)
 }
 export default mongoose.model("User", userSchema)

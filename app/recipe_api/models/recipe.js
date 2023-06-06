@@ -6,8 +6,13 @@ const { Schema } = mongoose
 
 const recipeSchema = new Schema({
 
-    title: String,
-    image: String,
+    title:{
+        type: String,
+        required: true
+    },
+    image:{
+        type: String
+    },
     ingredients: [
         {
             amount: String,
@@ -16,7 +21,10 @@ const recipeSchema = new Schema({
         }
     ],
     instructions: String,
-    drink: String,
+    drink:{
+        type: String,
+        required: true
+    },
     //nutriScore: String
 })
 

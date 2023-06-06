@@ -45,7 +45,7 @@
 
 
 
-register:
+/register:
   post:
     summary: Registrierung eines neuen Benutzers
     description: Registriert einen neuen Benutzer mit den angegebenen Daten.
@@ -114,7 +114,7 @@ register:
 
 
 
-update/{userId}:
+/update/{userId}:
   put:
     summary: Aktualisiert die Daten eines Benutzers
     parameters:
@@ -168,3 +168,210 @@ update/{userId}:
               properties:
                 error:
                   type: string
+
+
+
+/{userId}/follow:
+  post:
+    summary: Füge einen Follower zu einem Benutzer hinzu
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        description: Die ID des Benutzers, dem der Follower hinzugefügt werden soll
+        schema:
+          type: string
+      - in: body
+        name: followerId
+        required: true
+        description: Die ID des Followers, der hinzugefügt werden soll
+        schema:
+          type: object
+          properties:
+            followerId:
+              type: string
+    responses:
+      '200':
+        description: Erfolgreich. Der Follower wurde dem Benutzer hinzugefügt.
+      '404':
+        description: Nicht gefunden. Der Benutzer oder der Follower wurde nicht gefunden.
+      '500':
+        description: Serverfehler. Ein Fehler ist aufgetreten.
+
+
+
+/{userId}/followers:
+  get:
+    summary: Abrufen der Follower eines Benutzers
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        description: Die ID des Benutzers, dessen Follower abgerufen werden sollen
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Erfolgreich. Die Liste der Follower des Benutzers wurde abgerufen.
+      '404':
+        description: Nicht gefunden. Der Benutzer wurde nicht gefunden.
+      '500':
+        description: Serverfehler. Ein Fehler ist aufgetreten.
+    produces:
+      - application/json
+    security:
+      - bearerAuth: []
+
+
+/{userId}/unfollow:
+  post:
+    summary: Entfolgen eines Benutzers
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        description: Die ID des Benutzers, von dem entfolgt werden soll
+        schema:
+          type: string
+      - in: body
+        name: followerId
+        required: true
+        description: Die ID des Benutzers, der entfolgen soll
+        schema:
+          type: object
+          properties:
+            followerId:
+              type: string
+    responses:
+      '200':
+        description: Erfolgreich. Der Benutzer wurde erfolgreich entfolgt.
+      '404':
+        description: Nicht gefunden. Der Benutzer wurde nicht gefunden oder ist nicht unter den Followern.
+      '500':
+        description: Serverfehler. Ein Fehler ist aufgetreten.
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    security:
+      - bearerAuth: []
+
+
+/deleteUser/{userId}:
+  delete:
+    summary: Löschen eines Benutzers
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        description: Die ID des zu löschenden Benutzers
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Erfolgreich. Die Daten des Benutzers wurden erfolgreich gelöscht.
+      '404':
+        description: Nicht gefunden. Der Benutzer wurde nicht gefunden.
+      '500':
+        description: Serverfehler. Ein Fehler ist aufgetreten.
+    produces:
+      - application/json
+    security:
+      - bearerAuth: []
+
+/addRecipe/{userId}:
+  post:
+    summary: Hinzufügen eines Rezepts zu einem Benutzer
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        description: Die ID des Benutzers, dem das Rezept hinzugefügt werden soll
+        schema:
+          type: string
+      - in: body
+        name: request
+        description: Das Rezept, das hinzugefügt werden soll
+        required: true
+        schema:
+          type: object
+          properties:
+            recipeId:
+              type: string
+              description: Die ID des Rezepts
+    responses:
+      '200':
+        description: Erfolgreich. Das Rezept wurde dem Benutzer erfolgreich hinzugefügt.
+      '404':
+        description: Nicht gefunden. Der Benutzer wurde nicht gefunden.
+      '500':
+        description: Interner Serverfehler. Ein Fehler ist aufgetreten.
+    produces:
+      - application/json
+    security:
+      - bearerAuth: []
+
+
+/dropRecipe/{userId}:
+  post:
+    summary: Entfernen eines Rezepts von einem Benutzer
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        description: Die ID des Benutzers, von dem das Rezept entfernt werden soll
+        schema:
+          type: string
+      - in: body
+        name: request
+        description: Das Rezept, das entfernt werden soll
+        required: true
+        schema:
+          type: object
+          properties:
+            recipeId:
+              type: string
+              description: Die ID des Rezepts
+    responses:
+      '200':
+        description: Erfolgreich. Das Rezept wurde erfolgreich vom Benutzer entfernt.
+      '404':
+        description: Nicht gefunden. Der Benutzer wurde nicht gefunden.
+      '500':
+        description: Interner Serverfehler. Ein Fehler ist aufgetreten.
+    produces:
+      - application/json
+    security:
+      - bearerAuth: []
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Vorname des Benutzers
+        lastName:
+          type: string
+          description: Nachname des Benutzers
+        userName:
+          type: string
+          description: Benutzername des Benutzers
+        emailAddress:
+          type: string
+          description: E-Mail-Adresse des Benutzers
+        password:
+          type: string
+          description: Passwort des Benutzers
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          description: Liste der Follower des Benutzers
+        myRecipes:
+          type: array
+          items:
+            type: string
+            description: ID des Rezepts
+          description: Liste der Rezepte des Benutzers

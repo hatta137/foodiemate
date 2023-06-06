@@ -15,7 +15,20 @@ router.post('/new/:userId', async (req, res) => {
     const { title, ingredients, instructions, image, drink } = req.body
 
     try {
-
+        //TODO statt Nutriscore wird mit spoonacular berechnet ob das Gericht Vegan/Glutenferee etc. ist --> POST
+        // https://api.spoonacular.com/recipes/analyze
+        // {
+        //     "title": "Spaghetti Carbonara",
+        //     "servings": 2,
+        //     "ingredients": [
+        //         "1 lb spaghetti",
+        //         "3.5 oz pancetta",
+        //         "2 Tbsps olive oil",
+        //         "1  egg",
+        //         "0.5 cup parmesan cheese"
+        //     ],
+        //     "instructions": "Bring a large pot of water to a boil and season generously with salt. Add the pasta to the water once boiling and cook until al dente. Reserve 2 cups of cooking water and drain the pasta. "
+        // }
         //const nutriScoreRes = await axios.get('https://', { params: {ingredients}})
 
         //const nutriScore = nutriScoreRes.data.score
@@ -45,6 +58,9 @@ router.post('/new/:userId', async (req, res) => {
 
 router.get('/allRecipes', async (req, res) => {
     try {
+
+        //TODO  Spoonacular nutzen um mit jedem aufruf 10 rezepte in DB zu schreiben
+
         const data = await Recipe.find()
 
         res.json(data)

@@ -1,0 +1,101 @@
+components:
+  schemas:
+    Recipe:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Titel des Rezepts
+        ingredients:
+          type: array
+          items:
+            type: string
+          description: Liste der Zutaten
+        instructions:
+          type: string
+          description: Zubereitungsanweisungen des Rezepts
+        image:
+          type: string
+          description: Bild des Rezepts
+        drink:
+          type: string
+          description: Getränk des Rezepts
+
+paths:
+  /recipes:
+    get:
+      summary: Alle Rezepte abrufen
+      responses:
+        '200':
+          description: Erfolgreich abgerufene Rezepte
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipe'
+        '500':
+          description: Serverfehler
+
+  /recipes/new/{userId}:
+    post:
+      summary: Neues Rezept erstellen
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID des Benutzers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+      responses:
+        '200':
+          description: Erfolgreich erstelltes Rezept
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '500':
+          description: Serverfehler
+
+  /recipes/allRecipes:
+    get:
+      summary: Alle Rezepte abrufen
+      responses:
+        '200':
+          description: Erfolgreich abgerufene Rezepte
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipe'
+        '500':
+          description: Serverfehler
+
+  /recipes/recipeByTitle:
+    get:
+      summary: Rezept nach Titel abrufen
+      parameters:
+        - in: query
+          name: title
+          required: true
+          schema:
+            type: string
+          description: Titel des Rezepts
+      responses:
+        '200':
+          description: Erfolgreich abgerufenes Rezept
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '404':
+          description: Rezept nicht gefunden
+        '500':
+          description: Serverfehler

@@ -188,16 +188,10 @@ router.post('/:userId/unfollow', async (req, res) => {
         console.error('Fehler beim Unfollow', error)
         res.status(500).json({ error: 'Serverfehler' })
     }
-
 })
 
 
 
-
-
-/**
- *
- */
 router.delete("/deleteUser/:userId", async (req, res) => {
     const userId = req.params.userId
 
@@ -236,7 +230,7 @@ router.post('/addRecipe/:userId', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' })
     }
-});
+})
 
 
 router.post('/dropRecipe/:userId', async (req, res) => {
