@@ -33,6 +33,22 @@ services:
     networks:
       - private
 
+  cooking_together_api:
+    build: cooking_together_api
+    container_name: cooking_together_api
+    restart: always
+    ports:
+      - 3002:3002
+    depends_on:
+      - database
+    environment:
+      - MONGO_URI=mongodb://database:27017/example_db
+    volumes:
+      - ./cooking_together_api:/usr/src/app
+
+    networks:
+      - private
+
   database:
     image: mongo:4.4.5
     container_name: database

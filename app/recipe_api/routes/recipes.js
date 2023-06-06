@@ -4,15 +4,14 @@ import axios from "axios"
 
 
 
-const router = Router();
+const router = Router()
 
 router.get("/", async (req, res) => (
     res.send("recipe entry")
 ))
 
-// create Recipe and add to Profile
 
-router.post('/new', async (req, res) => {
+router.post('/new/:userId', async (req, res) => {
     const { title, ingredients, instructions, image, drink } = req.body
 
     try {
@@ -30,14 +29,18 @@ router.post('/new', async (req, res) => {
             //nutriScore
         })
         await newRecipe.save()
+
+        // Call to user API an set Recipe to myRecipes
+        const userId = req.params.userId
+        const addUserRecipeUrl = `http://user_api:3000/users/addRecipe/${userId}`
+        await axios.post(addUserRecipeUrl, { recipeId: newRecipe._id })
+
         res.status(200).json({ message: 'Rezept erfolgreich angelegt', recipe: newRecipe })
     } catch (err) {
         console.error('Fehler bei Anlegen', err)
         res.status(500).json({ error: 'Serverfehler' })
     }
-    // Call to user API an set Recipe to myRecipes
 })
-
 
 
 router.get('/allRecipes', async (req, res) => {
@@ -50,7 +53,6 @@ router.get('/allRecipes', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 });
-
 
 
 router.get('/recipeByTitle', async (req, res) => {
@@ -68,8 +70,5 @@ router.get('/recipeByTitle', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 });
-
-
-
 
 export { router }
