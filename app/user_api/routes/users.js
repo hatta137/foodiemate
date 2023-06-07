@@ -2,18 +2,13 @@ import {Router} from "express";
 import User from "../models/user.js";
 import bcrypt from 'bcryptjs'
 
+
 const router = Router();
-
-
 
 
 router.get("/", async (req, res) => {
     res.send("users entry")
 })
-
-
-
-
 
 
 router.get("/allUsers", async (_req, res) => {
@@ -22,11 +17,6 @@ router.get("/allUsers", async (_req, res) => {
 })
 
 
-
-
-
-
-//TODO @HendrikToken zurückgeben
 router.post("/login", async (req, res) => {
     try {
         const { userName, password } = req.body;
@@ -34,25 +24,27 @@ router.post("/login", async (req, res) => {
         // Überprüfen, ob der Benutzername und das Passwort korrekt sind
         const user = await User.findOne({ userName });
 
-        if (!user || !user.comparePassword(password)) {
+        console.log(password)
+        console.log(userName)
+        console.log(await user.comparePassword(password))
+
+        const passwordCheck = await user.comparePassword(password)
+
+        if (!user || !passwordCheck) {
             // Benutzer nicht gefunden oder Passwort stimmt nicht überein
             return res.status(401).json({ message: "Ungültige Anmeldeinformationen" });
         }
 
-        // Erzeugen Sie ein JWT-Token für den authentifizierten Benutzer
-        //const token = generateToken(user);
+        //console.log(user)
+        req.session.userId = user._id
 
-        // Senden Sie das Token als Antwort an den Client
         res.status(200).json("eingeloggt" );
-        //res.status(200).json({token});
+
     } catch (err) {
         console.error('Fehler beim Login', err);
         res.status(500).json({ error: 'Serverfehler' });
     }
 });
-
-
-
 
 
 router.post("/register", async (req, res) => {
@@ -78,12 +70,13 @@ router.post("/register", async (req, res) => {
 })
 
 
-
-
-
-
 router.put("/update/:userId", async (req, res) => {
     try {
+
+        if (!req.session.userId) {
+            res.redirect('/login');
+        }
+
         const userId = req.params.userId
         const updateData = req.body
 
@@ -141,8 +134,6 @@ router.post('/:userId/follow', async (req, res) => {
 })
 
 
-
-
 router.get('/:userId/followers', async (req, res) => {
     try {
         const userId = req.params["userId"]
@@ -160,8 +151,6 @@ router.get('/:userId/followers', async (req, res) => {
         console.error('Fehler beim Abrufen der Follower', err)
     }
 })
-
-
 
 
 router.post('/:userId/unfollow', async (req, res) => {
@@ -189,7 +178,6 @@ router.post('/:userId/unfollow', async (req, res) => {
         res.status(500).json({ error: 'Serverfehler' })
     }
 })
-
 
 
 router.delete("/deleteUser/:userId", async (req, res) => {
@@ -254,5 +242,4 @@ router.post('/dropRecipe/:userId', async (req, res) => {
     }
 })
 
-
-export { router }
+export default router

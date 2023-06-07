@@ -104,4 +104,7 @@ npm i -g nodemon
 npm i mongoose
 
 npm i swagger-ui-express swagger-jsdoc
+
+npm i express-session
+
 ````
