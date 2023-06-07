@@ -46,6 +46,26 @@ router.post("/login", async (req, res) => {
     }
 });
 
+//logout
+router.post("/logout", (req, res) => {
+    // Überprüfen, ob eine aktive Sitzung vorhanden ist
+    if (req.session) {
+        // Löschen Sie die Sitzungsdaten und beenden Sie die Sitzung
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Fehler beim Logout', err);
+                res.status(500).json({ error: 'Serverfehler' });
+            } else {
+                // Erfolgreich ausgeloggt
+                res.status(200).json({ message: 'Erfolgreich ausgeloggt' });
+            }
+        });
+    } else {
+        // Keine aktive Sitzung vorhanden
+        res.status(400).json({ message: 'Keine aktive Sitzung vorhanden' });
+    }
+});
+
 
 router.post("/register", async (req, res) => {
     const data = req.body
@@ -72,26 +92,25 @@ router.post("/register", async (req, res) => {
 
 router.put("/update/:userId", async (req, res) => {
     try {
-
-        if (!req.session.userId) {
-            res.redirect('/login');
+        if (!req.session || req.session.userId !== req.params.userId) {
+            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
         }
 
-        const userId = req.params.userId
-        const updateData = req.body
+        const userId = req.params.userId;
+        const updateData = req.body;
 
-        const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true })
+        const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
 
         if (updatedUser) {
-            res.status(200).json({ message: 'Daten erfolgreich aktualisiert', user: updatedUser })
+            res.status(200).json({ message: 'Daten erfolgreich aktualisiert', user: updatedUser });
         } else {
-            res.status(404).json({ message: 'Benutzer nicht gefunden' })
+            res.status(404).json({ message: 'Benutzer nicht gefunden' });
         }
     } catch (err) {
-        console.error('Fehler bei Aktualisierung der Daten', err)
-        res.status(500).json({ error: 'Serverfehler' })
+        console.error('Fehler bei Aktualisierung der Daten', err);
+        res.status(500).json({ error: 'Serverfehler' });
     }
-})
+});
 
 
 /**
@@ -102,6 +121,10 @@ router.post('/:userId/follow', async (req, res) => {
     try {
         const userId = req.params["userId"]
         const followerId = req.body["followerId"]
+
+        if (!req.session || req.session.userId !== userId) {
+            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+        }
 
         // User dem der Follower hinzugefügt werden soll
         const user = await User.findById(userId)
@@ -140,6 +163,10 @@ router.get('/:userId/followers', async (req, res) => {
 
         const user = await User.findById(userId).populate('followers')
 
+        if (!req.session || req.session.userId !== userId) {
+            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+        }
+
         if(!user) {
             return res.status(404).json({ message: 'Benutzer nicht gefunden' })
         }
@@ -156,6 +183,10 @@ router.get('/:userId/followers', async (req, res) => {
 router.post('/:userId/unfollow', async (req, res) => {
     const userId = req.params['userId']
     const followerId = req.body['followerId']
+
+    if (!req.session || req.session.userId !== userId) {
+        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+    }
 
     try {
         const user = await User.findById(userId)
@@ -183,6 +214,10 @@ router.post('/:userId/unfollow', async (req, res) => {
 router.delete("/deleteUser/:userId", async (req, res) => {
     const userId = req.params.userId
 
+    if (!req.session || req.session.userId !== userId) {
+        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+    }
+
     User.findByIdAndDelete(userId)
         .then((updatedUser) => {
             if (updatedUser){
@@ -202,6 +237,10 @@ router.delete("/deleteUser/:userId", async (req, res) => {
 router.post('/addRecipe/:userId', async (req, res) => {
     const recipeId = req.body.recipeId
     const userId = req.params.userId
+
+    if (!req.session || req.session.userId !== userId) {
+        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+    }
 
     try {
         const user = await User.findById(userId)
@@ -224,6 +263,10 @@ router.post('/addRecipe/:userId', async (req, res) => {
 router.post('/dropRecipe/:userId', async (req, res) => {
     const recipeId = req.body.recipeId
     const userId = req.params.userId
+
+    if (!req.session || req.session.userId !== userId) {
+        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+    }
 
     try {
         const user = await User.findById(userId)
