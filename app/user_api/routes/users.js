@@ -238,6 +238,12 @@ router.post('/addRecipe/:userId', async (req, res) => {
     const recipeId = req.body.recipeId
     const userId = req.params.userId
 
+    req.session.userId = userId
+
+    console.log(userId)
+    console.log(req.session.userId)
+    console.log(req.session)
+
     if (!req.session || req.session.userId !== userId) {
         return res.status(401).json({ message: 'Unautorisierter Zugriff' });
     }

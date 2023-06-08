@@ -6,6 +6,7 @@ import mongoose from "mongoose"
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
 import session from "express-session"
+import MongoStore from 'connect-mongo';
 
 mongoose.connect("mongodb://database/foodiemate")
 
@@ -17,12 +18,19 @@ app.use(express.json())
 const port = 3000
 
 
+const sessionStore = MongoStore.create({
+    mongoUrl: 'mongodb://database/foodiemate', // MongoDB-Verbindungs-URL
+    collectionName: 'sessions', // Name der MongoDB-Sessions-Sammlung
+    ttl: 3600 // Ablaufzeit der Session in Sekunden
+});
+
 // Use the session middleware with some options
 app.use(session({
     secret: "dflskd", // string to encrypt the session cookie
     name: "session", // cookie name
     resave: false, // avoid saving session if unmodified
     saveUninitialized: true, // save session even if empty
+    store: sessionStore,
     cookie: {
         maxAge: 60 * 60 * 1000, // expiration time -> one hour
         secure: false, // needs to be true for HTTPS

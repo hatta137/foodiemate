@@ -25,7 +25,8 @@ const recipeSchema = new Schema({
         type: String,
         required: true
     },
-    //nutriScore: String
+    vegan: Boolean,
+    vegetarian: Boolean
 })
 
 
