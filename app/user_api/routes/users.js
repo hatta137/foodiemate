@@ -211,8 +211,8 @@ router.post('/:userId/unfollow', async (req, res) => {
 })
 
 
-router.delete("/deleteUser/:userId", async (req, res) => {
-    const userId = req.params.userId
+router.delete("/deleteUser", async (req, res) => {
+    const userId = req.session.userId
 
     if (!req.session || req.session.userId !== userId) {
         return res.status(401).json({ message: 'Unautorisierter Zugriff' });
@@ -266,9 +266,9 @@ router.post('/addRecipe/:userId', async (req, res) => {
 })
 
 
-router.post('/dropRecipe/:userId', async (req, res) => {
+router.post('/dropRecipe/', async (req, res) => {
     const recipeId = req.body.recipeId
-    const userId = req.params.userId
+    const userId = req.session.userId
 
     if (!req.session || req.session.userId !== userId) {
         return res.status(401).json({ message: 'Unautorisierter Zugriff' });
