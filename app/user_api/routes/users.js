@@ -291,4 +291,56 @@ router.post('/dropRecipe/', async (req, res) => {
     }
 })
 
+router.put('/setCookingTogetherDate', async (req, res) => {
+    const userId = req.session.userId
+
+    if (!req.session || req.session.userId !== userId) {
+        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+    }
+
+    try {
+
+        const updateDate = req.body
+
+        const updatedUser = await User.findByIdAndUpdate(userId, updateDate, { new: true, runValidators: true })
+
+        if (updatedUser) {
+            res.status(200).json({ message: 'Daten erfolgreich aktualisiert', user: updatedUser })
+        } else {
+            res.status(404).json({ message: 'Benutzer nicht gefunden' })
+        }
+
+    } catch(err) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+})
+
+
+router.delete('/removeCookingTogetherDate', async (req, res) => {
+    const userId = req.session.userId
+
+    if (!req.session || req.session.userId !== userId) {
+        return res.status(401).json({ message: 'Unautorisierter Zugriff' })
+    }
+
+    try {
+        const updateDate = { cookingTogetherDate: null }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, updateDate, { new: true, runValidators: true })
+
+        if (updatedUser) {
+            res.status(200).json({ message: 'Datum erfolgreich entfernt', user: updatedUser })
+        } else {
+            res.status(404).json({ message: 'Benutzer nicht gefunden' })
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+})
+
+// aber in CTG API!!
+// GET alle User welche ein Datum bei CookingTogether gesetzt haben
+
+// POST mit Kontaktdaten an User via email
+
 export default router
