@@ -338,6 +338,26 @@ router.delete('/removeCookingTogetherDate', async (req, res) => {
     }
 })
 
+
+// Get Mail
+
+router.get('/getEmailAddress/:userId', async (req, res) => {
+    const userId = req.params.userId
+
+    try {
+
+        const userEmail = await User.findById(userId)
+
+        if (userEmail) {
+            res.status(200).json({ message: 'Datum erfolgreich entfernt', user: updatedUser })
+        }
+
+
+    } catch (err) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+})
+
 // aber in CTG API!!
 // GET alle User welche ein Datum bei CookingTogether gesetzt haben
 
