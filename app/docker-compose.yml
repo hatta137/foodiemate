@@ -70,6 +70,17 @@ services:
     networks:
       - private
 
+  frontend:
+    build: frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - 3003:3003
+    volumes:
+      - ./frontend:/usr/src/app
+
+    networks:
+      - private
 
 networks:
   private:
