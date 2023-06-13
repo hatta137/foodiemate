@@ -113,4 +113,6 @@ npm i bcrypts
 
 npm i axios
 
+npm install --save @sendgrid/mail
+
 ````

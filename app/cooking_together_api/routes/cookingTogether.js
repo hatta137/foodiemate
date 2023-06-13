@@ -1,5 +1,6 @@
 import {Router} from "express";
 import axios from "axios"
+import sgMail from '@sendgrid/mail';
 
 const router = Router()
 
@@ -16,7 +17,8 @@ router.get("/findCookingBuddy",async (req, res) => {
         // Extrahiere Datum und Benutzernamen
         const filteredUsers = users.map(user => ({
             date: user.cookingTogetherDate,
-            username: user.userName
+            username: user.userName,
+            email: user.emailAddress
         }));
 
         res.status(200).json({ users: filteredUsers });
@@ -25,11 +27,31 @@ router.get("/findCookingBuddy",async (req, res) => {
     }
 });
 
-router.get("/inviteCookingBuddy/:userId", (req, res) => {
-    //Suche nach Benutzer mit userID
-    //nehme Kontaktdaten von der einladenden Person entgegen
-    //schreibe email an User mit kontaktdaten (externe API)
-})
+
+
+router.post("/inviteCookingBuddy", async (req, res) => {
+    const { email, contactData } = req.body;
+    const apiKey = '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';
+
+    sgMail.setApiKey(apiKey);
+
+    const msg = {
+        to: email,
+        from: 'h.lendeckel@web.de',
+        subject: 'Invitation for Cooking Buddy',
+        text: contactData,
+        html: `<p>Hi, you have been invited to be a cooking buddy! Please find the contact information below:</p><p>${contactData}</p>`,
+    };
+
+    try {
+        await sgMail.send(msg);
+        console.log('Email sent');
+        res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+        console.error('Failed to send email:', error);
+        res.status(500).json({ error: 'Failed to send email' });
+    }
+});
 
 
 export { router }
