@@ -1,4 +1,4 @@
-FROM node
+FROM node:latest
 
 RUN apt-get update
 
@@ -13,8 +13,6 @@ RUN npm i express
 RUN npm i mongoose
 
 RUN npm i bcryptjs
-
-RUN npm i jsonwebtoken
 
 RUN npm i -g nodemon
 

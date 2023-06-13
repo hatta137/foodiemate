@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "init": "^0.1.2",
+    "react": "^18.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start"
+  }
+}

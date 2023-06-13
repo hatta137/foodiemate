@@ -339,7 +339,7 @@ router.delete('/removeCookingTogetherDate', async (req, res) => {
 })
 
 
-// Get Mail
+
 
 router.get('/getEmailAddress/:userId', async (req, res) => {
     const userId = req.params.userId
@@ -349,7 +349,9 @@ router.get('/getEmailAddress/:userId', async (req, res) => {
         const userEmail = await User.findById(userId)
 
         if (userEmail) {
-            res.status(200).json({ message: 'Datum erfolgreich entfernt', user: updatedUser })
+            res.status(200).json({ message: 'Email-Adresse erfolgreich abgerufen', email: userEmail.emailAddress })
+        } else {
+            res.status(404).json({ message: 'Benutzer nicht gefunden' })
         }
 
 
@@ -358,9 +360,24 @@ router.get('/getEmailAddress/:userId', async (req, res) => {
     }
 })
 
-// aber in CTG API!!
-// GET alle User welche ein Datum bei CookingTogether gesetzt haben
 
-// POST mit Kontaktdaten an User via email
+router.get('/getUserCTG', async (req, res) => {
+    const date = req.params.date
+
+    try {
+
+        const users = await User.find( {cookingTogetherDate: { $ne: null } } ).select('-password')
+
+        if (users) {
+            res.status(200).json({ message: 'Folgende User wurden gefunden', users: users })
+        } else {
+            res.status(404).json({ message: 'keine User gefunden' })
+        }
+
+    } catch (err) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+})
+
 
 export default router

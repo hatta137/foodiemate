@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   user_api:
@@ -70,17 +70,7 @@ services:
     networks:
       - private
 
-  frontend:
-    build: frontend
-    container_name: frontend
-    restart: always
-    ports:
-      - 3003:3003
-    volumes:
-      - ./frontend:/usr/src/app
 
-    networks:
-      - private
 
 networks:
   private:

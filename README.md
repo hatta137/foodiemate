@@ -107,4 +107,10 @@ npm i swagger-ui-express swagger-jsdoc
 
 npm i express-session
 
+npm i connect-mongo
+
+npm i bcrypts
+
+npm i axios
+
 ````
