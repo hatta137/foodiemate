@@ -10,16 +10,16 @@ router.get("/", async (req, res) => (
 router.get("/findCookingBuddy",async (req, res) => {
     try {
 
-        const response = await axios.get('http://users_api:3000/users/getUserCTG')
+        const response = await axios.get('http://user_api:3000/users/getUserCTG')
         const users = response.data.users
 
         // Extrahiere Datum und Benutzernamen
         const filteredUsers = users.map(user => ({
             date: user.cookingTogetherDate,
-            username: user.username
+            username: user.userName
         }));
 
-        res.status(200).json({ users: response });
+        res.status(200).json({ users: filteredUsers });
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
