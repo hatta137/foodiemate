@@ -55,6 +55,7 @@ services:
     restart: always
     ports:
       - 27017:27017
+    command: mongod --logpath /var/log/mongodb/mongod.log --logappend --quiet --setParameter logLevel=2
     volumes:
       - ./data:/data/db
     networks:
@@ -67,8 +68,12 @@ services:
       - 8081:8081
     environment:
       - ME_CONFIG_MONGODB_URL=mongodb://database:27017/
+      - ME_CONFIG_BASICAUTH_USERNAME=adminHL
+      - ME_CONFIG_BASICAUTH_PASSWORD=passHL
     networks:
       - private
+    depends_on:
+      - database
 
   frontend:
     build: frontend
