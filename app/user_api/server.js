@@ -17,6 +17,12 @@ app.use(express.json())
 
 const port = 3000
 
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3003'); // Hier die URL deiner React-Anwendung eintragen
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 const sessionStore = MongoStore.create({
     mongoUrl: 'mongodb://database/foodiemate', // MongoDB-Verbindungs-URL

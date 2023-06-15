@@ -70,7 +70,14 @@ services:
     networks:
       - private
 
-
+  frontend:
+    build: frontend
+    ports:
+      - 3003:3000
+    volumes:
+      - ./frontend:/app
+    networks:
+      - private
 
 networks:
   private:
