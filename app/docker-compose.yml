@@ -75,12 +75,12 @@ services:
     depends_on:
       - database
 
-  frontend:
-    build: frontend
+  react_frontend:
+    build: react_frontend
     ports:
       - 3003:3000
     volumes:
-      - ./frontend:/app
+      - ./react_frontend:/app
     networks:
       - private
 
