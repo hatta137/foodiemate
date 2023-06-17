@@ -52,6 +52,4 @@ router.post("/inviteCookingBuddy", async (req, res) => {
         res.status(500).json({ error: 'Failed to send email' });
     }
 });
-
-
 export { router }

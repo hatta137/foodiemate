@@ -78,7 +78,7 @@ services:
   react_frontend:
     build: react_frontend
     ports:
-      - 3003:5137
+      - 3003:3000
     volumes:
       - ./react_frontend:/app
     networks:
