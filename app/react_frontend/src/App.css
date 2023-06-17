@@ -1,46 +1,42 @@
-.App {
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
   text-align: center;
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background-image: linear-gradient(70deg, #3ad5b4, #38a968 48%, #32d8b4);
-  color: white;
 }
 
-.auth-form-container, .Login-Form, .Register-Form {
-  display: flex;
-  flex-direction: column;
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.auth-form-container {
-  padding: 5rem;
-  border: 10px solid white;
-  border-radius: 10px;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-label {
-  text-align: left;
-  padding: 0.25rem 0;
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 
-input {
-  margin: 0.5rem 0;
-  padding: 1rem;
-  border: none;
-  border-radius: 10px;
+.card {
+  padding: 2em;
 }
 
-button {
-  border: none;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  color: #38a968;
-}
-
-.Link-Button {
-  background: none;
-  color: white;
-  text-decoration: underline;
+.read-the-docs {
+  color: #888;
 }
