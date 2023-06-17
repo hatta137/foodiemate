@@ -50,9 +50,10 @@ const userSchema = new Schema({
 
 userSchema.methods.comparePassword = async function (password) {
     try {
-        return await bcrypt.compare(password, this.password);
+        const isMatch = await bcrypt.compare(password, this.password)
+        return !!isMatch
     } catch (error) {
-        throw new Error(error);
+        throw new Error(error)
     }
 };
 

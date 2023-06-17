@@ -20,19 +20,20 @@ router.get("/allUsers", async (_req, res) => {
 router.post("/login", async (req, res) => {
     try {
         const { userName, password } = req.body;
-
-        // Überprüfen, ob der Benutzername und das Passwort korrekt sind
-        const user = await User.findOne({ userName });
-
         console.log(password)
         console.log(userName)
-        console.log(await user.comparePassword(password))
 
-        const passwordCheck = await user.comparePassword(password)
+        const user = await User.findOne({ userName });
+        if (!user) {
+            console.log("Benutzer nicht gefunden")
+            return res.status(401).json({ error: 'Benutzer nicht gefunden' });
+        }
 
-        if (!user || !passwordCheck) {
-            // Benutzer nicht gefunden oder Passwort stimmt nicht überein
-            return res.status(401).json({ message: "Ungültige Anmeldeinformationen" });
+        // Überprüfe das Passwort
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            console.log("Passwort falsch")
+            return res.status(401).json({ error: 'Ungültige Benutzerdaten' });
         }
 
         //console.log(user)
