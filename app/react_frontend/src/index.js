@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from "./components/Home";
 import PageNotFound from "./components/PageNotFound";
+import Footer from "./components/Footer";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,10 +21,13 @@ root.render(
                   <Route path="contact" element={<Contact />} />
                   <Route path="hallo" element={<Hallo />} />
                   <Route path="login" element={<App />} />
+
                   <Route path="*" element={<PageNotFound />} />
               </Route>
           </Routes>
+          <Footer></Footer>
       </BrowserRouter>
+
   </React.StrictMode>
 );
 
