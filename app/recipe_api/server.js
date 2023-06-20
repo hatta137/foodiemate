@@ -17,6 +17,13 @@ app.use(express.json())
 
 const port = 3001
 
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3003'); // URL deiner React-Anwendung
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Credentials', 'true'); // Hinzufügen dieser Zeile, um Cookies über Cross-Origin-Anfragen zu ermöglichen
+    next();
+});
 
 
 const sessionStore = MongoStore.create({

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+
 import App from './App';
 import Hallo from './components/Hallo'
 import Navbar from "./components/Navbar";
@@ -10,6 +10,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from "./components/Home";
 import PageNotFound from "./components/PageNotFound";
 import Footer from "./components/Footer";
+
+
+import './styles/index.css';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import Feed from "./components/Feed";
+import Recipes from "./components/Recipes";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,9 +28,11 @@ root.render(
                   <Route path="contact" element={<Contact />} />
                   <Route path="hallo" element={<Hallo />} />
                   <Route path="login" element={<App />} />
-
+                  <Route path="feed" element={<Feed />} />
+                  <Route path="recipes" element={<Recipes />} />
                   <Route path="*" element={<PageNotFound />} />
               </Route>
+
           </Routes>
           <Footer></Footer>
       </BrowserRouter>

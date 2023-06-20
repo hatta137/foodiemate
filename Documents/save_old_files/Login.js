@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios"
+import {MDBBtn} from "mdb-react-ui-kit";
 
 
 const Login = ({setIsLoggedIn}) => {
@@ -76,7 +77,7 @@ const Login = ({setIsLoggedIn}) => {
                 <button type={"submit"}>Log In</button>
                 {error && <div>{error}</div>}
             </form>
-            <button type={"submit"} className={"Link-Button"} onClick={() => props.onFormSwitch('register')}>Kein Account?</button>
+            <MDBBtn type={"submit"} className={"Link-Button"} onClick={() => props.onFormSwitch('register')}>Kein Account?</MDBBtn>
 
         </div>
 

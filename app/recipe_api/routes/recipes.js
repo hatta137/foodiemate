@@ -107,4 +107,20 @@ router.get('/recipeByTitle', async (req, res) => {
     }
 });
 
+router.get('/recipeByCount', async (req, res) => {
+    try {
+        const count = req.query.count;
+
+        const recipes = await Recipe.find().limit(count)
+
+        if (!recipes) {
+            return res.status(404).json({ error: 'Rezepte nicht gefunden' })
+        }
+
+        res.status(200).json({ recipes })
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+})
+
 export { router }

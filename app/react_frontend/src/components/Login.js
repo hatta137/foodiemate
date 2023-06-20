@@ -1,12 +1,20 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios"
 
 
-const Login = (props, {setIsLoggedIn}) => {
+const Login = (props) => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('');
+
+    const navigate = useNavigate();
+
+    const handleSuccessfullLogin = () => {
+        props.setIsLoggedIn(true)
+        navigate('/recipes')
+    };
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -16,11 +24,13 @@ const Login = (props, {setIsLoggedIn}) => {
         setPassword(event.target.value);
     };
 
+
+
     const handleSubmit = async (event) => {
         event.preventDefault()
 
         if (username.trim() === '' || password.trim() === '') {
-            setError('Bitte Benutzernamen und Passwort eingeben');
+            alert('Bitte Benutzernamen und Passwort eingeben');
             return;
         }
 
@@ -40,6 +50,7 @@ const Login = (props, {setIsLoggedIn}) => {
                 setError('')
                 setUsername('')
                 setPassword('')
+                handleSuccessfullLogin()
             } else if (response.status === 401) {
                 setError("Ungültige Anmeldeinformationen")
             }
@@ -47,15 +58,12 @@ const Login = (props, {setIsLoggedIn}) => {
             console.log('Serverfehler:', err);
             setError('Fehler bei der Anmeldung');
         }
-
-
-        setIsLoggedIn(true);
     }
 
     return (
-        <div className={"auth-container"}>
+        <div className={"auth-container-HL"}>
             <h2>Login</h2>
-            <form className={"Login-Form"} onSubmit={handleSubmit}>
+            <form className={"Login-Form-HL"} onSubmit={handleSubmit}>
 
                 <label htmlFor="username">username</label>
                 <input value={username}
@@ -73,10 +81,10 @@ const Login = (props, {setIsLoggedIn}) => {
                        id={"password"}
                        name={"password"}/>
 
-                <button type={"submit"}>Log In</button>
+                <button className={"Login-Button-HL"} type={"submit"}>Log In</button>
                 {error && <div>{error}</div>}
             </form>
-            <button type={"submit"} className={"Link-Button"} onClick={() => props.onFormSwitch('register')}>Kein Account?</button>
+            <button type={"submit"} className={"Link-Button-HL"} onClick={() => props.onFormSwitch('register')}>Kein Account?</button>
 
         </div>
 

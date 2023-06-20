@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Register = (props) => {
 
@@ -7,26 +8,42 @@ const Register = (props) => {
     const [userName, setUserName] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
-    const [dateOfBirth, setDateOfBirth] = useState('')
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log(email)
+
+        try {
+            const response = await axios.post('http://localhost:3000/users/register', {
+                firstName: firstName,
+                lastName: lastName,
+                emailAddress: email,
+                password: password,
+                userName: userName
+            });
+            console.log(response.status)
+
+            if (response.status === 200) {
+                setUserName('')
+                setPassword('')
+            } else if (response.status === 401) {
+                alert("Fehler bei der Anmeldung")
+            }
+        } catch (err) {
+            console.log('Serverfehler:', err);
+            alert('ServerFehler bei der Anmeldung');
+        }
     }
 
     return (
-        <div className={"auth-container"}>
+        <div className={"auth-container-HL"}>
             <h2>Register</h2>
-            <form className={"Register-Form"} onSubmit={handleSubmit}>
+            <form className={"Register-Form-HL"} onSubmit={handleSubmit}>
 
                 <label htmlFor="lastName">Vorname</label>
                 <input value={firstName} onChange={(event) => setFirstName(event.target.value)} type="text" placeholder={"Vorname"} id={"firstName"} name={"firstName"}/>
 
                 <label htmlFor="lastName">Nachname</label>
                 <input value={lastName} onChange={(event) => setLastName(event.target.value)} type="text" placeholder={"Nachname"} id={"lastName"} name={"lastName"}/>
-
-                <label htmlFor="dateOfBirth">Geburtstag</label>
-                <input value={dateOfBirth} onChange={(event) => setDateOfBirth(event.target.value)} type="date" placeholder={"Geburtstag"} id={"dateOfBirth"} name={"dateOfBirth"}/>
 
                 <label htmlFor="userName">Benutzername</label>
                 <input value={userName} onChange={(event) => setUserName(event.target.value)} type="text" placeholder={"Benutzername"} id={"userName"} name={"userName"}/>
@@ -37,10 +54,10 @@ const Register = (props) => {
                 <label htmlFor="password">password</label>
                 <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" placeholder={"******"} id={"password"} name={"password"}/>
 
-                <button type={"submit"}>Log In</button>
+                <button className={"Login-Button-HL"} type={"submit"}>Log In</button>
 
             </form>
-            <button className={"Link-Button"} onClick={() => props.onFormSwitch('login')}>Schon einen Account?</button>
+            <button className={"Link-Button-HL"} onClick={() => props.onFormSwitch('login')}>Schon einen Account?</button>
 
         </div>
     )
