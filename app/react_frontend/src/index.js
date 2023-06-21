@@ -17,6 +17,7 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Feed from "./components/Feed";
 import Recipes from "./components/Recipes";
+import ShowProfile from "./components/ShowProfile";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -30,6 +31,7 @@ root.render(
                   <Route path="login" element={<App />} />
                   <Route path="feed" element={<Feed />} />
                   <Route path="recipes" element={<Recipes />} />
+                  <Route path="/profile" component={<ShowProfile />} />
                   <Route path="*" element={<PageNotFound />} />
               </Route>
 

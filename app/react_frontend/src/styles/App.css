@@ -31,7 +31,11 @@ input {
   border-radius: 10px;
 }
 
-.Login-Button-HL, .Link-Button-HL{
+ul {
+  list-style: none;
+}
+
+.Login-Button-HL, .Link-Button-HL, .Load-More-Button-HL{
   border: none;
   background-color: white;
   margin-top: 1rem;
@@ -46,4 +50,22 @@ input {
   color: white;
   text-decoration: underline;
 }
+
+.Load-More-Button-HL{
+  margin-bottom: 2rem;
+}
+
+.Recipe-Container-HL {
+
+}
+
+.Recipe-Card-HL {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  text-align: left;
+  padding: 2rem;
+  margin: 0.5rem;
+}
+
 

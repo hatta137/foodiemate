@@ -1,18 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import Recipes from "./Recipes";
+import React from "react";
+import RecipeCard from "./RecipeCard";
 
-const Feed = () => {
-    const navigate = useNavigate();
-
-    const handleLogOutClick = () => {
-        navigate('/')
-    };
-
+const Feed = ({ recipes }) => {
     return (
-        <div className="Feed">
-
-            <h1>Feed</h1>
-            <Recipes />
+        <div>
+            <h2>Feed</h2>
+            {recipes.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
+            ))}
         </div>
     );
 };

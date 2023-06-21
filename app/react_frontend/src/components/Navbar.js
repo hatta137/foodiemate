@@ -16,6 +16,7 @@ import {
     MDBNavbarBrand,
     MDBCollapse
 } from 'mdb-react-ui-kit';
+import Search from "./Search";
 
 export default function Navbar() {
 
@@ -56,6 +57,10 @@ export default function Navbar() {
                             <MDBNavbarItem>
                                 <MDBNavbarLink href='/login'>Login</MDBNavbarLink>
                             </MDBNavbarItem>
+                            <MDBNavbarItem>
+                                <Search></Search>
+                            </MDBNavbarItem>
+
                         </MDBNavbarNav>
                     </MDBCollapse>
                 </MDBContainer>

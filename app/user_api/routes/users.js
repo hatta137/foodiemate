@@ -2,20 +2,16 @@ import {Router} from "express";
 import User from "../models/user.js";
 import bcrypt from 'bcryptjs'
 
-
 const router = Router();
-
 
 router.get("/", async (req, res) => {
     res.send("users entry")
 })
 
-
 router.get("/allUsers", async (_req, res) => {
     const data = await User.find()
     res.json(data)
 })
-
 
 router.post("/login", async (req, res) => {
     try {
@@ -67,7 +63,6 @@ router.post("/logout", (req, res) => {
     }
 });
 
-
 router.post("/register", async (req, res) => {
     const data = req.body
     const saltRounds = 10
@@ -89,7 +84,6 @@ router.post("/register", async (req, res) => {
         res.status(500).json({ error: 'Serverfehler' })
     }
 })
-
 
 router.put("/update/:userId", async (req, res) => {
     try {
@@ -113,6 +107,21 @@ router.put("/update/:userId", async (req, res) => {
     }
 });
 
+router.get('/getByUserName', async (req, res) => {
+    try {
+        const name = req.query.userName;
+
+        const user = await User.findOne({ userName: name })
+
+        if (!user) {
+            return res.status(404).json({ error: 'User nicht gefunden' })
+        }
+
+        res.status(200).json({ user })
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+});
 
 /**
  * UserId → ID von dem User der jemandem folgen möchte
@@ -157,7 +166,6 @@ router.post('/:userId/follow', async (req, res) => {
     }
 })
 
-
 router.get('/:userId/followers', async (req, res) => {
     try {
         const userId = req.params["userId"]
@@ -179,7 +187,6 @@ router.get('/:userId/followers', async (req, res) => {
         console.error('Fehler beim Abrufen der Follower', err)
     }
 })
-
 
 router.post('/:userId/unfollow', async (req, res) => {
     const userId = req.params['userId']
@@ -211,7 +218,6 @@ router.post('/:userId/unfollow', async (req, res) => {
     }
 })
 
-
 router.delete("/deleteUser", async (req, res) => {
     const userId = req.session.userId
 
@@ -233,7 +239,6 @@ router.delete("/deleteUser", async (req, res) => {
         })
     res.send(userId)
 })
-
 
 router.post('/addRecipe/:userId', async (req, res) => {
     const recipeId = req.body.recipeId
@@ -265,7 +270,6 @@ router.post('/addRecipe/:userId', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 })
-
 
 router.post('/dropRecipe/', async (req, res) => {
     const recipeId = req.body.recipeId
@@ -316,7 +320,6 @@ router.put('/setCookingTogetherDate', async (req, res) => {
     }
 })
 
-
 router.delete('/removeCookingTogetherDate', async (req, res) => {
     const userId = req.session.userId
 
@@ -339,9 +342,6 @@ router.delete('/removeCookingTogetherDate', async (req, res) => {
     }
 })
 
-
-
-
 router.get('/getEmailAddress/:userId', async (req, res) => {
     const userId = req.params.userId
 
@@ -361,7 +361,6 @@ router.get('/getEmailAddress/:userId', async (req, res) => {
     }
 })
 
-
 router.get('/getUserCTG', async (req, res) => {
     const date = req.params.date
 
@@ -379,6 +378,4 @@ router.get('/getUserCTG', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 })
-
-
 export default router
