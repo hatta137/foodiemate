@@ -1,5 +1,7 @@
-/app/user_api/node_modules/
+/backend/user_api/node_modules/
 
-/app/recipe_api/node_modules/
+/backend/recipe_api/node_modules/
 
-/app/cooking_together_api/node_modules/
+/backend/cooking_together_api/node_modules/
+
+/frontend/node_modules/

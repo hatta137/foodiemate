@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   ss2023_wa_foodiemate_user_api:
-    build: user_api
+    build: backend/user_api
     container_name: user_api
     restart: always
     ports:
@@ -12,13 +12,13 @@ services:
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
     volumes:
-      - ./user_api:/usr/src/app
+      - ./backend/user_api:/usr/src/app
 
     networks:
       - private
 
   ss2023_wa_foodiemate_recipe_api:
-    build: recipe_api
+    build: backend/recipe_api
     container_name: recipe_api
     restart: always
     ports:
@@ -28,13 +28,13 @@ services:
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
     volumes:
-      - ./recipe_api:/usr/src/app
+      - ./backend/recipe_api:/usr/src/app
 
     networks:
       - private
 
   ss2023_wa_foodiemate_cooking_together_api:
-    build: cooking_together_api
+    build: backend/cooking_together_api
     container_name: cooking_together_api
     restart: always
     ports:
@@ -44,7 +44,7 @@ services:
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
     volumes:
-      - ./cooking_together_api:/usr/src/app
+      - ./backend/cooking_together_api:/usr/src/app
 
     networks:
       - private
@@ -57,7 +57,7 @@ services:
       - 20062:27017
     command: mongod --logpath /var/log/mongodb/mongod.log --logappend --quiet --setParameter logLevel=2
     volumes:
-      - ./data:/data/db
+      - ./database:/database/db
     networks:
       - private
 
@@ -79,7 +79,7 @@ services:
     build: frontend
     container_name: frontend
     ports:
-      - 20061:3000
+      - 20061:20061
     volumes:
       - ./frontend:/app
     networks:

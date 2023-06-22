@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 
-
-
-
 import './styles/App.css';
 
 import Login from "./components/Login";
@@ -15,8 +12,6 @@ const App = () => {
   const toggleForm = (formName) => {
     setCurrentForm(formName)
   }
-
-
 
   return (
     <div className="App">
