@@ -14,7 +14,7 @@ export default function Search() {
     useEffect( () => {
 
         if (searchSubmitted && userName !=='') {
-            axios.get("http://localhost:3000/users/getByUserName", {
+            axios.get("http://localhost:20063/users/getByUserName", {
                 params: {
                     userName: userName
                 }})

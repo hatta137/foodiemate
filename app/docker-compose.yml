@@ -1,14 +1,14 @@
 version: "3.8"
 
 services:
-  user_api:
+  ss2023_wa_foodiemate_user_api:
     build: user_api
     container_name: user_api
     restart: always
     ports:
-      - 20063:3000
+      - 20063:20063
     depends_on:
-      - database
+      - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
     volumes:
@@ -17,14 +17,14 @@ services:
     networks:
       - private
 
-  recipe_api:
+  ss2023_wa_foodiemate_recipe_api:
     build: recipe_api
     container_name: recipe_api
     restart: always
     ports:
-      - 20064:3000
+      - 20064:20064
     depends_on:
-      - database
+      - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
     volumes:
@@ -33,14 +33,14 @@ services:
     networks:
       - private
 
-  cooking_together_api:
+  ss2023_wa_foodiemate_cooking_together_api:
     build: cooking_together_api
     container_name: cooking_together_api
     restart: always
     ports:
-      - 20065:3000
+      - 20065:20065
     depends_on:
-      - database
+      - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
     volumes:
@@ -49,7 +49,7 @@ services:
     networks:
       - private
 
-  database:
+  ss2023_wa_foodiemate_database:
     image: mongo:4.4.5
     container_name: database
     restart: always
@@ -67,20 +67,21 @@ services:
     ports:
       - 8081:8081
     environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://database:20062/
+      - ME_CONFIG_MONGODB_URL=mongodb://database:27017/
       - ME_CONFIG_BASICAUTH_USERNAME=adminHL
       - ME_CONFIG_BASICAUTH_PASSWORD=passHL
     networks:
       - private
     depends_on:
-      - database
+      - ss2023_wa_foodiemate_database
 
-  react_frontend:
-    build: react_frontend
+  ss2023_wa_foodiemate_frontend:
+    build: frontend
+    container_name: frontend
     ports:
       - 20061:3000
     volumes:
-      - ./react_frontend:/app
+      - ./frontend:/app
     networks:
       - private
 

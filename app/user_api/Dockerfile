@@ -18,7 +18,6 @@ RUN npm i -g nodemon
 
 COPY . .
 
-EXPOSE 3000
-
+EXPOSE 20063
 
 CMD ["npm", "start"]

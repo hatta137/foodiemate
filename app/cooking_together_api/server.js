@@ -13,7 +13,7 @@ mongoose.connect("mongodb://database/foodiemate");
 const app = express()
 app.use(express.json())
 
-const port = 3002
+const port = 20065
 
 
 app.use("/cookingTogether", cookingTogetherRouter);
@@ -29,7 +29,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000",
+                url: "http://localhost:20061",
                 description: "COOKINGTOGETHER_API",
             },
         ],

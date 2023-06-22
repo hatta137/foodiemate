@@ -15,10 +15,10 @@ mongoose.connect("mongodb://database/foodiemate");
 const app = express()
 app.use(express.json())
 
-const port = 3001
+const port = 20064
 
 app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3003'); // URL deiner React-Anwendung
+    res.header('Access-Control-Allow-Origin', 'http://localhost:20061'); // URL deiner React-Anwendung
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials', 'true'); // Hinzufügen dieser Zeile, um Cookies über Cross-Origin-Anfragen zu ermöglichen
@@ -59,8 +59,8 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000",
-                description: "USER_API",
+                url: "http://localhost:20064",
+                description: "RECIPE_API",
             },
         ],
     },

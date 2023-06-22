@@ -13,7 +13,7 @@ const Register = (props) => {
         event.preventDefault()
 
         try {
-            const response = await axios.post('http://localhost:3000/users/register', {
+            const response = await axios.post('http://localhost:20063/users/register', {
                 firstName: firstName,
                 lastName: lastName,
                 emailAddress: email,
