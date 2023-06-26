@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from "./components/Home";
 import PageNotFound from "./components/PageNotFound";
 import Footer from "./components/Footer";
+import RecipeForm from "./components/RecipeForm";
 
 
 import './styles/index.css';
@@ -31,6 +32,7 @@ root.render(
                   <Route path="login" element={<App />} />
                   <Route path="feed" element={<Feed />} />
                   <Route path="recipes" element={<Recipes />} />
+                  <Route path="newRecipe" element={<RecipeForm />} />
                   <Route path="/profile" component={<ShowProfile />} />
                   <Route path="*" element={<PageNotFound />} />
               </Route>

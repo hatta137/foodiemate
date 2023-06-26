@@ -58,6 +58,9 @@ export default function Navbar() {
                                 <MDBNavbarLink href='/login'>Login</MDBNavbarLink>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
+                                <MDBNavbarLink href='/newRecipe'>Neues Rezept</MDBNavbarLink>
+                            </MDBNavbarItem>
+                            <MDBNavbarItem>
                                 <Search></Search>
                             </MDBNavbarItem>
 

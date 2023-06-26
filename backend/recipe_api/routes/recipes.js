@@ -60,7 +60,7 @@ router.post('/new', async (req, res) => {
         try {
             // Call to user API an set Recipe to myRecipes
             //const userId = req.params.userId
-            const addUserRecipeUrl = `http://user_api:3000/users/addRecipe/${userId}`
+            const addUserRecipeUrl = `http://user_api:20063/users/addRecipe/${userId}`
             await axios.post(addUserRecipeUrl, { recipeId: newRecipe._id })
 
             res.status(200).json({ message: 'Rezept erfolgreich angelegt', recipe: newRecipe })
