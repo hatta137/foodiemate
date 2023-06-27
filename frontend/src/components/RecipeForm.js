@@ -58,7 +58,7 @@ const RecipeForm = () => {
 
         // Code zum Senden der Daten an das Backend hier...
         try {
-            await axios.post("http://localhost:20063/users/addRecipe/", recipeData);
+            await axios.post("http://localhost:20064/recipe/new/", recipeData);
             // Erfolgreiches Absenden, ggf. Weiterleitung oder Benachrichtigung anzeigen
         } catch (error) {
             console.error("Fehler beim Speichern des Rezepts:", error);

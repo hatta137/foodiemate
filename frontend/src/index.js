@@ -19,6 +19,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Feed from "./components/Feed";
 import Recipes from "./components/Recipes";
 import ShowProfile from "./components/ShowProfile";
+import EditUserProfile from "./components/EditUserProfile";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -33,10 +34,10 @@ root.render(
                   <Route path="feed" element={<Feed />} />
                   <Route path="recipes" element={<Recipes />} />
                   <Route path="newRecipe" element={<RecipeForm />} />
-                  <Route path="/profile" component={<ShowProfile />} />
+                  <Route path="/profile" element={<ShowProfile />} />
+                  <Route path="editUserProfile" element={<EditUserProfile />} />
                   <Route path="*" element={<PageNotFound />} />
               </Route>
-
           </Routes>
           <Footer></Footer>
       </BrowserRouter>

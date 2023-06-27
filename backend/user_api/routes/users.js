@@ -85,6 +85,18 @@ router.post("/register", async (req, res) => {
     }
 })
 
+router.get("/userStatus", async (req, res) => {
+
+    try {
+        if (!req.session.userId) {
+
+        }
+
+    }catch (err) {
+
+    }
+})
+
 router.put("/update/:userId", async (req, res) => {
     try {
         if (!req.session || req.session.userId !== req.params.userId) {
