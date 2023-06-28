@@ -13,11 +13,19 @@ router.get("/", async (req, res) => (
 ))
 
 
-router.post('/new', async (req, res) => {
+router.post('/new/', async (req, res) => {
 
     try {
         const { title, ingredients, instructions, image, drink } = req.body
-        const token = req.cookies.token;
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
+
+        }
+
+
         const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
         const userId = decoded.userId;
 
@@ -62,7 +70,7 @@ router.post('/new', async (req, res) => {
             const addUserRecipeUrl = `http://user_api:20063/users/addRecipe/${userId}`
             await axios.post(addUserRecipeUrl, { recipeId: newRecipe._id }, {
                 headers: {
-                    Cookie: 'token=${token};'
+                    Cookie: `token=${token}`
                 }
             })
 

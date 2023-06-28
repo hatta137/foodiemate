@@ -42,7 +42,7 @@ router.post("/login", async (req, res) => {
 
         // Erzeuge das JWT-Token
         const token = jwt.sign({ userId: user._id }, 'sehr_geheimer_schluessel');
-
+        console.log(token)
         return res.cookie("token", token).json({success:true,message:'LoggedIn Successfully', userId: user._id, token: token})
         //return res.status(200).json({ message: "welcome back", token: token });
 
@@ -78,11 +78,17 @@ router.post("/register", async (req, res) => {
 
 router.put("/update", isAuthenticated, async (req, res) => {
     try {
-        const token = req.cookies.token;
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
+        }
+
         const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
         const userId = decoded.userId;
         const updateData = req.body;
-
+        console.log(updateData)
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
 
         if (updatedUser) {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {useIsAuthenticated} from 'react-auth-kit';
 
 const RecipeForm = () => {
     const [title, setTitle] = useState("");
@@ -8,17 +9,13 @@ const RecipeForm = () => {
     const [instructions, setInstructions] = useState("");
     const [drink, setDrink] = useState("");
 
-    const handleTitleChange = (e) => {
-        setTitle(e.target.value);
-    };
 
-    const handleImageChange = (e) => {
-        setImage(e.target.value);
-    };
+    const isAuthenticated = useIsAuthenticated()
+    const handleTitleChange = (e) => {setTitle(e.target.value)};
 
-    const handleDrinkChange = (e) => {
-        setDrink(e.target.value);
-    };
+    const handleImageChange = (e) => {setImage(e.target.value)};
+
+    const handleDrinkChange = (e) => {setDrink(e.target.value)};
 
     const handleIngredientChange = (e, index, field) => {
         const updatedIngredients = [...ingredients];
@@ -41,9 +38,7 @@ const RecipeForm = () => {
         });
     };
 
-    const handleInstructionsChange = (e) => {
-        setInstructions(e.target.value);
-    };
+    const handleInstructionsChange = (e) => {setInstructions(e.target.value)};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,9 +51,22 @@ const RecipeForm = () => {
             drink,
         };
 
-        // Code zum Senden der Daten an das Backend hier...
+
+
         try {
-            await axios.post("http://localhost:20064/recipe/new/", recipeData);
+
+            if (isAuthenticated()) {
+
+                const response = await axios.post("http://localhost:20064/recipe/new/", recipeData, {
+                    withCredentials: true
+                });
+
+
+            } else {
+                // Der Benutzer ist nicht authentifiziert
+                console.log('Benutzer ist nicht authentifiziert');
+            }
+
             // Erfolgreiches Absenden, ggf. Weiterleitung oder Benachrichtigung anzeigen
         } catch (error) {
             console.error("Fehler beim Speichern des Rezepts:", error);
@@ -130,5 +138,4 @@ const RecipeForm = () => {
         </form>
     );
 };
-
 export default RecipeForm;

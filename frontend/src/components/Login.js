@@ -47,7 +47,7 @@ const Login = (props) => {
                     token: response.data.token,
                     expiresIn: 3600,
                     tokenType: 'Bearer',
-                    authState: {userName: response.data.userId}
+                    authState: {userId: response.data.userId}
                 })
 
                 navigate('/recipes')

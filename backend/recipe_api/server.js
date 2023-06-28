@@ -12,40 +12,35 @@ import cookieParser from 'cookie-parser'
 
 mongoose.connect("mongodb://database/foodiemate");
 
-process.env.TZ = 'Europe/Berlin';
 
 const app = express()
 
-app.use(express.json())
-app.use(cookieParser());
 
 const port = 20064
 
 
-app.use(cors({ origin: true, withCredentials:true}));
-
-
-const sessionStore = MongoStore.create({
-    mongoUrl: 'mongodb://database/foodiemate', // MongoDB-Verbindungs-URL
-    collectionName: 'sessions', // Name der MongoDB-Sessions-Sammlung
-    ttl: 3600 // Ablaufzeit der Session in Sekunden
-});
-const hour = 60 * 60 * 1000; // Eine Stunde in Millisekunden
-const expirationDate = new Date(Date.now() + hour); // Berechne das Ablaufdatum (eine Stunde ab jetzt)
-
-// Use the session middleware with some options
-app.use(session({
-    secret: "dflskd", // string to encrypt the session cookie
-    name: "session", // cookie name
-    resave: false, // avoid saving session if unmodified
-    saveUninitialized: true, // save session even if empty
-    store: sessionStore,
-    cookie: {
-        expires: expirationDate, // expiration time -> one hour
-        secure: false, // needs to be true for HTTPS
-        SameSite: 'none'
+app.use(function (req, res, next) {
+    const allowedOrigins = [
+        'http://localhost:20061',
+        'http://localhost:20062',
+        'http://localhost:20063',
+        // Füge hier weitere erlaubte Ursprünge hinzu
+    ];
+    const { origin } = req.headers;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
     }
-}))
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
+
+app.use(express.json())
+app.use(cookieParser());
+
+
+
 
 
 app.use("/recipe", recipesRouter);
