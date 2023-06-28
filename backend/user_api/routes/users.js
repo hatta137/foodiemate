@@ -110,6 +110,7 @@ router.get("/userStatus", async (req, res) => {
 
     }catch (err) {
         console.log('Serverfehler')
+
         console.log(req.session.userId)
         console.error('Fehler bei Status Check', err);
         res.status(500).json({ error: 'Serverfehler' });
