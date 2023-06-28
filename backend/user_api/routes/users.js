@@ -1,6 +1,7 @@
 import {Router} from "express";
 import User from "../models/user.js";
 import bcrypt from 'bcryptjs'
+import Session from "express-session/session/session.js";
 
 const router = Router();
 
@@ -85,15 +86,33 @@ router.post("/register", async (req, res) => {
     }
 })
 
+
+
+
+
+
 router.get("/userStatus", async (req, res) => {
 
+    console.log(req.body)
+    console.log(req.session)
     try {
         if (!req.session.userId) {
+            console.log('keine userId')
+            console.log(req.session.userId)
+            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
 
+        } else {
+
+            console.log(req.session.userId)
+            const user = await User.findOne({ _id: req.session.userId }, { _id: false, passwordHash: false, __v: false });
+            return res.status(200).json({ message: 'user eingeloggt', user });
         }
 
     }catch (err) {
-
+        console.log('Serverfehler')
+        console.log(req.session.userId)
+        console.error('Fehler bei Status Check', err);
+        res.status(500).json({ error: 'Serverfehler' });
     }
 })
 

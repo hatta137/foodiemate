@@ -8,7 +8,7 @@ import swaggerJsDoc from 'swagger-jsdoc'
 import session from "express-session"
 import MongoStore from 'connect-mongo';
 import cors from "cors";
-
+process.env.TZ = 'Europe/Berlin';
 mongoose.connect("mongodb://database/foodiemate")
 
 
@@ -17,16 +17,25 @@ const app = express()
 app.use(express.json())
 
 const port = 20063
+app.use(function (req, res, next) {
+    const allowedOrigins = [
+        'http://localhost:20061',
+        'http://localhost:20062',
+        'http://localhost:20064',
+        // Füge hier weitere erlaubte Ursprünge hinzu
+    ];
+    const { origin } = req.headers;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
 
-// app.use(function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', cd ); // URL deiner React-Anwendung
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     res.header('Access-Control-Allow-Credentials', 'true'); // Hinzufügen dieser Zeile, um Cookies über Cross-Origin-Anfragen zu ermöglichen
-//     next();
-// });
 
-app.use(cors({ origin: true }));
+
 
 
 const sessionStore = MongoStore.create({
@@ -34,19 +43,23 @@ const sessionStore = MongoStore.create({
     collectionName: 'sessions', // Name der MongoDB-Sessions-Sammlung
     ttl: 3600 // Ablaufzeit der Session in Sekunden
 });
+const hour = 60 * 60 * 1000 * 4; // Eine Stunde in Millisekunden
+const expirationDate = new Date(Date.now() + hour); // Berechne das Ablaufdatum (eine Stunde ab jetzt)
 
 // Use the session middleware with some options
+// app.use(cors({ origin: true, credentials: true }));
 app.use(session({
-    secret: "dflskd", // string to encrypt the session cookie
-    name: "session", // cookie name
-    resave: false, // avoid saving session if unmodified
-    saveUninitialized: true, // save session even if empty
+    secret: "dflskd",
+    name: "session",
+    resave: false,
+    saveUninitialized: true,
     store: sessionStore,
     cookie: {
-        maxAge: 60 * 60 * 1000, // expiration time -> one hour
-        secure: false, // needs to be true for HTTPS
+        expires: expirationDate,
+        secure: false,
+        sameSite: 'none'
     }
-}))
+}));
 
 
 app.use("/users", usersRouter);

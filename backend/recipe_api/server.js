@@ -11,7 +11,7 @@ import cors from "cors";
 
 mongoose.connect("mongodb://database/foodiemate");
 
-
+process.env.TZ = 'Europe/Berlin';
 
 const app = express()
 app.use(express.json())
@@ -25,7 +25,7 @@ const port = 20064
 //     res.header('Access-Control-Allow-Credentials', 'true'); // Hinzufügen dieser Zeile, um Cookies über Cross-Origin-Anfragen zu ermöglichen
 //     next();
 // });
-app.use(cors({ origin: true }));
+app.use(cors({ origin: true, withCredentials:true}));
 
 
 const sessionStore = MongoStore.create({
@@ -33,6 +33,8 @@ const sessionStore = MongoStore.create({
     collectionName: 'sessions', // Name der MongoDB-Sessions-Sammlung
     ttl: 3600 // Ablaufzeit der Session in Sekunden
 });
+const hour = 60 * 60 * 1000; // Eine Stunde in Millisekunden
+const expirationDate = new Date(Date.now() + hour); // Berechne das Ablaufdatum (eine Stunde ab jetzt)
 
 // Use the session middleware with some options
 app.use(session({
@@ -42,8 +44,9 @@ app.use(session({
     saveUninitialized: true, // save session even if empty
     store: sessionStore,
     cookie: {
-        maxAge: 60 * 60 * 1000, // expiration time -> one hour
+        expires: expirationDate, // expiration time -> one hour
         secure: false, // needs to be true for HTTPS
+        SameSite: 'none'
     }
 }))
 
