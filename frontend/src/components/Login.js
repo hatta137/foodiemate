@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
+import { useSignIn } from "react-auth-kit";
 
 
 const Login = (props) => {
@@ -9,12 +10,9 @@ const Login = (props) => {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('');
 
-    const navigate = useNavigate();
+    const signIn = useSignIn();
 
-    const handleSuccessfullLogin = () => {
-        props.setIsLoggedIn(true)
-        navigate('/recipes')
-    };
+    const navigate = useNavigate();
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -24,8 +22,6 @@ const Login = (props) => {
         setPassword(event.target.value);
     };
 
-
-
     const handleSubmit = async (event) => {
         event.preventDefault()
 
@@ -34,23 +30,27 @@ const Login = (props) => {
             return;
         }
 
-
-
         try {
             const response = await axios.post('http://localhost:20063/users/login', {
                 password: password,
                 userName: username,
-
-
-
             });
+
             console.log(response.status)
 
             if (response.status === 200) {
                 setError('')
                 setUsername('')
                 setPassword('')
-                handleSuccessfullLogin()
+
+                signIn({
+                    token: response.data.token,
+                    expiresIn: 3600,
+                    tokenType: 'Bearer',
+                    authState: {userName: response.data.userId}
+                })
+
+                navigate('/recipes')
             } else if (response.status === 401) {
                 setError("Ungültige Anmeldeinformationen")
             }

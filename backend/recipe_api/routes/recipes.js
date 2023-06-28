@@ -1,6 +1,7 @@
 import {Router} from "express";
 import Recipe from "../models/recipe.js";
 import axios from "axios"
+import jwt from 'jsonwebtoken'
 
 const apiKey = '0ce295988778430289ce5f05f03f0262';
 const recipeUrl = 'https://api.spoonacular.com/recipes/analyze';
@@ -13,22 +14,21 @@ router.get("/", async (req, res) => (
 
 
 router.post('/new', async (req, res) => {
-    const { title, ingredients, instructions, image, drink } = req.body
-
-    const userId = req.session.userId
-
-    console.log("addRecipe")
-    console.log(userId)
 
     try {
+        const { title, ingredients, instructions, image, drink } = req.body
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
+
+        console.log("addRecipe")
+        console.log(userId)
 
         const ingredientsListSpoon = []
 
         for (let ing of ingredients){
             ingredientsListSpoon.push(ing["name"])
         }
-
-        console.log(ingredientsListSpoon)
 
         const jsonReq = {
             "title": title,
@@ -59,9 +59,12 @@ router.post('/new', async (req, res) => {
 
         try {
             // Call to user API an set Recipe to myRecipes
-            //const userId = req.params.userId
             const addUserRecipeUrl = `http://user_api:20063/users/addRecipe/${userId}`
-            await axios.post(addUserRecipeUrl, { recipeId: newRecipe._id })
+            await axios.post(addUserRecipeUrl, { recipeId: newRecipe._id }, {
+                headers: {
+                    Cookie: 'token=${token};'
+                }
+            })
 
             res.status(200).json({ message: 'Rezept erfolgreich angelegt', recipe: newRecipe })
         } catch (err) {

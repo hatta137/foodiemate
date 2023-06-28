@@ -8,23 +8,20 @@ import swaggerJsDoc from 'swagger-jsdoc'
 import session from "express-session"
 import MongoStore from 'connect-mongo';
 import cors from "cors";
+import cookieParser from 'cookie-parser'
 
 mongoose.connect("mongodb://database/foodiemate");
 
 process.env.TZ = 'Europe/Berlin';
 
 const app = express()
+
 app.use(express.json())
+app.use(cookieParser());
 
 const port = 20064
 
-// app.use(function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:20061'); // URL deiner React-Anwendung
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     res.header('Access-Control-Allow-Credentials', 'true'); // Hinzufügen dieser Zeile, um Cookies über Cross-Origin-Anfragen zu ermöglichen
-//     next();
-// });
+
 app.use(cors({ origin: true, withCredentials:true}));
 
 

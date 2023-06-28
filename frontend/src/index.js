@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {AuthProvider, RequireAuth} from "react-auth-kit";
 
 import App from './App';
 import Hallo from './components/Hallo'
@@ -24,24 +25,28 @@ import EditUserProfile from "./components/EditUserProfile";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+      <AuthProvider authType={'cookie'}
+                    authName={'_auth'}
+                    cookieDomain={window.location.hostname}
+                    cookieSecure={false}>
       <BrowserRouter>
           <Routes>
               <Route path="/" element={<Navbar />}>
-                  <Route path="" element={<Home />} />
-                  <Route path="contact" element={<Contact />} />
-                  <Route path="hallo" element={<Hallo />} />
-                  <Route path="login" element={<App />} />
-                  <Route path="feed" element={<Feed />} />
-                  <Route path="recipes" element={<Recipes />} />
-                  <Route path="newRecipe" element={<RecipeForm />} />
-                  <Route path="/profile" element={<ShowProfile />} />
-                  <Route path="editUserProfile" element={<EditUserProfile />} />
-                  <Route path="*" element={<PageNotFound />} />
+                  <Route path=""                element={<Home />} />
+                  <Route path="contact"         element={<Contact />} />
+                  <Route path="hallo"           element={<Hallo />} />
+                  <Route path="login"           element={<App />} />
+                  <Route path="feed"            element={ <RequireAuth loginPath={'/login'}><Feed /></RequireAuth>} />
+                  <Route path="recipes"         element={ <RequireAuth loginPath={'/login'}><Recipes /></RequireAuth>} />
+                  <Route path="newRecipe"       element={ <RequireAuth loginPath={'/login'}><RecipeForm /></RequireAuth>} />
+                  <Route path="/profile"        element={ <RequireAuth loginPath={'/login'}><ShowProfile /></RequireAuth>} />
+                  <Route path="editUserProfile" element={ <RequireAuth loginPath={'/login'}><EditUserProfile /></RequireAuth>} />
+                  <Route path="*"               element={<PageNotFound />} />
               </Route>
           </Routes>
           <Footer></Footer>
       </BrowserRouter>
-
+      </AuthProvider>
   </React.StrictMode>
 );
 
