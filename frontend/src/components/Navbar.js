@@ -52,7 +52,7 @@ export default function Navbar() {
                                 <MDBNavbarLink href='/hallo'>hallo</MDBNavbarLink>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <MDBNavbarLink href='/contact'>Contact</MDBNavbarLink>
+                                <MDBNavbarLink href='/restaurants'>Restaurants</MDBNavbarLink>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
                                 <MDBNavbarLink href='/login'>Login</MDBNavbarLink>
@@ -64,7 +64,13 @@ export default function Navbar() {
                                 <MDBNavbarLink href='/editUserProfile'>Profil bearbeiten</MDBNavbarLink>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
+                                <MDBNavbarLink href='/profile'>Profil anzeigen</MDBNavbarLink>
+                            </MDBNavbarItem>
+                            <MDBNavbarItem>
                                 <Search></Search>
+                            </MDBNavbarItem>
+                            <MDBNavbarItem>
+                                <MDBNavbarLink href='/logOut'>Ausloggen</MDBNavbarLink>
                             </MDBNavbarItem>
 
                         </MDBNavbarNav>

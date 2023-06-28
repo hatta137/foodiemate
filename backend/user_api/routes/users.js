@@ -119,6 +119,32 @@ router.get('/getByUserName', async (req, res) => {
     }
 });
 
+
+router.get('/getUser', isAuthenticated, async (req, res) => {
+    try {
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
+        }
+
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
+
+        const user = await User.findById(userId)
+
+        if (!user) {
+            return res.status(404).json({ error: 'User nicht gefunden' })
+        }
+
+
+        res.status(200).json({ user: user })
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+});
+
 /**
  * UserId → ID von dem User der jemandem folgen möchte
  * FollowerId → ID von der Person der gefolgt werden soll
@@ -132,23 +158,18 @@ router.post('/follow', isAuthenticated, async (req, res) => {
 
         const followerId = req.body["followerId"]
 
-        const user = await User.findOne({ userName });
+        const user = await User.findById(followerId);
 
         if (!user) {
             console.log("Benutzer nicht gefunden");
             return res.status(401).json({ error: 'Benutzer nicht gefunden' });
         }
 
-        if (!req.session || req.session.userId !== userId) {
-            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
-        }
-
-
         if(!user) {
             return res.status(404).json({message: 'User nicht gefunden'})
         }
 
-        const follower = await User.findById(followerId)
+        const follower = await User.findById(userId)
 
         if(!follower) {
             return res.status(404).json({message: 'Follower nicht gefunden'})
@@ -161,7 +182,7 @@ router.post('/follow', isAuthenticated, async (req, res) => {
 
         await user.save()
 
-        res.status(200).json({ message: 'Follower erfolgreich hinzugefügt' })
+        res.status(200).json({ message: 'Follower erfolgreich hinzugefügt'})
 
 
 
@@ -171,15 +192,14 @@ router.post('/follow', isAuthenticated, async (req, res) => {
     }
 })
 
-router.get('/:userId/followers', async (req, res) => {
+router.get('/getfollowers', isAuthenticated, async (req, res) => {
     try {
-        const userId = req.params["userId"]
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
 
         const user = await User.findById(userId).populate('followers')
 
-        if (!req.session || req.session.userId !== userId) {
-            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
-        }
 
         if(!user) {
             return res.status(404).json({ message: 'Benutzer nicht gefunden' })
@@ -193,13 +213,11 @@ router.get('/:userId/followers', async (req, res) => {
     }
 })
 
-router.post('/:userId/unfollow', async (req, res) => {
+router.post('/:userId/unfollow', isAuthenticated, async (req, res) => {
     const userId = req.params['userId']
     const followerId = req.body['followerId']
 
-    if (!req.session || req.session.userId !== userId) {
-        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
-    }
+
 
     try {
         const user = await User.findById(userId)
@@ -223,12 +241,18 @@ router.post('/:userId/unfollow', async (req, res) => {
     }
 })
 
-router.delete("/deleteUser", async (req, res) => {
-    const userId = req.session.userId
 
-    if (!req.session || req.session.userId !== userId) {
-        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+
+router.delete("/deleteUser", isAuthenticated, async (req, res) => {
+    let token = req.cookies._auth;
+
+    // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+    if(!token) {
+        token = req.cookies.token
     }
+
+    const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+    const userId = decoded.userId;
 
     User.findByIdAndDelete(userId)
         .then((updatedUser) => {
@@ -242,7 +266,7 @@ router.delete("/deleteUser", async (req, res) => {
             console.error('Fehler bei Aktualisierung der Daten', err)
             res.status(500).json({error: 'Serverfehler'})
         })
-    res.send(userId)
+
 })
 
 router.post('/addRecipe/:userId', async (req, res) => {
@@ -291,9 +315,16 @@ router.post('/dropRecipe/:userId', async (req, res) => {
     }
 })
 
-router.put('/setCookingTogetherDate', isAuthenticated,async (req, res) => {
+router.put('/setCookingTogetherDate', isAuthenticated, async (req, res) => {
 
-    const token = req.cookies.token;
+
+    let token = req.cookies._auth;
+
+    // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+    if(!token) {
+        token = req.cookies.token
+    }
+
     const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
     const userId = decoded.userId;
 
@@ -315,7 +346,12 @@ router.put('/setCookingTogetherDate', isAuthenticated,async (req, res) => {
 })
 
 router.delete('/removeCookingTogetherDate', isAuthenticated, async (req, res) => {
-    const token = req.cookies.token;
+    let token = req.cookies._auth;
+
+    // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+    if(!token) {
+        token = req.cookies.token
+    }
     const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
     const userId = decoded.userId;
 
@@ -370,4 +406,28 @@ router.get('/getUserCTG', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 })
+
+
+router.get('/getUserNameById/:userId', async (req, res)=> {
+
+    try {
+
+        const userId = req.params.userId;
+
+        const userName = User.findById(userId).select('userName')
+
+        if (userName) {
+            res.status(200).json({ message: 'Folgender Username wurden gefunden', users: usersName })
+        } else {
+            res.status(404).json({ message: 'keine User mit dieser ID' })
+        }
+
+
+
+    }catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+
+})
+
 export default router
