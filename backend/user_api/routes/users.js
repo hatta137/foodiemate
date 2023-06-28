@@ -2,6 +2,9 @@ import {Router} from "express";
 import User from "../models/user.js";
 import bcrypt from 'bcryptjs'
 import Session from "express-session/session/session.js";
+import jwt from 'jsonwebtoken'
+
+import isAuthenticated from '../auth.js'
 
 const router = Router();
 
@@ -14,35 +17,76 @@ router.get("/allUsers", async (_req, res) => {
     res.json(data)
 })
 
+
+
+
 router.post("/login", async (req, res) => {
     try {
         const { userName, password } = req.body;
-        console.log(password)
-        console.log(userName)
+        console.log(password);
+        console.log(userName);
 
         const user = await User.findOne({ userName });
         if (!user) {
-            console.log("Benutzer nicht gefunden")
+            console.log("Benutzer nicht gefunden");
             return res.status(401).json({ error: 'Benutzer nicht gefunden' });
         }
 
         // Überprüfe das Passwort
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            console.log("Passwort falsch")
+            console.log("Passwort falsch");
             return res.status(401).json({ error: 'Ungültige Benutzerdaten' });
         }
 
-        //console.log(user)
-        req.session.userId = user._id
+        // Erzeuge das JWT-Token
+        const token = jwt.sign({ userId: user._id }, 'sehr_geheimer_schluessel');
 
-        res.status(200).json("eingeloggt" );
+        return res.cookie("token", token).json({success:true,message:'LoggedIn Successfully'})
+        //res.status(200).json({ token });
 
     } catch (err) {
         console.error('Fehler beim Login', err);
         res.status(500).json({ error: 'Serverfehler' });
     }
 });
+
+
+
+
+
+
+
+// Session Version
+// router.post("/login", async (req, res) => {
+//     try {
+//         const { userName, password } = req.body;
+//         console.log(password)
+//         console.log(userName)
+//
+//         const user = await User.findOne({ userName });
+//         if (!user) {
+//             console.log("Benutzer nicht gefunden")
+//             return res.status(401).json({ error: 'Benutzer nicht gefunden' });
+//         }
+//
+//         // Überprüfe das Passwort
+//         const isMatch = await user.comparePassword(password);
+//         if (!isMatch) {
+//             console.log("Passwort falsch")
+//             return res.status(401).json({ error: 'Ungültige Benutzerdaten' });
+//         }
+//
+//         //console.log(user)
+//         req.session.userId = user._id
+//
+//         res.status(200).json("eingeloggt" );
+//
+//     } catch (err) {
+//         console.error('Fehler beim Login', err);
+//         res.status(500).json({ error: 'Serverfehler' });
+//     }
+// });
 
 //logout
 router.post("/logout", (req, res) => {
@@ -117,13 +161,14 @@ router.get("/userStatus", async (req, res) => {
     }
 })
 
-router.put("/update/:userId", async (req, res) => {
-    try {
-        if (!req.session || req.session.userId !== req.params.userId) {
-            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
-        }
 
-        const userId = req.params.userId;
+
+
+router.put("/update", isAuthenticated, async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
         const updateData = req.body;
 
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
@@ -138,6 +183,34 @@ router.put("/update/:userId", async (req, res) => {
         res.status(500).json({ error: 'Serverfehler' });
     }
 });
+
+
+
+
+
+
+
+// router.put("/update/:userId", async (req, res) => {
+//     try {
+//         if (!req.session || req.session.userId !== req.params.userId) {
+//             return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+//         }
+//
+//         const userId = req.params.userId;
+//         const updateData = req.body;
+//
+//         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
+//
+//         if (updatedUser) {
+//             res.status(200).json({ message: 'Daten erfolgreich aktualisiert', user: updatedUser });
+//         } else {
+//             res.status(404).json({ message: 'Benutzer nicht gefunden' });
+//         }
+//     } catch (err) {
+//         console.error('Fehler bei Aktualisierung der Daten', err);
+//         res.status(500).json({ error: 'Serverfehler' });
+//     }
+// });
 
 router.get('/getByUserName', async (req, res) => {
     try {
