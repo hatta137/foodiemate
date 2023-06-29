@@ -101,20 +101,23 @@ const UserProfile = () => {
     }
 
     return (
-        <div>
+        <div className={"User-Profile-Card-HL"}>
             <MDBCard>
                 <MDBCardImage position='top' alt='...' src='https://mdbootstrap.com/img/new/standard/city/062.webp' />
                 <MDBCardBody>
                     <MDBCardTitle>Hallo</MDBCardTitle>
                     <MDBCardText>{user.firstName}</MDBCardText>
                 </MDBCardBody>
-                <MDBListGroup flush>
+                <MDBListGroup >
                     <MDBListGroupItem>Vorname: {user.firstName}</MDBListGroupItem>
                     <MDBListGroupItem>Nachname: {user.lastName}</MDBListGroupItem>
                     <MDBListGroupItem>Benutzername: {user.userName}</MDBListGroupItem>
                     <MDBListGroupItem>E-Mailadresse: {user.emailAddress}</MDBListGroupItem>
                     <MDBListGroupItem>Cooking Together Date: {user.cookingTogetherDate} <button onClick={handleCTGdelete}>löschen</button></MDBListGroupItem>
-                    <MDBListGroupItem>CTD setzen: <input  value={date} onChange={(e) => setDate(e.target.value)} type={'date'}/><button onClick={handleCTG}>speichern</button></MDBListGroupItem>
+                    <MDBListGroupItem>CTD setzen:
+                        <input  value={date} onChange={(e) => setDate(e.target.value)} type={'date'}/>
+                        <button onClick={handleCTG}>speichern</button>
+                    </MDBListGroupItem>
                 </MDBListGroup>
                 {/*<MDBListGroup>
                     <ul>
