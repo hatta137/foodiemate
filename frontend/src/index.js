@@ -17,6 +17,7 @@ import './styles/index.css';
 import './styles/SearchBox.css'
 import './styles/Home.css'
 import './styles/UserProfile.css'
+import './styles/NewRecipe.css'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Feed from "./components/Feed";
