@@ -9,7 +9,6 @@ const RecipeForm = () => {
     const [instructions, setInstructions] = useState("");
     const [drink, setDrink] = useState("");
 
-
     const isAuthenticated = useIsAuthenticated()
     const handleTitleChange = (e) => {setTitle(e.target.value)};
 
@@ -51,8 +50,6 @@ const RecipeForm = () => {
             drink,
         };
 
-
-
         try {
 
             if (isAuthenticated()) {
@@ -60,7 +57,6 @@ const RecipeForm = () => {
                 const response = await axios.post("http://localhost:20064/recipe/new/", recipeData, {
                     withCredentials: true
                 });
-
 
             } else {
                 // Der Benutzer ist nicht authentifiziert

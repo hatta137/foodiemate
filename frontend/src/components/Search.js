@@ -27,16 +27,11 @@ export default function Search() {
     };
 
     return (
-        <div className="text-white">
-            <MDBInputGroup>
-                <MDBInput
-                    label="Search"
-                    ref={userInputRef}
-                />
-                <MDBBtn onClick={handleSearch} rippleColor="dark">
-                    <MDBIcon icon="search" />
-                </MDBBtn>
-            </MDBInputGroup>
+        <div>
+            <div className="search-box">
+                <button className="btn-search" onClick={handleSearch}><i className="fas fa-search"></i></button>
+                <input type="text" className="input-search" ref={userInputRef} placeholder="Type to Search..."/>
+            </div>
         </div>
     );
 }

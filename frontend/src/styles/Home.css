@@ -1,0 +1,17 @@
+.Home-HL {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 50px;
+}
+
+.Home-H1-HL {
+    margin-right: 5rem;
+    font-size: 5rem;
+}
+
+.FM-Logo-HL {
+    width: 300px;
+    height: 300px;
+}

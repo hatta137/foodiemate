@@ -3,6 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ListFollowers from "./ListFollowers";
 
+import {
+    MDBCard,
+    MDBCardImage,
+    MDBCardBody,
+    MDBCardTitle,
+    MDBCardText,
+    MDBCardLink,
+    MDBListGroup,
+    MDBListGroupItem
+} from 'mdb-react-ui-kit';
+
 const UserProfile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -91,26 +102,34 @@ const UserProfile = () => {
 
     return (
         <div>
-            <h2>User Profile</h2>
-            <p>First Name: {user.firstName}</p>
-            <p>Last Name: {user.lastName}</p>
-            <p>Username: {user.userName}</p>
-            <p>Email Address: {user.emailAddress}</p>
-            <p>CTG Date: {user.cookingTogetherDate}</p>
-            <p>Cooking Together Date setzen:</p>
-            <input  value={date} onChange={(e) => setDate(e.target.value)} type={'date'}/>
-            <button onClick={handleCTG}>CTG setzen</button>
-            <button onClick={handleCTGdelete}>CTG entfernen</button>
-            <h2>Followers</h2>
-            <ul>
-                {user.followers.map((follower) => (
-                    <li key={follower._id}>
-                        {/*<p>{ListFollowers(follower._id)}</p>*/}
-                    </li>
-                ))}
-            </ul>
-            <button onClick={handleDeleteProfile}>Delete Profile</button>
-            <button onClick={handleEditProfile}>Edit Profile</button>
+            <MDBCard>
+                <MDBCardImage position='top' alt='...' src='https://mdbootstrap.com/img/new/standard/city/062.webp' />
+                <MDBCardBody>
+                    <MDBCardTitle>Hallo</MDBCardTitle>
+                    <MDBCardText>{user.firstName}</MDBCardText>
+                </MDBCardBody>
+                <MDBListGroup flush>
+                    <MDBListGroupItem>Vorname: {user.firstName}</MDBListGroupItem>
+                    <MDBListGroupItem>Nachname: {user.lastName}</MDBListGroupItem>
+                    <MDBListGroupItem>Benutzername: {user.userName}</MDBListGroupItem>
+                    <MDBListGroupItem>E-Mailadresse: {user.emailAddress}</MDBListGroupItem>
+                    <MDBListGroupItem>Cooking Together Date: {user.cookingTogetherDate} <button onClick={handleCTGdelete}>löschen</button></MDBListGroupItem>
+                    <MDBListGroupItem>CTD setzen: <input  value={date} onChange={(e) => setDate(e.target.value)} type={'date'}/><button onClick={handleCTG}>speichern</button></MDBListGroupItem>
+                </MDBListGroup>
+                {/*<MDBListGroup>
+                    <ul>
+                            {user.followers.map((follower) => (
+                                <li key={follower._id}>
+                                    <p>{ListFollowers(follower._id)}</p>
+                                </li>
+                            ))}
+                    </ul>
+                </MDBListGroup>*/}
+                <MDBCardBody>
+                    <MDBCardLink href='/editUserProfile'>Profil bearbeiten</MDBCardLink>
+                    <MDBCardLink href='#' onClick={handleDeleteProfile}>Profil löschen</MDBCardLink>
+                </MDBCardBody>
+            </MDBCard>
         </div>
     );
 };

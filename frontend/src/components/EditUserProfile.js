@@ -44,14 +44,10 @@ const EditUserProfile = () => {
                 console.log("nicht eingeloggt")
             }
 
-
-
         } catch (err) {
             console.log('Fehler beim Update des Benutzers', err);
         }
     };
-
-
 
     return (
         <div>
