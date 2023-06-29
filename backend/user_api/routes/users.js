@@ -103,12 +103,12 @@ router.put("/update", isAuthenticated, async (req, res) => {
 });
 
 
-router.get('/getByUserName', async (req, res) => {
+router.get('/getByUserName/', async (req, res) => {
     try {
         const name = req.query.userName;
-
+        console.log(name)
         const user = await User.findOne({ userName: name })
-
+        console.log(user)
         if (!user) {
             return res.status(404).json({ error: 'User nicht gefunden' })
         }
@@ -152,11 +152,16 @@ router.get('/getUser', isAuthenticated, async (req, res) => {
 router.post('/follow', isAuthenticated, async (req, res) => {
     try {
 
-        const token = req.cookies.token;
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
+        }
         const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
         const userId = decoded.userId;
 
-        const followerId = req.body["followerId"]
+        const followerId = req.body.followerId
 
         const user = await User.findById(followerId);
 
@@ -240,8 +245,6 @@ router.post('/:userId/unfollow', isAuthenticated, async (req, res) => {
         res.status(500).json({ error: 'Serverfehler' })
     }
 })
-
-
 
 router.delete("/deleteUser", isAuthenticated, async (req, res) => {
     let token = req.cookies._auth;

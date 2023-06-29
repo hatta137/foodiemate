@@ -4,6 +4,7 @@ import './styles/App.css';
 
 import Login from "./components/Login";
 import Register from "./components/Register";
+import {div} from "mdb-ui-kit/src/js/mdb/perfect-scrollbar/lib/dom";
 
 const App = () => {
   const [currentForm, setCurrentForm] = useState('login')

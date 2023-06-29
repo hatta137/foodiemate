@@ -1,44 +1,38 @@
-import React, {useEffect, useState} from 'react';
+import React, { useRef } from 'react';
 import { MDBInputGroup, MDBInput, MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Search() {
-    const [user, setUser] = useState(null)
-    const [userName, setUserName] = useState('')
-    const [searchTerm, setSearchTerm] = useState('')
-    const [searchSubmitted, setSearchSubmitted] = useState(false)
-
+    const userInputRef = useRef(null);
     const navigate = useNavigate();
 
-    useEffect( () => {
-
-        if (searchSubmitted && userName !=='') {
-            axios.get("http://localhost:20063/users/getByUserName", {
-                params: {
-                    userName: userName
-                }})
-                .then((response) => {
-                    setUser(response.data)
-                })
-                .catch((error) => {
-                    console.error("Fehler beim Abruf des Users", error)
-                })
-        }
-    }, [searchSubmitted,userName])
-
     const handleSearch = async () => {
-        setUserName(searchTerm)
-        setSearchSubmitted(true)
-        console.log(user)
-        navigate('/profile', { state: { user: user } });
+        try {
+            const searchTerm = userInputRef.current.value;
+            const response = await axios.get("http://localhost:20063/users/getByUserName", {
+                params: {
+                    userName: searchTerm
+                },
+                withCredentials: true
+            });
 
-    }
+            const user = response.data.user;
+            console.log(user.firstName);
+            navigate('/showProfile', { state: { user: response.data.user } });
+
+        } catch (error) {
+            console.error("Fehler beim Abruf des Users", error);
+        }
+    };
 
     return (
         <div className="text-white">
             <MDBInputGroup>
-                <MDBInput label="Search" onChange={(e) => setSearchTerm(e.target.value)} />
+                <MDBInput
+                    label="Search"
+                    ref={userInputRef}
+                />
                 <MDBBtn onClick={handleSearch} rippleColor="dark">
                     <MDBIcon icon="search" />
                 </MDBBtn>
