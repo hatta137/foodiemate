@@ -1,7 +1,6 @@
 import {Router} from "express";
 import User from "../models/user.js";
 import bcrypt from 'bcryptjs'
-import Session from "express-session/session/session.js";
 import jwt from 'jsonwebtoken'
 
 import isAuthenticated from '../auth.js'
@@ -66,14 +65,14 @@ router.post("/register", async (req, res) => {
             userName: data["userName"],
             emailAddress: data["emailAddress"],
             password: await bcrypt.hash(password, saltRounds)
-        })
-        await newUser.save()
-        res.status(200).json({ message: 'User erfolgreich angelegt', user: newUser })
+        });
+        await newUser.save();
+        res.status(200).json({ message: 'User erfolgreich angelegt', user: newUser });
     } catch (err) {
-        console.error('Fehler bei Registrierung', err)
-        res.status(500).json({ error: 'Serverfehler' })
+        console.error('Fehler bei Registrierung', err);
+        res.status(500).json({ error: 'Serverfehler' });
     }
-})
+});
 
 
 router.put("/update", isAuthenticated, async (req, res) => {
