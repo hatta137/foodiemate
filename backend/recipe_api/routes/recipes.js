@@ -134,4 +134,26 @@ router.get('/recipeByCount', async (req, res) => {
     }
 })
 
+
+router.get('/recipesToDrink/:drink', async (req, res) => {
+    try {
+        const drink = req.params.drink;
+        const recipes = await Recipe.find({ drink: drink });
+        res.json(recipes);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+router.get('/recipeOfTheDay', async (req, res) => {
+    try {
+        const count = await Recipe.countDocuments();
+        const randomIndex = Math.floor(Math.random() * count);
+        const recipe = await Recipe.findOne().skip(randomIndex);
+        res.json(recipe);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 export { router }

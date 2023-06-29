@@ -410,7 +410,6 @@ router.get('/getUserCTG', async (req, res) => {
     }
 })
 
-
 router.get('/getUserNameById/:userId', async (req, res)=> {
 
     try {
@@ -432,5 +431,32 @@ router.get('/getUserNameById/:userId', async (req, res)=> {
     }
 
 })
+
+router.get('/getMyRecipes', isAuthenticated, async (req, res) => {
+    try {
+        let token = req.cookies._auth;
+        console.log(token)
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if (!token) {
+            token = req.cookies.token
+            console.log(token)
+        }
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
+        console.log(userId)
+
+        const user = await User.findById(userId);
+        console.log('user')
+        console.log(user)
+
+        if (user) {
+            res.status(200).json({ message: 'Folgende Rezepte gefunden:', myRecipes: user.myRecipes });
+        } else {
+            res.status(404).json({ message: 'Keine Rezepte bei diesem User gefunden.' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 export default router

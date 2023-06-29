@@ -24,6 +24,7 @@ import UserProfile from "./components/UserProfile";
 import Restaurants from "./components/Restaurants";
 import ShowProfile from "./components/ShowProfile";
 import Search from "./components/Search";
+import MyRecipes from "./components/MyRecipes";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -46,6 +47,7 @@ root.render(
                   <Route path="profile"         element={ <RequireAuth loginPath={'/login'}><UserProfile /></RequireAuth>} />
                   <Route path="showProfile"     element={ <RequireAuth loginPath={'/login'}><ShowProfile /></RequireAuth>} />
                   <Route path="search"          element={ <RequireAuth loginPath={'/login'}><Search /></RequireAuth>} />
+                  <Route path="myRecipes"       element={ <RequireAuth loginPath={'/login'}><MyRecipes /></RequireAuth>} />
                   <Route path="editUserProfile" element={ <RequireAuth loginPath={'/login'}><EditUserProfile /></RequireAuth>} />
                   <Route path="*"               element={<PageNotFound />} />
               </Route>

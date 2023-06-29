@@ -61,10 +61,10 @@ export default function Navbar() {
                                 <MDBNavbarLink href='/newRecipe'>Neues Rezept</MDBNavbarLink>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <MDBNavbarLink href='/editUserProfile'>Profil bearbeiten</MDBNavbarLink>
+                                <MDBNavbarLink href='/profile'>Profil anzeigen</MDBNavbarLink>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
-                                <MDBNavbarLink href='/profile'>Profil anzeigen</MDBNavbarLink>
+                                <MDBNavbarLink href='/myRecipes'>Meine Rezepte</MDBNavbarLink>
                             </MDBNavbarItem>
                             <MDBNavbarItem>
                                 <Search></Search>
