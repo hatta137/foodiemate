@@ -13,7 +13,7 @@ const ShowProfile = () => {
         };
         console.log(data)
         try {
-            const response = await axios.post('https://localhost/20063/users/follow', data, {
+            const response = await axios.post('http://localhost:20063/users/follow', data, {
                 withCredentials: true
             });
             console.log(response.data);
