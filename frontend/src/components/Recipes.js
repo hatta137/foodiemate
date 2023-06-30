@@ -35,12 +35,10 @@ const Recipes = () => {
         return <div>Lade Rezepte...</div>;
     }
 
-    console.log(recipes)
     return (
         <div className={"text-md-center"}>
             <div className={"Recipe-Container-HL"}>
-
-                <h2>Rezeptliste</h2>
+                <h2>Alle Rezepte</h2>
                 <div className={"Recipe-Card-HL"}>
                     {recipes.slice(0, visibleRecipes).map((recipe) => (
                         <RecipeCard key={recipe._id} recipe={recipe} />
@@ -61,7 +59,6 @@ const Recipes = () => {
                         Mehr Laden
                     </button>
                 </div>
-
             </div>
         </div>
 

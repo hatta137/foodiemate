@@ -14,11 +14,10 @@ const MyRecipes = () => {
                 withCredentials: true,
             })
             .then((response) => {
-                console.log(response)
-                console.log(response.data)
+
                 if (response.status === 200) {
                     setRecipes(response.data.myRecipes);
-                    console.log(recipes)
+
                 } else {
                     // alert('Keine eigenen Rezepte gefunden')
                     navigate("/recipes");
@@ -41,13 +40,9 @@ const MyRecipes = () => {
             <div className={"Recipe-Container-HL"}>
                 <h2>Meine Rezepte</h2>
                 <div className={"Recipe-Card-HL"}>
-                    <ul>
-                        {recipes && recipes.map((recipe) => (
-                            <li key={recipe._id}>
-                                <RecipeCard recipe={recipe} />
-                            </li>
+                        {recipes.map((recipe) => (
+                                <RecipeCard key={recipe._id} recipe={recipe} />
                         ))}
-                    </ul>
                 </div>
             </div>
         </div>
