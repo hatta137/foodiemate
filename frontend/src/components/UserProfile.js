@@ -59,10 +59,9 @@ const UserProfile = () => {
         }
     };
 
-    const handleEditProfile = () => {
-        // Handle profile editing logic here
-        navigate('/editUserProfile')
-    };
+    /*const handleEditProfile = () => {
+        navigate('/editUserProfile', { state: { actualUser: user } });
+    };*/
 
     const handleCTG = async (e) => {
         e.preventDefault();
@@ -129,7 +128,7 @@ const UserProfile = () => {
                     </ul>
                 </MDBListGroup>
                 <MDBCardBody>
-                    <MDBCardLink href='/editUserProfile'>Profil bearbeiten</MDBCardLink>
+                    <MDBCardLink href='/editUserProfile' >Profil bearbeiten</MDBCardLink>
                     <MDBCardLink href='#' onClick={handleDeleteProfile}>Profil löschen</MDBCardLink>
                 </MDBCardBody>
             </MDBCard>

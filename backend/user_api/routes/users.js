@@ -89,12 +89,14 @@ router.put("/update", isAuthenticated, async (req, res) => {
         const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
         const userId = decoded.userId;
 
-        const unHash = req.body.password;
-        console.log(unHash)
-        const password = await bcrypt.hash(unHash, saltRounds)
-
         let updateData = req.body;
-        updateData['password'] = password;
+        const unHash = req.body.passwordUnhash;
+
+        if (unHash) {
+            console.log(unHash)
+            updateData['password'] = await bcrypt.hash(unHash, saltRounds);
+        }
+
 
         console.log(updateData)
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
