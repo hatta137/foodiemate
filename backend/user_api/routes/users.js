@@ -392,7 +392,7 @@ router.get('/getEmailAddress/:userId', async (req, res) => {
 })
 
 router.get('/getUserCTG', async (req, res) => {
-    const date = req.params.date
+    const  date = req.params.date
 
     try {
 
