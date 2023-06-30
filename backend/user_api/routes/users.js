@@ -198,7 +198,12 @@ router.post('/follow', isAuthenticated, async (req, res) => {
 
 router.get('/getfollowers', isAuthenticated, async (req, res) => {
     try {
-        const token = req.cookies.token;
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
+        }
         const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
         const userId = decoded.userId;
 
@@ -217,9 +222,19 @@ router.get('/getfollowers', isAuthenticated, async (req, res) => {
     }
 })
 
-router.post('/:userId/unfollow', isAuthenticated, async (req, res) => {
-    const userId = req.params['userId']
-    const followerId = req.body['followerId']
+router.post('/unfollow', isAuthenticated, async (req, res) => {
+    // Id von dem Benutzer dessen Follower der angemeldete User ist und dem dieser Follower entzogen wird
+    const userId = req.body.userId;
+
+
+    let token = req.cookies._auth;
+
+    // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+    if(!token) {
+        token = req.cookies.token
+    }
+    const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+    const followerId = decoded.userId;
 
 
 
