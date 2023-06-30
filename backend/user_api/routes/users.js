@@ -1,5 +1,6 @@
 import {Router} from "express";
 import User from "../models/user.js";
+import Recipe from "../models/recipe.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
@@ -76,6 +77,7 @@ router.post("/register", async (req, res) => {
 
 
 router.put("/update", isAuthenticated, async (req, res) => {
+    const saltRounds = 10
     try {
         let token = req.cookies._auth;
 
@@ -86,7 +88,14 @@ router.put("/update", isAuthenticated, async (req, res) => {
 
         const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
         const userId = decoded.userId;
-        const updateData = req.body;
+
+        const unHash = req.body.password;
+        console.log(unHash)
+        const password = await bcrypt.hash(unHash, saltRounds)
+
+        let updateData = req.body;
+        updateData['password'] = password;
+
         console.log(updateData)
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
 
@@ -131,7 +140,7 @@ router.get('/getUser', isAuthenticated, async (req, res) => {
         const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
         const userId = decoded.userId;
 
-        const user = await User.findById(userId)
+        const user = await User.findById(userId).populate('followers')
 
         if (!user) {
             return res.status(404).json({ error: 'User nicht gefunden' })
@@ -459,7 +468,7 @@ router.get('/getMyRecipes', isAuthenticated, async (req, res) => {
         const userId = decoded.userId;
         console.log(userId)
 
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).populate('myRecipes');
         console.log('user')
         console.log(user)
 
@@ -469,6 +478,7 @@ router.get('/getMyRecipes', isAuthenticated, async (req, res) => {
             res.status(404).json({ message: 'Keine Rezepte bei diesem User gefunden.' });
         }
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });

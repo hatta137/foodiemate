@@ -28,7 +28,7 @@ const UserProfile = () => {
                     withCredentials: true
                 });
                 setUser(response.data.user);
-
+                console.log(response.data.user)
 
             } catch (error) {
                 console.error(error);
@@ -119,15 +119,15 @@ const UserProfile = () => {
                         <button onClick={handleCTG}>speichern</button>
                     </MDBListGroupItem>
                 </MDBListGroup>
-                {/*<MDBListGroup>
+                <MDBListGroup>
                     <ul>
                             {user.followers.map((follower) => (
                                 <li key={follower._id}>
-                                    <p>{ListFollowers(follower._id)}</p>
+                                    <p>{follower.userName}</p>
                                 </li>
                             ))}
                     </ul>
-                </MDBListGroup>*/}
+                </MDBListGroup>
                 <MDBCardBody>
                     <MDBCardLink href='/editUserProfile'>Profil bearbeiten</MDBCardLink>
                     <MDBCardLink href='#' onClick={handleDeleteProfile}>Profil löschen</MDBCardLink>

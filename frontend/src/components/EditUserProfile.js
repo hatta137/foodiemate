@@ -12,7 +12,6 @@ const EditUserProfile = () => {
     const [userName, setUserName] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
-    const [pwUnHash, setPwUnHash] = useState("")
     const saltRounds = 10
     const navigate = useNavigate();
 
@@ -23,16 +22,15 @@ const EditUserProfile = () => {
             userName,
             firstName,
             lastName,
-            emailAddress
+            emailAddress,
+            password,
         }
 
         try {
 
             if (isAuthenticated()) {
 
-                //const hash = await bcrypt.hash(pwUnHash, saltRounds)
-                //setPassword(hash)
-                //console.log(password)
+
 
                 const response = await axios.put(`http://localhost:20063/users/update/`, userData, {
                     withCredentials: true
@@ -69,10 +67,10 @@ const EditUserProfile = () => {
                     <label>E-Mail-Adresse:</label>
                     <input type="email" value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)} />
                 </div>
-                {/*<div>
+                <div>
                     <label>Passwort:</label>
-                    <input type="password" value={pwUnHash} onChange={(e) => setPwUnHash(e.target.value)} />
-                </div>*/}
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </div>
                 <button type="button" onClick={handleSave}>Speichern</button>
             </form>
         </div>
