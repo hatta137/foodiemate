@@ -15,13 +15,15 @@ mongoose.connect("mongodb://ss2023_wa_foodiemate_database/foodiemate")
 
 
 const app = express()
-
 app.use(cors());
 
 app.use(express.json())
 
 const port = 20063
-/*app.use(function (req, res, next) {
+
+
+/*
+app.use(function (req, res, next) {
     const allowedOrigins = [
         'http://localhost:20061',
         'http://localhost:20062',
@@ -43,7 +45,7 @@ const port = 20063
 
 
 const sessionStore = MongoStore.create({
-    mongoUrl: 'mongodb://database/foodiemate', // MongoDB-Verbindungs-URL
+    mongoUrl: 'mongodb://ss2023_wa_foodiemate_database/foodiemate', // MongoDB-Verbindungs-URL
     collectionName: 'sessions', // Name der MongoDB-Sessions-Sammlung
     ttl: 3600 // Ablaufzeit der Session in Sekunden
 });
@@ -80,7 +82,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://194.94.204.27:20063",
+                url: "http://localhost:20063",
                 description: "USER_API",
             },
         ],
@@ -97,5 +99,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)
 
 
 app.listen(port, () => {
-    console.log(`USER_API listening at http://194.94.204.27:${port}`)
+    console.log(`USER_API listening at http://localhost:${port}`)
 })

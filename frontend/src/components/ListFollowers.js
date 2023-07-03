@@ -1,8 +1,10 @@
 import axios from "axios";
+
+const ipAddr = process.env.REACT_APP_IP_ADDR
 const ListFollowers = async ({userId}) => {
 
     try {
-        const response = await axios.get(`https://194.94.204.27:20063/users/getUserNameById/${userId}`);
+        const response = await axios.get(`https://${ipAddr}:20063/users/getUserNameById/${userId}`);
 
         console.log(response.data)
 

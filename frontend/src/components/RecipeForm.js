@@ -14,6 +14,8 @@ import {
 } from 'mdb-react-ui-kit';
 import {Link} from "react-router-dom";
 
+const ipAddr = process.env.REACT_APP_IP_ADDR
+
 const RecipeForm = () => {
     const [title, setTitle] = useState("");
     const [image, setImage] = useState("");
@@ -66,7 +68,7 @@ const RecipeForm = () => {
 
             if (isAuthenticated()) {
 
-                const response = await axios.post("http://194.94.204.27:20064/recipe/new/", recipeData, {
+                const response = await axios.post(`http://${ipAddr}:20064/recipe/new/`, recipeData, {
                     withCredentials: true
                 });
 

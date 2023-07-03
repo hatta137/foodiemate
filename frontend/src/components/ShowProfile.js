@@ -4,6 +4,7 @@ import button from "mdb-ui-kit/src/js/free/button";
 import axios from "axios";
 
 
+
 import {
     MDBCard,
     MDBCardImage,
@@ -14,6 +15,8 @@ import {
     MDBListGroup,
     MDBListGroupItem
 } from 'mdb-react-ui-kit';
+
+const ipAddr = process.env.REACT_APP_IP_ADDR
 const ShowProfile = () => {
     const location = useLocation();
     const [user, setUser] = useState(location.state.user)
@@ -26,7 +29,7 @@ const ShowProfile = () => {
         };
         console.log(data)
         try {
-            const response = await axios.post('http://194.94.204.27:20063/users/follow', data, {
+            const response = await axios.post(`http://${ipAddr}:20063/users/follow`, data, {
                 withCredentials: true
             });
             console.log(response.data);
@@ -43,7 +46,7 @@ const ShowProfile = () => {
 
         try {
 
-            const response = await axios.post(`http://localhost:20063/users/unfollow`, data,{
+            const response = await axios.post(`http://${ipAddr}:20063/users/unfollow`, data,{
                 withCredentials: true
             })
             if (response.status === 200) {

@@ -29,7 +29,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://194.94.204.27:20061",
+                url: "http://localhost:20061",
                 description: "COOKINGTOGETHER_API",
             },
         ],
@@ -45,5 +45,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)
 
 
 app.listen(port, () => {
-    console.log(`RECIPE_API listening at http://194.94.204.27:${port}`)
+    console.log(`RECIPE_API listening at http://localhost:${port}`)
 })

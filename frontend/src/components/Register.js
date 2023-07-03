@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+const ipAddr = process.env.REACT_APP_IP_ADDR;
 const Register = (props) => {
 
     const [email, setEmail] = useState('')
@@ -13,7 +14,7 @@ const Register = (props) => {
         event.preventDefault()
 
         try {
-            const response = await axios.post('http://194.94.204.27:20063/users/register', {
+            const response = await axios.post(`http://${ipAddr}:20063/users/register`, {
                 firstName: firstName,
                 lastName: lastName,
                 emailAddress: email,

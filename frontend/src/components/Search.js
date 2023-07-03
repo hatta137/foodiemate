@@ -3,6 +3,8 @@ import { MDBInputGroup, MDBInput, MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const ipAddr = process.env.REACT_APP_IP_ADDR
+
 export default function Search() {
     const userInputRef = useRef(null);
     const navigate = useNavigate();
@@ -10,7 +12,7 @@ export default function Search() {
     const handleSearch = async () => {
         try {
             const searchTerm = userInputRef.current.value;
-            const response = await axios.get("http://194.94.204.27:20063/users/getByUserName", {
+            const response = await axios.get(`http://${ipAddr}:20063/users/getByUserName`, {
                 params: {
                     userName: searchTerm
                 },

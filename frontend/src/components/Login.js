@@ -4,6 +4,7 @@ import axios from "axios"
 import { useSignIn } from "react-auth-kit";
 
 
+
 const Login = (props) => {
 
     const [username, setUsername] = useState('')
@@ -31,7 +32,10 @@ const Login = (props) => {
         }
 
         try {
-            const response = await axios.post('http://194.94.204.27:20063/users/login', {
+
+            const ipAddr = process.env.REACT_APP_IP_ADDR;
+            console.log(process.env)
+            const response = await axios.post(`http://${ipAddr}:20063/users/login`, {
                 password: password,
                 userName: username,
             });

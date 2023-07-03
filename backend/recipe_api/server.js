@@ -16,15 +16,14 @@ mongoose.connect("mongodb://ss2023_wa_foodiemate_database/foodiemate");
 const app = express()
 
 app.use(cors());
-
 const port = 20064
 
 
 /*app.use(function (req, res, next) {
     const allowedOrigins = [
-        'http://0.0.0.0:20061',
-        'http://0.0.0.0:20062',
-        'http://0.0.0.0:20063',
+        'http://localhost:20061',
+        'http://localhost:20062',
+        'http://localhost:20063',
         // Füge hier weitere erlaubte Ursprünge hinzu
     ];
     const { origin } = req.headers;
@@ -57,7 +56,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://194.94.204.27:20064",
+                url: "http://localhost:20064",
                 description: "RECIPE_API",
             },
         ],
@@ -73,5 +72,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)
 
 
 app.listen(port, () => {
-    console.log(`RECIPE_API listening at http://194.94.204.27:${port}`)
+    console.log(`RECIPE_API listening at http://localhost:${port}`)
 })
