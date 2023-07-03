@@ -80,6 +80,9 @@ services:
     container_name: frontend
     ports:
       - 20061:20061
+
+    environment:
+      - REACT_APP_IP_ADDR=localhost
     #volumes:
     #  - ./frontend:/app
     networks:

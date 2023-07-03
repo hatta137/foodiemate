@@ -3,6 +3,8 @@ import axios from "axios";
 import RecipeCard from "./RecipeCard";
 import { useNavigate } from "react-router-dom";
 
+const ipAddr = process.env.REACT_APP_IP_ADDR
+
 const MyRecipes = () => {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -10,7 +12,7 @@ const MyRecipes = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:20063/users/getMyRecipes", {
+            .get("http://ipAddr:20063/users/getMyRecipes", {
                 withCredentials: true,
             })
             .then((response) => {

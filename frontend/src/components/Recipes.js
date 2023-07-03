@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import RecipeCard from "./RecipeCard";
 
+const ipAddr = process.env.REACT_APP_IP_ADDR
+
 const Recipes = () => {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -9,7 +11,7 @@ const Recipes = () => {
     const [loadMore, setLoadMore] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:20064/recipe/recipeByCount", {
+        axios.get(`http://${ipAddr}:20064/recipe/recipeByCount`, {
             params: {
                 count: visibleRecipes, // Anzahl der Rezepte, die abgerufen werden sollen
             }})

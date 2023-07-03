@@ -10,6 +10,8 @@ import {
 import {useAuthHeader, useAuthUser} from "react-auth-kit";
 import axios from "axios";
 
+const ipAddr = process.env.REACT_APP_IP_ADDR
+
 const RecipeCard = ({ recipe }) => {
     const authUser  = useAuthUser()
     
@@ -17,7 +19,7 @@ const RecipeCard = ({ recipe }) => {
         try {
             console.log(recipe)
             const userId = authUser().userId
-            const response = await axios.post(`http://localhost:20063/users/addRecipe/${userId}`, {
+            const response = await axios.post(`http://${ipAddr}:20063/users/addRecipe/${userId}`, {
                 recipeId: recipe._id
             }, {
                 withCredentials: true
