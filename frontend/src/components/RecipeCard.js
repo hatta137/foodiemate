@@ -17,7 +17,7 @@ const RecipeCard = ({ recipe }) => {
         try {
             console.log(recipe)
             const userId = authUser().userId
-            const response = await axios.post(`http://localhost:20063/users/addRecipe/${userId}`, {
+            const response = await axios.post(`http://194.94.204.27:20063/users/addRecipe/${userId}`, {
                 recipeId: recipe._id
             }, {
                 withCredentials: true

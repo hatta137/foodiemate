@@ -9,7 +9,7 @@ const Recipes = () => {
     const [loadMore, setLoadMore] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:20064/recipe/recipeByCount", {
+        axios.get("http://194.94.204.27:20064/recipe/recipeByCount", {
             params: {
                 count: visibleRecipes, // Anzahl der Rezepte, die abgerufen werden sollen
             }})

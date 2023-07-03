@@ -10,7 +10,7 @@ export default function Search() {
     const handleSearch = async () => {
         try {
             const searchTerm = userInputRef.current.value;
-            const response = await axios.get("http://localhost:20063/users/getByUserName", {
+            const response = await axios.get("http://194.94.204.27:20063/users/getByUserName", {
                 params: {
                     userName: searchTerm
                 },

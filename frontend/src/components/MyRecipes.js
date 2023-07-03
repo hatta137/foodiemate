@@ -10,7 +10,7 @@ const MyRecipes = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:20063/users/getMyRecipes", {
+            .get("http://l194.94.204.27:20063/users/getMyRecipes", {
                 withCredentials: true,
             })
             .then((response) => {

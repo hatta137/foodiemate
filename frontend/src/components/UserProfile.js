@@ -24,7 +24,7 @@ const UserProfile = () => {
         // Fetch user data from backend
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`http://localhost:20063/users/getUser/`, {
+                const response = await axios.get(`http://194.94.204.27:20063/users/getUser/`, {
                     withCredentials: true
                 });
                 setUser(response.data.user);
@@ -45,7 +45,7 @@ const UserProfile = () => {
 
     const handleDeleteProfile = async () => {
         try {
-            const response = await axios.delete(`http://localhost:20063/users/deleteUser/`, {
+            const response = await axios.delete(`http://194.94.204.27:20063/users/deleteUser/`, {
                 withCredentials: true
             })
 
@@ -67,7 +67,7 @@ const UserProfile = () => {
         e.preventDefault();
         try {
 
-            const response = await axios.put(`http://localhost:20063/users/setCookingTogetherDate/`, {
+            const response = await axios.put(`http://194.94.204.27:20063/users/setCookingTogetherDate/`, {
                 cookingTogetherDate: date
             }, {
                 withCredentials: true
@@ -86,7 +86,7 @@ const UserProfile = () => {
         e.preventDefault();
         try {
 
-            const response = await axios.delete('http://localhost:20063/users/removeCookingTogetherDate', {
+            const response = await axios.delete('http://194.94.204.27:20063/users/removeCookingTogetherDate', {
                 withCredentials: true
             })
 

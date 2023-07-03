@@ -66,7 +66,7 @@ const RecipeForm = () => {
 
             if (isAuthenticated()) {
 
-                const response = await axios.post("http://localhost:20064/recipe/new/", recipeData, {
+                const response = await axios.post("http://194.94.204.27:20064/recipe/new/", recipeData, {
                     withCredentials: true
                 });
 

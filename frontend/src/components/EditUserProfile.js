@@ -29,7 +29,7 @@ const EditUserProfile = () => {
         // Fetch user data from backend
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`http://localhost:20063/users/getUser/`, {
+                const response = await axios.get(`http://194.94.204.27:20063/users/getUser/`, {
                     withCredentials: true
                 });
                 setActualUser(response.data.user);
