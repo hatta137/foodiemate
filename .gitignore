@@ -5,3 +5,7 @@
 /backend/cooking_together_api/node_modules/
 
 /frontend/node_modules/
+
+/database/diagnostic.data
+
+/database/journal
