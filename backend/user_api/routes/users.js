@@ -9,7 +9,7 @@ import isAuthenticated from '../auth.js'
 const router = Router();
 
 router.get("/", async (req, res) => {
-    res.send("users entry")
+    res.status(200).json("users entry")
 })
 
 router.get("/allUsers", async (_req, res) => {
