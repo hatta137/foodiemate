@@ -11,8 +11,8 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
-    volumes:
-      - ./backend/user_api:/usr/src/app
+    #volumes:
+    #  - ./backend/user_api:/usr/src/app
 
     networks:
       - private
@@ -27,8 +27,8 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
-    volumes:
-      - ./backend/recipe_api:/usr/src/app
+    #volumes:
+    #  - ./backend/recipe_api:/usr/src/app
 
     networks:
       - private
@@ -43,8 +43,8 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://database:20062/foodiemate
-    volumes:
-      - ./backend/cooking_together_api:/usr/src/app
+    #volumes:
+    #  - ./backend/cooking_together_api:/usr/src/app
 
     networks:
       - private
@@ -80,8 +80,8 @@ services:
     container_name: frontend
     ports:
       - 20061:20061
-    volumes:
-      - ./frontend:/app
+    #volumes:
+    #  - ./frontend:/app
     networks:
       - private
 
