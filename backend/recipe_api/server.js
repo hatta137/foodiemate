@@ -21,9 +21,9 @@ const port = 20064
 
 app.use(function (req, res, next) {
     const allowedOrigins = [
-        'http://194.94.204.27:20061',
-        'http://194.94.204.27:20062',
-        'http://194.94.204.27:20063',
+        'http://0.0.0.0:20061',
+        'http://0.0.0.0:20062',
+        'http://0.0.0.0:20063',
         // Füge hier weitere erlaubte Ursprünge hinzu
     ];
     const { origin } = req.headers;
