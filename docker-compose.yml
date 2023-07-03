@@ -10,7 +10,7 @@ services:
     depends_on:
       - ss2023_wa_foodiemate_database
     environment:
-      - MONGO_URI=mongodb://database:20062/foodiemate
+      - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
     #volumes:
     #  - ./backend/user_api:/usr/src/app
 
@@ -26,7 +26,7 @@ services:
     depends_on:
       - ss2023_wa_foodiemate_database
     environment:
-      - MONGO_URI=mongodb://database:20062/foodiemate
+      - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
     #volumes:
     #  - ./backend/recipe_api:/usr/src/app
 
@@ -42,7 +42,7 @@ services:
     depends_on:
       - ss2023_wa_foodiemate_database
     environment:
-      - MONGO_URI=mongodb://database:20062/foodiemate
+      - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
     #volumes:
     #  - ./backend/cooking_together_api:/usr/src/app
 
