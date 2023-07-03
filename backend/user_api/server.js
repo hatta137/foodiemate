@@ -15,10 +15,13 @@ mongoose.connect("mongodb://ss2023_wa_foodiemate_database/foodiemate")
 
 
 const app = express()
+
+app.use(cors());
+
 app.use(express.json())
 
 const port = 20063
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
     const allowedOrigins = [
         'http://localhost:20061',
         'http://localhost:20062',
@@ -33,7 +36,7 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials', 'true');
     next();
-});
+});*/
 
 
 
