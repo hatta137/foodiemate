@@ -10,7 +10,7 @@ import MongoStore from 'connect-mongo';
 import cors from "cors";
 import cookieParser from 'cookie-parser'
 
-mongoose.connect("mongodb://194.94.204.27:20062/foodiemate");
+mongoose.connect("mongodb://ss2023_wa_foodiemate_database/foodiemate");
 
 
 const app = express()
