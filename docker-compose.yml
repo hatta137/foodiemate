@@ -57,7 +57,7 @@ services:
       - 20062:27017
     command: mongod --logpath /var/log/mongodb/mongod.log --logappend --quiet --setParameter logLevel=2
     volumes:
-      - ./database:/database/db
+      - ./database:/data/db
     networks:
       - private
 
