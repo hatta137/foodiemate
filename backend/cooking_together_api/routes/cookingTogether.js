@@ -11,7 +11,7 @@ router.get("/", async (req, res) => (
 router.get("/findCookingBuddy",async (req, res) => {
     try {
 
-        const response = await axios.get('http://194.94.204.27:20063/users/getUserCTG')
+        const response = await axios.get('http://user_api:20063/users/getUserCTG')
         const users = response.data.users
 
         // Extrahiere Datum und Benutzernamen

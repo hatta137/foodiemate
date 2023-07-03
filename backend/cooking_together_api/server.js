@@ -6,7 +6,7 @@ import mongoose from "mongoose"
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
 
-mongoose.connect("mongodb://194.94.204.27:20062/foodiemate");
+mongoose.connect("mongodb://database/foodiemate");
 
 
 
@@ -29,7 +29,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://194.94.204.27:20061",
+                url: "http://localhost:20061",
                 description: "COOKINGTOGETHER_API",
             },
         ],
@@ -45,5 +45,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)
 
 
 app.listen(port, () => {
-    console.log(`RECIPE_API listening at http://194.94.204.27:${port}`)
+    console.log(`RECIPE_API listening at http://localhost:${port}`)
 })
