@@ -10,7 +10,7 @@ import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 import cors from "cors";
 process.env.TZ = 'Europe/Berlin';
-mongoose.connect("mongodb://database/foodiemate")
+mongoose.connect("mongodb://194.94.204.27:20062/foodiemate")
 
 
 
@@ -20,9 +20,9 @@ app.use(express.json())
 const port = 20063
 app.use(function (req, res, next) {
     const allowedOrigins = [
-        'http://localhost:20061',
-        'http://localhost:20062',
-        'http://localhost:20064',
+        'http://194.94.204.27:20061',
+        'http://194.94.204.27:20062',
+        'http://194.94.204.27:20064',
         // Füge hier weitere erlaubte Ursprünge hinzu
     ];
     const { origin } = req.headers;
@@ -77,7 +77,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:20063",
+                url: "http://194.94.204.27:20063",
                 description: "USER_API",
             },
         ],
@@ -94,5 +94,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)
 
 
 app.listen(port, () => {
-    console.log(`USER_API listening at http://localhost:${port}`)
+    console.log(`USER_API listening at http://194.94.204.27:${port}`)
 })
