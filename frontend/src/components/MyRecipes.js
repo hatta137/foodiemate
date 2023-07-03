@@ -12,7 +12,7 @@ const MyRecipes = () => {
 
     useEffect(() => {
         axios
-            .get("http://ipAddr:20063/users/getMyRecipes", {
+            .get(`http://${ipAddr}:20063/users/getMyRecipes`, {
                 withCredentials: true,
             })
             .then((response) => {
@@ -29,7 +29,9 @@ const MyRecipes = () => {
             })
             .catch((error) => {
                 // Handle error
+
                 setLoading(false);
+                console.log(error)
             });
     }, []);
 
