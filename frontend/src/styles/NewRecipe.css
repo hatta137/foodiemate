@@ -1,0 +1,14 @@
+.New-Recipe-Card-HL {
+    display: flex;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    justify-content: center;
+}
+
+
+.Ingredient-Container-HL {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem;
+}
+

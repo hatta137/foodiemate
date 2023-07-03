@@ -20,7 +20,7 @@ const Register = (props) => {
                 password: password,
                 userName: userName
             });
-            console.log(response.status)
+            console.log(response.status);
 
             if (response.status === 200) {
                 setUserName('')
@@ -32,7 +32,7 @@ const Register = (props) => {
             console.log('Serverfehler:', err);
             alert('ServerFehler bei der Anmeldung');
         }
-    }
+    };
 
     return (
         <div className={"auth-container-HL"}>

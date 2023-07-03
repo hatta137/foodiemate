@@ -1,5 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {useIsAuthenticated} from 'react-auth-kit';
+
+import {
+    MDBCard,
+    MDBCardImage,
+    MDBCardBody,
+    MDBCardTitle,
+    MDBCardText,
+    MDBCardLink,
+    MDBListGroup,
+    MDBListGroupItem, MDBIcon
+} from 'mdb-react-ui-kit';
+import {Link} from "react-router-dom";
 
 const RecipeForm = () => {
     const [title, setTitle] = useState("");
@@ -8,17 +21,12 @@ const RecipeForm = () => {
     const [instructions, setInstructions] = useState("");
     const [drink, setDrink] = useState("");
 
-    const handleTitleChange = (e) => {
-        setTitle(e.target.value);
-    };
+    const isAuthenticated = useIsAuthenticated()
+    const handleTitleChange = (e) => {setTitle(e.target.value)};
 
-    const handleImageChange = (e) => {
-        setImage(e.target.value);
-    };
+    const handleImageChange = (e) => {setImage(e.target.value)};
 
-    const handleDrinkChange = (e) => {
-        setDrink(e.target.value);
-    };
+    const handleDrinkChange = (e) => {setDrink(e.target.value)};
 
     const handleIngredientChange = (e, index, field) => {
         const updatedIngredients = [...ingredients];
@@ -41,9 +49,7 @@ const RecipeForm = () => {
         });
     };
 
-    const handleInstructionsChange = (e) => {
-        setInstructions(e.target.value);
-    };
+    const handleInstructionsChange = (e) => {setInstructions(e.target.value)};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,9 +62,19 @@ const RecipeForm = () => {
             drink,
         };
 
-        // Code zum Senden der Daten an das Backend hier...
         try {
-            await axios.post("http://localhost:20064/recipe/new/", recipeData);
+
+            if (isAuthenticated()) {
+
+                const response = await axios.post("http://localhost:20064/recipe/new/", recipeData, {
+                    withCredentials: true
+                });
+
+            } else {
+                // Der Benutzer ist nicht authentifiziert
+                console.log('Benutzer ist nicht authentifiziert');
+            }
+
             // Erfolgreiches Absenden, ggf. Weiterleitung oder Benachrichtigung anzeigen
         } catch (error) {
             console.error("Fehler beim Speichern des Rezepts:", error);
@@ -73,62 +89,68 @@ const RecipeForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Title:</label>
-                <input type="text" value={title} onChange={handleTitleChange} />
-            </div>
+        <div className={"New-Recipe-Card-HL"}>
+            <MDBCard>
+                <MDBCardBody>
+                    <MDBCardTitle>Neues Rezept anlegen</MDBCardTitle>
+                    <MDBCardText>Neu angelegte Rezepte werden automatisch deinem Profil zugewiesen!</MDBCardText>
+                </MDBCardBody>
+                <MDBListGroup>
+                    <MDBListGroupItem>Titel: <input type="text" value={title} onChange={handleTitleChange} /></MDBListGroupItem>
+                    <MDBListGroupItem>Bild Url: <input type="text" value={image} onChange={handleImageChange} /></MDBListGroupItem>
+                    <MDBListGroupItem>Getränk: <input type="text" value={drink} onChange={handleDrinkChange} /></MDBListGroupItem>
+                </MDBListGroup>
+                <MDBListGroup>
+                    <MDBListGroupItem>Zutaten:</MDBListGroupItem>
+                    <MDBListGroupItem>
+                        {ingredients.map((ingredient, index) => (
+                            <div className={"Ingredient-Container-HL"} key={index}>
+                                <input
+                                    type="text"
+                                    value={ingredient.amount}
+                                    placeholder={'Menge'}
+                                    onChange={(e) => handleIngredientChange(e, index, "amount")}
+                                />
+                                <input
+                                    type="text"
+                                    value={ingredient.unit}
+                                    placeholder={'Einheit'}
+                                    onChange={(e) => handleIngredientChange(e, index, "unit")}
+                                />
+                                <input
+                                    type="text"
+                                    value={ingredient.name}
+                                    placeholder={'Name'}
+                                    onChange={(e) => handleIngredientChange(e, index, "name")}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveIngredient(index)}
+                                >
+                                    <MDBIcon fas icon="trash" />
+                                </button>
 
-            <div>
-                <label>Image URL:</label>
-                <input type="text" value={image} onChange={handleImageChange} />
-            </div>
-
-            <div>
-                <label>Drink:</label>
-                <input type="text" value={drink} onChange={handleDrinkChange} />
-            </div>
-
-            <div>
-                <h4>Ingredients:</h4>
-                {ingredients.map((ingredient, index) => (
-                    <div key={index}>
-                        <input
-                            type="text"
-                            value={ingredient.amount}
-                            onChange={(e) => handleIngredientChange(e, index, "amount")}
-                        />
-                        <input
-                            type="text"
-                            value={ingredient.unit}
-                            onChange={(e) => handleIngredientChange(e, index, "unit")}
-                        />
-                        <input
-                            type="text"
-                            value={ingredient.name}
-                            onChange={(e) => handleIngredientChange(e, index, "name")}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveIngredient(index)}
-                        >
-                            Remove
+                            </div>
+                        ))}
+                        <button type="button" onClick={handleAddIngredient}>
+                            Add Ingredient
                         </button>
-                    </div>
-                ))}
-                <button type="button" onClick={handleAddIngredient}>
-                    Add Ingredient
-                </button>
-            </div>
-
-            <div>
-                <label>Instructions:</label>
-                <textarea value={instructions} onChange={handleInstructionsChange} />
-            </div>
-
-            <button type="submit">Save Recipe</button>
-        </form>
+                    </MDBListGroupItem>
+                </MDBListGroup>
+                <MDBListGroup>
+                    <MDBListGroupItem>
+                        Anleitung:
+                        <div className={'New-Recipe-Card-Instruction-Text-HL'}>
+                            <label>Instructions:</label>
+                            <textarea value={instructions} onChange={handleInstructionsChange} />
+                        </div>
+                    </MDBListGroupItem>
+                </MDBListGroup>
+                <MDBCardBody>
+                    <MDBCardLink onClick={handleSubmit} href='/newRecipe'>Speichern</MDBCardLink>
+                </MDBCardBody>
+            </MDBCard>
+        </div>
     );
 };
-
 export default RecipeForm;

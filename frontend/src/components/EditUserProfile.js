@@ -1,126 +1,125 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import {useIsAuthenticated} from 'react-auth-kit';
+import bcrypt from 'bcryptjs'
+import {
+    MDBCard,
+    MDBCardBody,
+    MDBCardImage, MDBCardLink,
+    MDBCardText,
+    MDBCardTitle,
+    MDBListGroup,
+    MDBListGroupItem
+} from "mdb-react-ui-kit";
 
 const EditUserProfile = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Zustand für den Benutzerstatus
+    const isAuthenticated = useIsAuthenticated();
     const [userProfile, setUserProfile] = useState(null);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [userName, setUserName] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
-    const [password, setPassword] = useState('');
-    const [userId, setUserId] = useState('');
+    const [passwordUnhash, setPasswordUnhash] = useState('');
+    const saltRounds = 10
+    const navigate = useNavigate();
+    const [actualUser, setActualUser] = useState(null)
 
     useEffect(() => {
-
-
-        const checkLoggedInStatus = async () => {
+        // Fetch user data from backend
+        const fetchUser = async () => {
             try {
-                const response = await fetch('http://localhost:20063/users/userStatus', { credentials: 'include' });
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log(data);
-                    setUserProfile(data);
-                    setIsLoggedIn(true);
-                    setUserName(data.userName);
-                    setEmailAddress(data.emailAddress);
-                    setFirstName(data.firstName);
-                    setLastName(data.lastName);
-                    setPassword(data.password);
-                    setUserId(data.userId);
-                } else {
-                    setIsLoggedIn(false);
-                }
-            } catch (err) {
-                console.log('Fehler beim Überprüfen des Benutzerstatus', err);
-                setIsLoggedIn(false);
+                const response = await axios.get(`http://localhost:20063/users/getUser/`, {
+                    withCredentials: true
+                });
+                setActualUser(response.data.user);
+                console.log(response.data.user)
+
+            } catch (error) {
+                console.error(error);
             }
         };
 
-        checkLoggedInStatus();
-
-        return () => {
-            // Cleanup-Funktion für die useEffect-Hook
-        };
-
-
-        // const checkLoggedInStatus = async () => {
-        //     try {
-        //         const instance = axios.create({ withCredentials: true });
-        //         axios.defaults.withCredentials = true
-        //         const response = await axios.get('http://localhost:20063/users/userStatus', { withCredentials: true });
-        //         console.log(response.data)
-        //         if (response.status === 200) {
-        //             setUserProfile(response.data);
-        //             setIsLoggedIn(true);
-        //             setUserName(response.data.userName);
-        //             setEmailAddress(response.data.emailAddress);
-        //             setFirstName(response.data.firstName);
-        //             setLastName(response.data.lastName);
-        //             setPassword(response.data.password);
-        //             setUserId(response.data.userId);
-        //         }
-        //     } catch (err) {
-        //         console.log('Fehler beim Überprüfen des Benutzerstatus', err);
-        //         setIsLoggedIn(false);
-        //     }
-        // };
-        //
-        // checkLoggedInStatus();
-        //
-        // return () => {
-        //     // Cleanup-Funktion für die useEffect-Hook
-        // };
+        fetchUser();
     }, []);
 
-    const handleSave = async () => {
+    const handleSave = async (e) => {
+        e.preventDefault();
+        const userData = {}
+
+        if (userName !== '') {
+            userData.userName = userName;
+        }
+        if (firstName !== '') {
+            userData.firstName = firstName;
+        }
+        if (lastName !== '') {
+            userData.lastName = lastName;
+        }
+        if (emailAddress !== '') {
+            userData.emailAddress = emailAddress;
+        }
+        if (passwordUnhash !== '') {
+            userData.passwordUnhash = passwordUnhash;
+        }
+
         try {
-            const response = await axios.put(`http://localhost:20063/users/update/${userId}`, {
-                userName,
-                firstName,
-                lastName,
-                emailAddress,
-                password,
-            });
-            if (response.status === 200) {
-                // Erfolgreich aktualisiert
+            if (isAuthenticated()) {
+                const response = await axios.put(`http://localhost:20063/users/update/`, userData, {
+                    withCredentials: true
+                });
+                if (response.status === 200) {
+                    navigate('/profile')
+                }
+            } else {
+                console.log("nicht eingeloggt")
             }
+
         } catch (err) {
             console.log('Fehler beim Update des Benutzers', err);
         }
     };
 
-    if (!isLoggedIn) {
-        return <p>Bitte logge dich ein, um dein Profil zu bearbeiten.</p>;
+    if (!actualUser) {
+        return <div>Loading...</div>;
     }
 
     return (
         <div>
-            <h2>Bearbeite dein Profil</h2>
-            <p>Benutzername: {userName}</p>
-            <form>
-                <div>
-                    <label>Vorname:</label>
-                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                </div>
-                <div>
-                    <label>Nachname:</label>
-                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                </div>
-                <div>
-                    <label>Benutzername:</label>
-                    <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} />
-                </div>
-                <div>
-                    <label>E-Mail-Adresse:</label>
-                    <input type="email" value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)} />
-                </div>
-                <div>
-                    <label>Passwort:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <button type="button" onClick={handleSave}>Speichern</button>
-            </form>
+            <div className={"User-Profile-Card-HL"}>
+                <MDBCard>
+                    <MDBCardImage position='top' alt='...' src='https://mdbootstrap.com/img/new/standard/city/062.webp' />
+                    <MDBCardBody>
+                        <MDBCardTitle>Bearbeite dein Profil</MDBCardTitle>
+                        <MDBCardText>{actualUser.firstName}</MDBCardText>
+                    </MDBCardBody>
+                    <MDBListGroup >
+                        <MDBListGroupItem>
+                            Vorname: {actualUser.firstName}
+                            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                        </MDBListGroupItem>
+                        <MDBListGroupItem>
+                            Nachname: {actualUser.lastName}
+                            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                        </MDBListGroupItem>
+                        <MDBListGroupItem>
+                            Benutzername: {actualUser.userName}
+                            <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                        </MDBListGroupItem>
+                        <MDBListGroupItem>
+                            E-Mailadresse: {actualUser.emailAddress}
+                            <input type="email" value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)} />
+                        </MDBListGroupItem>
+                        <MDBListGroupItem>
+                            Passwort:
+                            <input type="password" value={passwordUnhash} onChange={(e) => setPasswordUnhash(e.target.value)} />
+                        </MDBListGroupItem>
+                    </MDBListGroup>
+                    <MDBCardBody>
+                        <button type="button" onClick={handleSave}>Speichern</button>
+                    </MDBCardBody>
+                </MDBCard>
+            </div>
         </div>
     );
 };

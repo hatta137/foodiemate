@@ -1,7 +1,10 @@
 import {Router} from "express";
 import User from "../models/user.js";
+import Recipe from "../models/recipe.js";
 import bcrypt from 'bcryptjs'
-import Session from "express-session/session/session.js";
+import jwt from 'jsonwebtoken'
+
+import isAuthenticated from '../auth.js'
 
 const router = Router();
 
@@ -14,29 +17,34 @@ router.get("/allUsers", async (_req, res) => {
     res.json(data)
 })
 
+
+
+
 router.post("/login", async (req, res) => {
     try {
         const { userName, password } = req.body;
-        console.log(password)
-        console.log(userName)
+        console.log(password);
+        console.log(userName);
 
         const user = await User.findOne({ userName });
+
         if (!user) {
-            console.log("Benutzer nicht gefunden")
+            console.log("Benutzer nicht gefunden");
             return res.status(401).json({ error: 'Benutzer nicht gefunden' });
         }
 
         // Überprüfe das Passwort
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            console.log("Passwort falsch")
+            console.log("Passwort falsch");
             return res.status(401).json({ error: 'Ungültige Benutzerdaten' });
         }
 
-        //console.log(user)
-        req.session.userId = user._id
-
-        res.status(200).json("eingeloggt" );
+        // Erzeuge das JWT-Token
+        const token = jwt.sign({ userId: user._id }, 'sehr_geheimer_schluessel');
+        console.log(token)
+        return res.cookie("token", token).json({success:true,message:'LoggedIn Successfully', userId: user._id, token: token})
+        //return res.status(200).json({ message: "welcome back", token: token });
 
     } catch (err) {
         console.error('Fehler beim Login', err);
@@ -44,25 +52,6 @@ router.post("/login", async (req, res) => {
     }
 });
 
-//logout
-router.post("/logout", (req, res) => {
-    // Überprüfen, ob eine aktive Sitzung vorhanden ist
-    if (req.session) {
-        // Löschen Sie die Sitzungsdaten und beenden Sie die Sitzung
-        req.session.destroy((err) => {
-            if (err) {
-                console.error('Fehler beim Logout', err);
-                res.status(500).json({ error: 'Serverfehler' });
-            } else {
-                // Erfolgreich ausgeloggt
-                res.status(200).json({ message: 'Erfolgreich ausgeloggt' });
-            }
-        });
-    } else {
-        // Keine aktive Sitzung vorhanden
-        res.status(400).json({ message: 'Keine aktive Sitzung vorhanden' });
-    }
-});
 
 router.post("/register", async (req, res) => {
     const data = req.body
@@ -77,54 +66,39 @@ router.post("/register", async (req, res) => {
             userName: data["userName"],
             emailAddress: data["emailAddress"],
             password: await bcrypt.hash(password, saltRounds)
-        })
-        await newUser.save()
-        res.status(200).json({ message: 'User erfolgreich angelegt', user: newUser })
+        });
+        await newUser.save();
+        res.status(200).json({ message: 'User erfolgreich angelegt', user: newUser });
     } catch (err) {
-        console.error('Fehler bei Registrierung', err)
-        res.status(500).json({ error: 'Serverfehler' })
-    }
-})
-
-
-
-
-
-
-router.get("/userStatus", async (req, res) => {
-
-    console.log(req.body)
-    console.log(req.session)
-    try {
-        if (!req.session.userId) {
-            console.log('keine userId')
-            console.log(req.session.userId)
-            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
-
-        } else {
-
-            console.log(req.session.userId)
-            const user = await User.findOne({ _id: req.session.userId }, { _id: false, passwordHash: false, __v: false });
-            return res.status(200).json({ message: 'user eingeloggt', user });
-        }
-
-    }catch (err) {
-        console.log('Serverfehler')
-        console.log(req.session.userId)
-        console.error('Fehler bei Status Check', err);
+        console.error('Fehler bei Registrierung', err);
         res.status(500).json({ error: 'Serverfehler' });
     }
-})
+});
 
-router.put("/update/:userId", async (req, res) => {
+
+router.put("/update", isAuthenticated, async (req, res) => {
+    const saltRounds = 10
     try {
-        if (!req.session || req.session.userId !== req.params.userId) {
-            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
         }
 
-        const userId = req.params.userId;
-        const updateData = req.body;
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
 
+        let updateData = req.body;
+        const unHash = req.body.passwordUnhash;
+
+        if (unHash) {
+            console.log(unHash)
+            updateData['password'] = await bcrypt.hash(unHash, saltRounds);
+        }
+
+
+        console.log(updateData)
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true });
 
         if (updatedUser) {
@@ -138,12 +112,13 @@ router.put("/update/:userId", async (req, res) => {
     }
 });
 
-router.get('/getByUserName', async (req, res) => {
+
+router.get('/getByUserName/', async (req, res) => {
     try {
         const name = req.query.userName;
-
+        console.log(name)
         const user = await User.findOne({ userName: name })
-
+        console.log(user)
         if (!user) {
             return res.status(404).json({ error: 'User nicht gefunden' })
         }
@@ -154,27 +129,62 @@ router.get('/getByUserName', async (req, res) => {
     }
 });
 
+
+router.get('/getUser', isAuthenticated, async (req, res) => {
+    try {
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
+        }
+
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
+
+        const user = await User.findById(userId).populate('followers')
+
+        if (!user) {
+            return res.status(404).json({ error: 'User nicht gefunden' })
+        }
+
+
+        res.status(200).json({ user: user })
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+});
+
 /**
  * UserId → ID von dem User der jemandem folgen möchte
  * FollowerId → ID von der Person der gefolgt werden soll
  */
-router.post('/:userId/follow', async (req, res) => {
+router.post('/follow', isAuthenticated, async (req, res) => {
     try {
-        const userId = req.params["userId"]
-        const followerId = req.body["followerId"]
 
-        if (!req.session || req.session.userId !== userId) {
-            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
         }
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
 
-        // User dem der Follower hinzugefügt werden soll
-        const user = await User.findById(userId)
+        const followerId = req.body.followerId
+
+        const user = await User.findById(followerId);
+
+        if (!user) {
+            console.log("Benutzer nicht gefunden");
+            return res.status(401).json({ error: 'Benutzer nicht gefunden' });
+        }
 
         if(!user) {
             return res.status(404).json({message: 'User nicht gefunden'})
         }
 
-        const follower = await User.findById(followerId)
+        const follower = await User.findById(userId)
 
         if(!follower) {
             return res.status(404).json({message: 'Follower nicht gefunden'})
@@ -187,7 +197,7 @@ router.post('/:userId/follow', async (req, res) => {
 
         await user.save()
 
-        res.status(200).json({ message: 'Follower erfolgreich hinzugefügt' })
+        res.status(200).json({ message: 'Follower erfolgreich hinzugefügt'})
 
 
 
@@ -197,15 +207,19 @@ router.post('/:userId/follow', async (req, res) => {
     }
 })
 
-router.get('/:userId/followers', async (req, res) => {
+router.get('/getfollowers', isAuthenticated, async (req, res) => {
     try {
-        const userId = req.params["userId"]
+        let token = req.cookies._auth;
+
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if(!token) {
+            token = req.cookies.token
+        }
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
 
         const user = await User.findById(userId).populate('followers')
 
-        if (!req.session || req.session.userId !== userId) {
-            return res.status(401).json({ message: 'Unautorisierter Zugriff' });
-        }
 
         if(!user) {
             return res.status(404).json({ message: 'Benutzer nicht gefunden' })
@@ -219,13 +233,21 @@ router.get('/:userId/followers', async (req, res) => {
     }
 })
 
-router.post('/:userId/unfollow', async (req, res) => {
-    const userId = req.params['userId']
-    const followerId = req.body['followerId']
+router.post('/unfollow', isAuthenticated, async (req, res) => {
+    // Id von dem Benutzer dessen Follower der angemeldete User ist und dem dieser Follower entzogen wird
+    const userId = req.body.userId;
 
-    if (!req.session || req.session.userId !== userId) {
-        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+
+    let token = req.cookies._auth;
+
+    // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+    if(!token) {
+        token = req.cookies.token
     }
+    const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+    const followerId = decoded.userId;
+
+
 
     try {
         const user = await User.findById(userId)
@@ -249,12 +271,16 @@ router.post('/:userId/unfollow', async (req, res) => {
     }
 })
 
-router.delete("/deleteUser", async (req, res) => {
-    const userId = req.session.userId
+router.delete("/deleteUser", isAuthenticated, async (req, res) => {
+    let token = req.cookies._auth;
 
-    if (!req.session || req.session.userId !== userId) {
-        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+    // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+    if(!token) {
+        token = req.cookies.token
     }
+
+    const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+    const userId = decoded.userId;
 
     User.findByIdAndDelete(userId)
         .then((updatedUser) => {
@@ -268,24 +294,18 @@ router.delete("/deleteUser", async (req, res) => {
             console.error('Fehler bei Aktualisierung der Daten', err)
             res.status(500).json({error: 'Serverfehler'})
         })
-    res.send(userId)
+
 })
 
 router.post('/addRecipe/:userId', async (req, res) => {
-    const recipeId = req.body.recipeId
-    const userId = req.params.userId
-
-    req.session.userId = userId
-
-    console.log(userId)
-    console.log(req.session.userId)
-    console.log(req.session)
-
-    if (!req.session || req.session.userId !== userId) {
-        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
-    }
 
     try {
+
+        const recipeId = req.body.recipeId
+        const userId = req.params.userId
+
+        console.log(userId)
+
         const user = await User.findById(userId)
 
         if (!user) {
@@ -302,13 +322,9 @@ router.post('/addRecipe/:userId', async (req, res) => {
     }
 })
 
-router.post('/dropRecipe/', async (req, res) => {
+router.post('/dropRecipe/:userId', async (req, res) => {
     const recipeId = req.body.recipeId
-    const userId = req.session.userId
-
-    if (!req.session || req.session.userId !== userId) {
-        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
-    }
+    const userId = req.params.userId
 
     try {
         const user = await User.findById(userId)
@@ -327,12 +343,18 @@ router.post('/dropRecipe/', async (req, res) => {
     }
 })
 
-router.put('/setCookingTogetherDate', async (req, res) => {
-    const userId = req.session.userId
+router.put('/setCookingTogetherDate', isAuthenticated, async (req, res) => {
 
-    if (!req.session || req.session.userId !== userId) {
-        return res.status(401).json({ message: 'Unautorisierter Zugriff' });
+
+    let token = req.cookies._auth;
+
+    // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+    if(!token) {
+        token = req.cookies.token
     }
+
+    const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+    const userId = decoded.userId;
 
     try {
 
@@ -351,12 +373,15 @@ router.put('/setCookingTogetherDate', async (req, res) => {
     }
 })
 
-router.delete('/removeCookingTogetherDate', async (req, res) => {
-    const userId = req.session.userId
+router.delete('/removeCookingTogetherDate', isAuthenticated, async (req, res) => {
+    let token = req.cookies._auth;
 
-    if (!req.session || req.session.userId !== userId) {
-        return res.status(401).json({ message: 'Unautorisierter Zugriff' })
+    // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+    if(!token) {
+        token = req.cookies.token
     }
+    const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+    const userId = decoded.userId;
 
     try {
         const updateDate = { cookingTogetherDate: null }
@@ -393,7 +418,7 @@ router.get('/getEmailAddress/:userId', async (req, res) => {
 })
 
 router.get('/getUserCTG', async (req, res) => {
-    const date = req.params.date
+    const  date = req.params.date
 
     try {
 
@@ -409,4 +434,55 @@ router.get('/getUserCTG', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 })
+
+router.get('/getUserNameById/:userId', async (req, res)=> {
+
+    try {
+
+        const userId = req.params.userId;
+
+        const userName = User.findById(userId).select('userName')
+
+        if (userName) {
+            res.status(200).json({ message: 'Folgender Username wurden gefunden', users: usersName })
+        } else {
+            res.status(404).json({ message: 'keine User mit dieser ID' })
+        }
+
+
+
+    }catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+
+})
+
+router.get('/getMyRecipes', isAuthenticated, async (req, res) => {
+    try {
+        let token = req.cookies._auth;
+        console.log(token)
+        // Falls der Token nicht durch das react-auth-kit im Frontend gesetzt wurde --> für Postman
+        if (!token) {
+            token = req.cookies.token
+            console.log(token)
+        }
+        const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
+        const userId = decoded.userId;
+        console.log(userId)
+
+        const user = await User.findById(userId).populate('myRecipes');
+        console.log('user')
+        console.log(user)
+
+        if (user) {
+            res.status(200).json({ message: 'Folgende Rezepte gefunden:', myRecipes: user.myRecipes });
+        } else {
+            res.status(404).json({ message: 'Keine Rezepte bei diesem User gefunden.' });
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 export default router

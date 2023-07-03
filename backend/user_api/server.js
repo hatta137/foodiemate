@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
 import session from "express-session"
 import MongoStore from 'connect-mongo';
+import cookieParser from 'cookie-parser';
 import cors from "cors";
 process.env.TZ = 'Europe/Berlin';
 mongoose.connect("mongodb://database/foodiemate")
@@ -60,7 +61,8 @@ app.use(session({
         sameSite: 'none'
     }
 }));
-
+app.use(express.json());
+app.use(cookieParser());
 
 app.use("/users", usersRouter);
 console.log('curren working dir', process.cwd())
