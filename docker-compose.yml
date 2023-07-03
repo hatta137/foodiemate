@@ -61,19 +61,19 @@ services:
     networks:
       - private
 
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://ss2023_wa_foodiemate_database:27017/
-      - ME_CONFIG_BASICAUTH_USERNAME=adminHL
-      - ME_CONFIG_BASICAUTH_PASSWORD=passHL
-    networks:
-      - private
-    depends_on:
-      - ss2023_wa_foodiemate_database
+#  mongo-express:
+#    image: mongo-express
+#    restart: always
+#    ports:
+#      - 8081:8081
+#    environment:
+#      - ME_CONFIG_MONGODB_URL=mongodb://ss2023_wa_foodiemate_database:27017/
+#      - ME_CONFIG_BASICAUTH_USERNAME=adminHL
+#      - ME_CONFIG_BASICAUTH_PASSWORD=passHL
+#    networks:
+#      - private
+#    depends_on:
+#      - ss2023_wa_foodiemate_database
 
   ss2023_wa_foodiemate_frontend:
     build: frontend
