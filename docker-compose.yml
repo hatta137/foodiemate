@@ -15,7 +15,7 @@ services:
     #  - ./backend/user_api:/usr/src/app
 
     networks:
-      - private
+      - ss2023_wa_foodiemate_private
 
   ss2023_wa_foodiemate_recipe_api:
     build: backend/recipe_api
@@ -31,7 +31,7 @@ services:
     #  - ./backend/recipe_api:/usr/src/app
 
     networks:
-      - private
+      - ss2023_wa_foodiemate_private
 
   ss2023_wa_foodiemate_cooking_together_api:
     build: backend/cooking_together_api
@@ -47,7 +47,7 @@ services:
     #  - ./backend/cooking_together_api:/usr/src/app
 
     networks:
-      - private
+      - ss2023_wa_foodiemate_private
 
   ss2023_wa_foodiemate_database:
     image: mongo:4.4.5
@@ -59,7 +59,7 @@ services:
     volumes:
       - ./database:/data/db
     networks:
-      - private
+      - ss2023_wa_foodiemate_private
 
 #  mongo-express:
 #    image: mongo-express
@@ -83,7 +83,7 @@ services:
     #volumes:
     #  - ./frontend:/app
     networks:
-      - private
+      - ss2023_wa_foodiemate_private
 
 networks:
-  private:
+  ss2023_wa_foodiemate_private:
