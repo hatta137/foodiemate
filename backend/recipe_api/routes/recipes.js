@@ -67,7 +67,7 @@ router.post('/new/', async (req, res) => {
 
         try {
             // Call to user API an set Recipe to myRecipes
-            const addUserRecipeUrl = `http://uuser_api:20063/users/addRecipe/${userId}`
+            const addUserRecipeUrl = `http://user_api:20063/users/addRecipe/${userId}`
             await axios.post(addUserRecipeUrl, { recipeId: newRecipe._id }, {
                 headers: {
                     Cookie: `token=${token}`

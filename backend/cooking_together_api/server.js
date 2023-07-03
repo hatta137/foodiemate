@@ -6,7 +6,7 @@ import mongoose from "mongoose"
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
 
-mongoose.connect("mongodb://database/foodiemate");
+mongoose.connect("mongodb://ss2023_wa_foodiemate_database/foodiemate");
 
 
 

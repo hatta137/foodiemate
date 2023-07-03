@@ -10,16 +10,16 @@ import MongoStore from 'connect-mongo';
 import cors from "cors";
 import cookieParser from 'cookie-parser'
 
-mongoose.connect("mongodb://database/foodiemate");
+mongoose.connect("mongodb://ss2023_wa_foodiemate_database/foodiemate");
 
 
 const app = express()
 
-
+app.use(cors());
 const port = 20064
 
 
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
     const allowedOrigins = [
         'http://localhost:20061',
         'http://localhost:20062',
@@ -34,7 +34,7 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials', 'true');
     next();
-});
+});*/
 
 app.use(express.json())
 app.use(cookieParser());

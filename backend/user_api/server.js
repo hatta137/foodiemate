@@ -10,14 +10,19 @@ import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 import cors from "cors";
 process.env.TZ = 'Europe/Berlin';
-mongoose.connect("mongodb://194.94.204.27:20062/foodiemate")
+mongoose.connect("mongodb://ss2023_wa_foodiemate_database/foodiemate")
 
 
 
 const app = express()
+//app.use(cors());
+
 app.use(express.json())
 
 const port = 20063
+
+
+
 app.use(function (req, res, next) {
     const allowedOrigins = [
         'http://localhost:20061',
@@ -40,7 +45,7 @@ app.use(function (req, res, next) {
 
 
 const sessionStore = MongoStore.create({
-    mongoUrl: 'mongodb://database/foodiemate', // MongoDB-Verbindungs-URL
+    mongoUrl: 'mongodb://ss2023_wa_foodiemate_database/foodiemate', // MongoDB-Verbindungs-URL
     collectionName: 'sessions', // Name der MongoDB-Sessions-Sammlung
     ttl: 3600 // Ablaufzeit der Session in Sekunden
 });
