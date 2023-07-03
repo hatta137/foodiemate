@@ -3,7 +3,7 @@ version: "3.8"
 services:
   ss2023_wa_foodiemate_user_api:
     build: backend/user_api
-    container_name: user_api
+    container_name: ss2023_wa_foodiemate_user_api
     restart: always
     ports:
       - 20063:20063
@@ -19,7 +19,7 @@ services:
 
   ss2023_wa_foodiemate_recipe_api:
     build: backend/recipe_api
-    container_name: recipe_api
+    container_name: ss2023_wa_foodiemate_recipe_api
     restart: always
     ports:
       - 20064:20064
@@ -35,7 +35,7 @@ services:
 
   ss2023_wa_foodiemate_cooking_together_api:
     build: backend/cooking_together_api
-    container_name: cooking_together_api
+    container_name: ss2023_wa_foodiemate_cooking_together_api
     restart: always
     ports:
       - 20065:20065
@@ -77,7 +77,7 @@ services:
 
   ss2023_wa_foodiemate_frontend:
     build: frontend
-    container_name: frontend
+    container_name: ss2023_wa_foodiemate_frontend
     ports:
       - 20061:20061
 
