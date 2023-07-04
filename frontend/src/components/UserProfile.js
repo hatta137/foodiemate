@@ -120,6 +120,7 @@ const UserProfile = () => {
                     </MDBListGroupItem>
                 </MDBListGroup>
                 <MDBListGroup>
+                    <MDBListGroupItem>Deine Follower</MDBListGroupItem>
                     <ul>
                             {user.followers.map((follower) => (
                                 <li key={follower._id}>

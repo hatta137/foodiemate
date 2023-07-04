@@ -50,7 +50,7 @@ services:
       - private
 
   ss2023_wa_foodiemate_database:
-    image: mongo:4.4.5
+    image: mongo:4.4
     container_name: ss2023_wa_foodiemate_database
     restart: always
     ports:

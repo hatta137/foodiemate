@@ -25,7 +25,6 @@ router.post('/new/', async (req, res) => {
 
         }
 
-
         const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
         const userId = decoded.userId;
 
@@ -141,6 +140,7 @@ router.get('/recipesToDrink/:drink', async (req, res) => {
         const recipes = await Recipe.find({ drink: drink });
         res.json(recipes);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: 'Internal server error' });
     }
 });

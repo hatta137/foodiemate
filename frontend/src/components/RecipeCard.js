@@ -5,7 +5,7 @@ import {
     MDBCardBody,
     MDBCardTitle,
     MDBCardText,
-    MDBBtn, MDBTooltip
+    MDBBtn, MDBTooltip, MDBListGroup, MDBListGroupItem
 } from 'mdb-react-ui-kit';
 import {useAuthHeader, useAuthUser} from "react-auth-kit";
 import axios from "axios";
@@ -43,13 +43,15 @@ const RecipeCard = ({ recipe }) => {
                 <MDBCardBody>
                     <MDBCardTitle>{recipe.title}</MDBCardTitle>
                     <MDBCardText>Zutaten:</MDBCardText>
-                    <MDBCardText><ul>
-                            {recipe.ingredients.map((ingredient) => (
-                                <li key={ingredient._id}>
-                                    {ingredient.amount} {ingredient.unit} {ingredient.name}
-                                </li>
-                            ))}
-                        </ul></MDBCardText>
+                    <MDBListGroup>
+
+                                {recipe.ingredients.map((ingredient) => (
+                                    <MDBListGroupItem key={ingredient._id}>
+                                        {ingredient.amount} {ingredient.unit} {ingredient.name}
+                                    </MDBListGroupItem>
+                                ))}
+
+                        </MDBListGroup>
                     <MDBCardText>Anleitung:</MDBCardText>
                     <MDBCardText>{recipe.instructions}</MDBCardText>
                     <MDBCardText>Drink: {recipe.drink}</MDBCardText>
