@@ -21,6 +21,7 @@ const ShowProfile = () => {
     const location = useLocation();
     const [user, setUser] = useState(location.state.user)
     const navigate = useNavigate()
+    const [message, setMessage] = useState('')
 
 
     const handleFollow = async () => {
@@ -62,7 +63,15 @@ const ShowProfile = () => {
     }
 
     const handleInviteCookingBuddy = async () => {
-
+        try {
+            const data = {
+                emailAddress: user.emailAddress,
+                contactData: message,
+            }
+            const response = await axios.post(`http://${ipAddr}:20065/cookingTogether/inviteCookingBuddy`, data)
+        } catch (error) {
+            console.error("Fehler beim Einladen des Benutzers:", error);
+        }
     }
 
     console.log(user);
@@ -77,6 +86,7 @@ const ShowProfile = () => {
                     <MDBListGroup >
                         <MDBListGroupItem>Cooking Together Date: {user.cookingTogetherDate}</MDBListGroupItem>
                         <MDBListGroupItem>Invite Cooking Buddy?
+                            <input type="text" onChange={(e) => setMessage(e.target.value)} placeholder={'Ihre Nachricht'}/>
                             <button onClick={handleInviteCookingBuddy}>send</button>
                         </MDBListGroupItem>
                     </MDBListGroup>
