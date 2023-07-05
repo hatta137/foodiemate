@@ -11,8 +11,7 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
-    #volumes:
-    #  - ./backend/user_api:/usr/src/app
+
 
     networks:
       - ss2023_wa_foodiemate
@@ -27,8 +26,7 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
-    #volumes:
-    #  - ./backend/recipe_api:/usr/src/app
+
 
     networks:
       - ss2023_wa_foodiemate
@@ -43,8 +41,7 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
-    #volumes:
-    #  - ./backend/cooking_together_api:/usr/src/app
+
 
     networks:
       - ss2023_wa_foodiemate
@@ -83,8 +80,7 @@ services:
 
     environment:
       - REACT_APP_IP_ADDR=194.94.204.27
-    #volumes:
-    #  - ./frontend:/app
+
     networks:
       - ss2023_wa_foodiemate
 
