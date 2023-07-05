@@ -1,5 +1,6 @@
 import {Router} from "express";
 import User from "../models/user.js";
+import Recipe from "../models/recipe.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 

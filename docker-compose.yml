@@ -11,8 +11,6 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
-
-
     networks:
       - ss2023_wa_foodiemate
 
@@ -26,8 +24,6 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
-
-
     networks:
       - ss2023_wa_foodiemate
 
@@ -41,8 +37,6 @@ services:
       - ss2023_wa_foodiemate_database
     environment:
       - MONGO_URI=mongodb://ss2023_wa_foodiemate_database:20062/foodiemate
-
-
     networks:
       - ss2023_wa_foodiemate
 
@@ -55,6 +49,7 @@ services:
     #command: mongod --logpath /var/log/mongodb/mongod.log --logappend --quiet --setParameter logLevel=2
     volumes:
       - ./database:/data/db
+      - ./mongodump:/backup
     networks:
       - ss2023_wa_foodiemate
 

@@ -29,6 +29,20 @@ Der lokale Database Ordner im Stammverzeichnis muss gelöscht werden:
 4. ```git pull```
    Danach funktioniert der Neustart mit den Daten aus dem Git, da der Ordner frisch gezogen wurde.
 
+### Datenbank Backup
+Pfad: /mongodump
+Befehl für Sicherung auf System:
+````
+1. docker exec -it ss2023_wa_foodiemate_database /bin/bash
+2. mongodump --host localhost --port 27017 --db foodiemate --out /backup
+````
+Rücksicherung:
+````
+1. docker exec -it ss2023_wa_foodiemate_database /bin/bash
+2. mongorestore --host localhost --port 27017 --db foodiemate /backup/foodiemate
+````
+
+
 ## Verwendete Bibliotheken und Frameworks
 ### Backend und Datenbank 
 * nodeJS-Bibliothek: Mongoose https://mongoosejs.com/docs/
