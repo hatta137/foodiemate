@@ -10,13 +10,10 @@ import {
     MDBCardImage,
     MDBCardBody,
     MDBCardTitle,
-    MDBCardText,
-    MDBCardLink,
     MDBListGroup,
     MDBListGroupItem
 } from 'mdb-react-ui-kit';
 
-const ipAddr = process.env.REACT_APP_IP_ADDR
 const ShowProfile = () => {
     const location = useLocation();
     const [user, setUser] = useState(location.state.user)
@@ -30,6 +27,7 @@ const ShowProfile = () => {
         };
         console.log(data)
         try {
+            const ipAddr = process.env.REACT_APP_IP_ADDR
             const response = await axios.post(`http://${ipAddr}:20063/users/follow`, data, {
                 withCredentials: true
             });
@@ -46,7 +44,7 @@ const ShowProfile = () => {
         };
 
         try {
-
+            const ipAddr = process.env.REACT_APP_IP_ADDR
             const response = await axios.post(`http://${ipAddr}:20063/users/unfollow`, data,{
                 withCredentials: true
             })
@@ -65,10 +63,13 @@ const ShowProfile = () => {
     const handleInviteCookingBuddy = async () => {
         try {
             const data = {
-                emailAddress: user.emailAddress,
+                email: user.emailAddress,
                 contactData: message,
             }
+            console.log(data)
+            const ipAddr = process.env.REACT_APP_IP_ADDR
             const response = await axios.post(`http://${ipAddr}:20065/cookingTogether/inviteCookingBuddy`, data)
+            console.log(response.data)
         } catch (error) {
             console.error("Fehler beim Einladen des Benutzers:", error);
         }

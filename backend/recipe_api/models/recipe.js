@@ -2,8 +2,6 @@ import mongoose from "mongoose"
 
 const { Schema } = mongoose
 
-
-
 const recipeSchema = new Schema({
 
     title:{
@@ -28,9 +26,5 @@ const recipeSchema = new Schema({
     vegan: Boolean,
     vegetarian: Boolean
 })
-
-
-
-
 
 export default mongoose.model("Recipe", recipeSchema)

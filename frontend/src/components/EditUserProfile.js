@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import {useIsAuthenticated} from 'react-auth-kit';
-import bcrypt from 'bcryptjs'
 import {
     MDBCard,
     MDBCardBody,
-    MDBCardImage, MDBCardLink,
+    MDBCardImage,
     MDBCardText,
     MDBCardTitle,
     MDBListGroup,
@@ -15,22 +14,21 @@ import {
 
 const EditUserProfile = () => {
     const isAuthenticated = useIsAuthenticated();
-    const [userProfile, setUserProfile] = useState(null);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [userName, setUserName] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
     const [passwordUnhash, setPasswordUnhash] = useState('');
-    const saltRounds = 10
     const navigate = useNavigate();
     const [actualUser, setActualUser] = useState(null)
 
-    const ipAddr = process.env.REACT_APP_IP_ADDR;
+
 
     useEffect(() => {
         // Fetch user data from backend
         const fetchUser = async () => {
             try {
+                const ipAddr = process.env.REACT_APP_IP_ADDR;
                 const response = await axios.get(`http://${ipAddr}:20063/users/getUser/`, {
                     withCredentials: true
                 });
@@ -67,6 +65,7 @@ const EditUserProfile = () => {
 
         try {
             if (isAuthenticated()) {
+                const ipAddr = process.env.REACT_APP_IP_ADDR;
                 const response = await axios.put(`http://${ipAddr}:20063/users/update/`, userData, {
                     withCredentials: true
                 });

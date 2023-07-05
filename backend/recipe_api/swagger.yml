@@ -22,31 +22,19 @@ components:
           description: Getränk des Rezepts
 
 paths:
-  /recipes:
+  /:
     get:
-      summary: Alle Rezepte abrufen
+      summary: Recipe entry endpoint
       responses:
         '200':
-          description: Erfolgreich abgerufene Rezepte
+          description: Successful response
           content:
-            application/json:
+            text/plain:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Recipe'
-        '500':
-          description: Serverfehler
-
-  /recipes/new/{userId}:
+                type: string
+  /new/:
     post:
-      summary: Neues Rezept erstellen
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: string
-          description: ID des Benutzers
+      summary: Create a new recipe
       requestBody:
         required: true
         content:
@@ -55,47 +43,105 @@ paths:
               $ref: '#/components/schemas/Recipe'
       responses:
         '200':
-          description: Erfolgreich erstelltes Rezept
+          description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Recipe'
         '500':
-          description: Serverfehler
+          description: Server Error
+          content:
+            application/json:
 
-  /recipes/allRecipes:
+  /allRecipes:
     get:
-      summary: Alle Rezepte abrufen
+      summary: Get all recipes
       responses:
         '200':
-          description: Erfolgreich abgerufene Rezepte
+          description: Successful response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Recipe'
+                $ref: '#/components/schemas/Recipe'
         '500':
-          description: Serverfehler
+          description: Internal Server Error
+          content:
+            application/json:
 
-  /recipes/recipeByTitle:
+  /recipeByTitle:
     get:
-      summary: Rezept nach Titel abrufen
+      summary: Get a recipe by title
       parameters:
         - in: query
           name: title
-          required: true
           schema:
             type: string
-          description: Titel des Rezepts
+          required: true
       responses:
         '200':
-          description: Erfolgreich abgerufenes Rezept
+          description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Recipe'
         '404':
-          description: Rezept nicht gefunden
+          description: Recipe not found
+          content:
+            application/json:
+
         '500':
-          description: Serverfehler
+          description: Internal Server Error
+          content:
+            application/json:
+
+  /recipeByCount:
+    get:
+      summary: Get recipes by count
+      parameters:
+        - in: query
+          name: count
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '404':
+          description: Recipes not found
+          content:
+            application/json:
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+
+  /recipesToDrink/{drink}:
+    get:
+      summary: Get recipes by drink
+      parameters:
+        - in: path
+          name: drink
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+
+  /recipeOfTheDay:
+    get:
+      summary: Get recipe of the day
+      responses:

@@ -27,11 +27,14 @@ router.get("/findCookingBuddy",async (req, res) => {
     }
 });
 
-
-
 router.post("/inviteCookingBuddy", async (req, res) => {
     const { email, contactData } = req.body;
+
+    // API Key from SendGrid-API
     const apiKey = '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';
+
+    console.log(email)
+    console.log(contactData)
 
     sgMail.setApiKey(apiKey);
 
@@ -53,6 +56,3 @@ router.post("/inviteCookingBuddy", async (req, res) => {
     }
 });
 export { router }
-
-
-

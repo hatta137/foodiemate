@@ -1,4 +1,4 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css'
 import React, { useState } from 'react';
 import {
@@ -13,15 +13,12 @@ import {
     MDBCollapse
 } from 'mdb-react-ui-kit';
 import Search from "./Search";
-import FMLogo from "../assets/FM_LOGO_WB_B.png";
 
 export default function Navbar() {
 
 
 
-    const [showNavColor, setShowNavColor] = useState(false);
     const [showNavColorSecond, setShowNavColorSecond] = useState(false);
-    const [showNavColorThird, setShowNavColorThird] = useState(false);
 
     return (
         <>

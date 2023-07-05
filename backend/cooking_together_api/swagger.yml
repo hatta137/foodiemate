@@ -1,0 +1,81 @@
+
+paths:
+  /:
+    get:
+      summary: Entry endpoint
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+  /findCookingBuddy:
+    get:
+      summary: Get cooking buddies
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    users:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          date:
+                            type: string
+                            description: Cooking together date
+                          username:
+                            type: string
+                            description: Username of the User with CTD set
+                          email:
+                            type: string
+                            description: Email address of the User with CTD set
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /inviteCookingBuddy:
+    post:
+      summary: Invite a cooking buddy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Email address of the cooking buddy
+                contactData:
+                  type: string
+                  description: Contact information for the cooking buddy
+      responses:
+          '200':
+            description: Successful response
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+          '500':
+            description: Failed to send email
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string

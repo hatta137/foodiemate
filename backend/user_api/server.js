@@ -15,7 +15,23 @@ mongoose.connect("mongodb://ss2023_wa_foodiemate_database/foodiemate")
 
 
 const app = express()
-app.use(cors());
+const allowedOrigins = [
+    'http://localhost:20061',
+    'http://localhost:20062',
+    'http://localhost:20063',
+    'http://localhost:20064',
+    'http://localhost:20065',
+    'http://194.94.204.27:20061',
+    'http://194.94.204.27:20062',
+    'http://194.94.204.27:20063',
+    'http://194.94.204.27:20064',
+    'http://194.94.204.27:20065',
+];
+
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+}));
 
 app.use(express.json())
 
@@ -81,7 +97,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:20063",
+                url: "http://localhost:20063/users",
                 description: "USER_API",
             },
         ],

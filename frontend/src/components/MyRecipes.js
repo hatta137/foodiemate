@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RecipeCard from "./RecipeCard";
-import { useNavigate } from "react-router-dom";
 
 const ipAddr = process.env.REACT_APP_IP_ADDR
 
 const MyRecipes = () => {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -21,8 +19,7 @@ const MyRecipes = () => {
                     setRecipes(response.data.myRecipes);
 
                 } else {
-                    // alert('Keine eigenen Rezepte gefunden')
-                    navigate("/recipes");
+                    alert('Keine eigenen Rezepte gefunden')
                 }
 
                 setLoading(false);

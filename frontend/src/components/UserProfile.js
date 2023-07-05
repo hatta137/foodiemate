@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ListFollowers from "./ListFollowers";
 
 import {
     MDBCard,
@@ -14,7 +13,7 @@ import {
     MDBListGroupItem
 } from 'mdb-react-ui-kit';
 
-const ipAddr = process.env.REACT_APP_IP_ADDR
+
 const UserProfile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -25,6 +24,7 @@ const UserProfile = () => {
         // Fetch user data from backend
         const fetchUser = async () => {
             try {
+                const ipAddr = process.env.REACT_APP_IP_ADDR
                 const response = await axios.get(`http://${ipAddr}:20063/users/getUser/`, {
                     withCredentials: true
                 });
@@ -46,6 +46,7 @@ const UserProfile = () => {
 
     const handleDeleteProfile = async () => {
         try {
+            const ipAddr = process.env.REACT_APP_IP_ADDR
             const response = await axios.delete(`http://${ipAddr}:20063/users/deleteUser/`, {
                 withCredentials: true
             })
@@ -60,14 +61,11 @@ const UserProfile = () => {
         }
     };
 
-    /*const handleEditProfile = () => {
-        navigate('/editUserProfile', { state: { actualUser: user } });
-    };*/
 
     const handleCTG = async (e) => {
         e.preventDefault();
         try {
-
+            const ipAddr = process.env.REACT_APP_IP_ADDR
             const response = await axios.put(`http://${ipAddr}:20063/users/setCookingTogetherDate/`, {
                 cookingTogetherDate: date
             }, {
@@ -86,13 +84,13 @@ const UserProfile = () => {
     const handleCTGdelete = async (e) => {
         e.preventDefault();
         try {
-
+            const ipAddr = process.env.REACT_APP_IP_ADDR
             const response = await axios.delete(`http://${ipAddr}:20063/users/removeCookingTogetherDate`, {
                 withCredentials: true
             })
-
+            console.log(response.data)
         } catch (error) {
-
+            console.error(error)
         }
     }
 

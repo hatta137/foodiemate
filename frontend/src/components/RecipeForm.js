@@ -4,7 +4,6 @@ import {useIsAuthenticated} from 'react-auth-kit';
 
 import {
     MDBCard,
-    MDBCardImage,
     MDBCardBody,
     MDBCardTitle,
     MDBCardText,
