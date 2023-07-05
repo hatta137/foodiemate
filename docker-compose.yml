@@ -83,6 +83,7 @@ services:
 
     environment:
       - REACT_APP_IP_ADDR=194.94.204.27
+      -
     #volumes:
     #  - ./frontend:/app
     networks:
