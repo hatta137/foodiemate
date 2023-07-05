@@ -12,12 +12,22 @@
 docker compose up
 ```
 
-## Bug-fixing wenn docker compose up fehlschlägt
-1. /node_modules - Ordner in den folgenden Ordnern löschen und "npm install" in diesen Ordnern ausführen (Terminal):
-* cooking_together_api
-* recipe_api
-* user_api
-* frontend
+## Bug-fixing 
+### --> wenn die Datenbank nicht startet
+#### Reason:
+Die Daten im Database-Ordner werden als inkonsistent erkannt. Erkennbar an WiredTiger-Fehlermeldung.
+Grund dafür ist, dass die DB im Produktivsystem lief und weitere Daten erzeugt hat.
+Bei einem erneuten Pull kommt die Datenbank nicht mit den Änderungen zurecht.
+#### Solution:
+Der lokale Database Ordner im Stammverzeichnis muss gelöscht werden:
+1. ```git status```
+2. schauen ob der DB Ordner unversioniert ist (bei nur einem Start ohne Änderungen ist das der Fall)
+   wenn ja:
+   3a: ```rm -rf database```
+   wenn nein:
+   3b: ```git restore --staged database``` und dann ```git checkout -- database``` und danach ```rm -rf database``` (MacOs)
+4. ```git pull```
+   Danach funktioniert der Neustart mit den Daten aus dem Git, da der Ordner frisch gezogen wurde.
 
 ## Verwendete Bibliotheken und Frameworks
 ### Backend und Datenbank 
@@ -35,29 +45,31 @@ docker compose up
 
 
 ## Container
-### Frontend
+Im Produktivsystem statt localhost -> IP-Adresse
+### ss2023_wa_foodiemate_frontend
 ```
 http://localhost:20061/
 ```
 
-### Datenbank
+### ss2023_wa_foodiemate_database
 ```
 http://localhost:20062/  
+http://194.94.204.27:20062/
 ```
 
-### user_api
+### ss2023_wa_foodiemate_user_api
 ```
 API:        http://localhost:20063/users
 Swagger:    http://localhost:20063/api-docs
 ```
 
-### recipe_api
+### ss2023_wa_foodiemate_recipe_api
 ```
 API:        http://localhost:20064/recipe
 Swagger:    http://localhost:20064/api-docs
 ```
 
-### cooking_together_api
+### ss2023_wa_foodiemate_cooking_together_api
 ```
 API:        http://localhost:20065/cookingTogether
 Swagger:    http://localhost:20065/api-docs
@@ -86,6 +98,54 @@ Body:
     "email": "max@mustermann.de",
     "contactData": "Meine Kontaktdaten"
 }
+```
+
+## getRecipeToDrink
+
+Die "getRecipeToDrink" - API erwartet als param den Key: Drink und als Value ein beliebiges Getränk und liefert ein dazu passendes Gericht.
+```
+GET http://localhost:20064/recipe/recipesToDrink/Bier
+
+Testbar mit Bier, Wasser und Rotwein
+```
+
+## RecipeOfTheDay
+Die "RecipeOfTheDay" - API liefert ein zufälliges Rezept aus der Datenbank.
+
+
+# Testen des Backends
+Folgende Funktionalitäten sind z.B. via Postman testbar:
+## user_api
+```
+POST http://localhost:20063/users/register
+Body:
+{
+    "firstName": "Max",
+    "lastName": "Mustermann",
+    "userName": "userMaxMustermann",
+    "emailAddress": "max@mm.de",
+    "password": "pass"
+}
+
+POST http://localhost:20063/users/login
+Body:
+{
+  "userName": "userMaxMustermann",
+  "password": "pass"
+}
+
+GET http://localhost:20063/users/getUserCTG
+
+GET http://localhost:20063/users/getByUserName?userName=userMaxMustermann
+```
+Alle anderen Funktionen der user_api lassen sich besser über das Frontend testen, da einige der Funktionen auf der Anmeldung und übergebener Authentifikation basiert.
+
+
+## recipe_api
+```
+```
+## cookingTogetherApi
+```
 ```
 
 ## Backup package-json

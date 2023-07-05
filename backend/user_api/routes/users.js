@@ -1,6 +1,5 @@
 import {Router} from "express";
 import User from "../models/user.js";
-import Recipe from "../models/recipe.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
@@ -23,31 +22,38 @@ router.get("/allUsers", async (_req, res) => {
 router.post("/login", async (req, res) => {
     try {
         const { userName, password } = req.body;
+
         console.log(password);
+
         console.log(userName);
 
         const user = await User.findOne({ userName });
 
         if (!user) {
             console.log("Benutzer nicht gefunden");
+
             return res.status(401).json({ error: 'Benutzer nicht gefunden' });
         }
 
         // Überprüfe das Passwort
         const isMatch = await user.comparePassword(password);
+
         if (!isMatch) {
             console.log("Passwort falsch");
+
             return res.status(401).json({ error: 'Ungültige Benutzerdaten' });
         }
 
         // Erzeuge das JWT-Token
         const token = jwt.sign({ userId: user._id }, 'sehr_geheimer_schluessel');
+
         console.log(token)
+
         return res.cookie("token", token).json({success:true,message:'LoggedIn Successfully', userId: user._id, token: token})
         //return res.status(200).json({ message: "welcome back", token: token });
-
     } catch (err) {
         console.error('Fehler beim Login', err);
+
         res.status(500).json({ error: 'Serverfehler' });
     }
 });
@@ -55,6 +61,7 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", async (req, res) => {
     const data = req.body
+
     const saltRounds = 10
 
     try {
@@ -67,10 +74,13 @@ router.post("/register", async (req, res) => {
             emailAddress: data["emailAddress"],
             password: await bcrypt.hash(password, saltRounds)
         });
+
         await newUser.save();
+
         res.status(200).json({ message: 'User erfolgreich angelegt', user: newUser });
     } catch (err) {
         console.error('Fehler bei Registrierung', err);
+
         res.status(500).json({ error: 'Serverfehler' });
     }
 });
@@ -294,7 +304,6 @@ router.delete("/deleteUser", isAuthenticated, async (req, res) => {
             console.error('Fehler bei Aktualisierung der Daten', err)
             res.status(500).json({error: 'Serverfehler'})
         })
-
 })
 
 router.post('/addRecipe/:userId', async (req, res) => {
@@ -418,7 +427,6 @@ router.get('/getEmailAddress/:userId', async (req, res) => {
 })
 
 router.get('/getUserCTG', async (req, res) => {
-    const  date = req.params.date
 
     try {
 

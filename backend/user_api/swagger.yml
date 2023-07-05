@@ -1,348 +1,333 @@
-/login:
-  post:
-    summary: Benutzeranmeldung
-    description: Authentifiziert den Benutzer und gibt ein JWT-Token zurück.
-    requestBody:
-      required: true
-      content:
-         application/json:
-           schema:
-             type: object
-             properties:
-               userName:
-                 type: string
-               password:
-                 type: string
-    responses:
-       200:
-          description: Erfolgreiche Anmeldung
-          content:
-            application/json:
-              schema:
-                type: string
-                example: Eingeloggt
-       401:
-         description: Ungültige Anmeldeinformationen
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 message:
-                   type: string
-                   example: Ungültige Anmeldeinformationen
-       500:
-         description: Serverfehler
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 error:
-                   type: string
-                   example: Serverfehler
+
+paths:
+  /:
+    get:
+      summary: Get users entry
+      responses:
+        200:
+          description: OK
+          schema:
+            type: string
+  /allUsers:
+    get:
+      summary: Get all users
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+  /login:
+    post:
+      summary: User login
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/LoginRequest"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /register:
+    post:
+      summary: User registration
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/RegisterRequest"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/RegisterResponse"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
 
 
+  /update:
+    put:
+      summary: Update user data
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateRequest"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/UpdateResponse"
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
 
+  /getByUserName/:
+    get:
+      summary: Get user by username
+      parameters:
+        - in: query
+          name: userName
+          type: string
+          required: true
+          description: The username of the user to retrieve
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
 
-/register:
-  post:
-    summary: Registrierung eines neuen Benutzers
-    description: Registriert einen neuen Benutzer mit den angegebenen Daten.
-    requestBody:
-      required: true
-      content:
-        application/json:
+  /getUser:
+    get:
+      summary: Get current user
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /follow:
+    post:
+      summary: Follow a user
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: followerId
+          in: body
+          description: ID of the user to follow
+          required: true
           schema:
             type: object
             properties:
-              firstName:
+              followerId:
                 type: string
-                description: Vorname des Benutzers.
-              lastName:
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
                 type: string
-                description: Nachname des Benutzers.
-              userName:
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /getfollowers:
+    get:
+      summary: Get the followers of the current user
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              followers:
+                type: array
+                items:
+                  $ref: "#/definitions/User"
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /unfollow:
+    post:
+      summary: Unfollow a user
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: userId
+          in: body
+          description: ID of the user to unfollow
+          required: true
+          schema:
+            type: object
+            properties:
+              userId:
                 type: string
-                description: Benutzername des Benutzers.
-              emailAddress:
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
                 type: string
-                format: email
-                description: E-Mail-Adresse des Benutzers.
-              password:
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: User not found or not followed
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /deleteUser:
+    delete:
+      summary: Delete the current user
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
                 type: string
-                format: password
-                description: Passwort des Benutzers.
-    responses:
-      200:
-        description: Erfolgreiche Registrierung.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  description: Erfolgsmeldung.
-                user:
-                  type: object
-                  description: Informationen über den neu registrierten Benutzer.
-                  properties:
-                    firstName:
-                      type: string
-                      description: Vorname des Benutzers.
-                    lastName:
-                      type: string
-                      description: Nachname des Benutzers.
-                    userName:
-                      type: string
-                      description: Benutzername des Benutzers.
-                    emailAddress:
-                      type: string
-                      format: email
-                      description: E-Mail-Adresse des Benutzers.
-      500:
-        description: Serverfehler bei der Registrierung.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  description: Fehlernachricht.
+        401:
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
 
-
-
-/update/{userId}:
-  put:
-    summary: Aktualisiert die Daten eines Benutzers
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        description: Die ID des Benutzers, dessen Daten aktualisiert werden sollen
-        schema:
+  /addRecipe/{userId}:
+    post:
+      summary: Add a recipe to a user
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user to add the recipe to
+          required: true
           type: string
-      - in: body
-        name: updateData
-        required: true
-        description: Die zu aktualisierenden Daten des Benutzers
-        schema:
-          type: object
-          properties:
-            firstName:
-              type: string
-            lastName:
-              type: string
-            userName:
-              type: string
-            emailAddress:
-              type: string
-    responses:
-      200:
-        description: Erfolgreiche Aktualisierung der Benutzerdaten
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
+        - name: recipeId
+          in: body
+          description: ID of the recipe to add
+          required: true
+          schema:
+            type: object
+            properties:
+              recipeId:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
 
-      404:
-        description: Benutzer nicht gefunden
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-      500:
-        description: Serverfehler
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-
-
-
-/{userId}/follow:
-  post:
-    summary: Füge einen Follower zu einem Benutzer hinzu
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        description: Die ID des Benutzers, dem der Follower hinzugefügt werden soll
-        schema:
+  /dropRecipe/{userId}:
+    post:
+      summary: Remove a recipe from a user
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user to remove the recipe from
+          required: true
           type: string
-      - in: body
-        name: followerId
-        required: true
-        description: Die ID des Followers, der hinzugefügt werden soll
-        schema:
-          type: object
-          properties:
-            followerId:
-              type: string
-    responses:
-      '200':
-        description: Erfolgreich. Der Follower wurde dem Benutzer hinzugefügt.
-      '404':
-        description: Nicht gefunden. Der Benutzer oder der Follower wurde nicht gefunden.
-      '500':
-        description: Serverfehler. Ein Fehler ist aufgetreten.
+        - name: recipeId
+          in: body
+          description: ID of the recipe to remove
+          required: true
+          schema:
+            type: object
+            properties:
+              recipeId:
+                type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
 
-
-
-/{userId}/followers:
-  get:
-    summary: Abrufen der Follower eines Benutzers
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        description: Die ID des Benutzers, dessen Follower abgerufen werden sollen
-        schema:
-          type: string
-    responses:
-      '200':
-        description: Erfolgreich. Die Liste der Follower des Benutzers wurde abgerufen.
-      '404':
-        description: Nicht gefunden. Der Benutzer wurde nicht gefunden.
-      '500':
-        description: Serverfehler. Ein Fehler ist aufgetreten.
-    produces:
-      - application/json
-    security:
-      - bearerAuth: []
-
-
-/{userId}/unfollow:
-  post:
-    summary: Entfolgen eines Benutzers
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        description: Die ID des Benutzers, von dem entfolgt werden soll
-        schema:
-          type: string
-      - in: body
-        name: followerId
-        required: true
-        description: Die ID des Benutzers, der entfolgen soll
-        schema:
-          type: object
-          properties:
-            followerId:
-              type: string
-    responses:
-      '200':
-        description: Erfolgreich. Der Benutzer wurde erfolgreich entfolgt.
-      '404':
-        description: Nicht gefunden. Der Benutzer wurde nicht gefunden oder ist nicht unter den Followern.
-      '500':
-        description: Serverfehler. Ein Fehler ist aufgetreten.
-    consumes:
-      - application/json
-    produces:
-      - application/json
-    security:
-      - bearerAuth: []
-
-
-/deleteUser/{userId}:
-  delete:
-    summary: Löschen eines Benutzers
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        description: Die ID des zu löschenden Benutzers
-        schema:
-          type: string
-    responses:
-      '200':
-        description: Erfolgreich. Die Daten des Benutzers wurden erfolgreich gelöscht.
-      '404':
-        description: Nicht gefunden. Der Benutzer wurde nicht gefunden.
-      '500':
-        description: Serverfehler. Ein Fehler ist aufgetreten.
-    produces:
-      - application/json
-    security:
-      - bearerAuth: []
-
-/addRecipe/{userId}:
-  post:
-    summary: Hinzufügen eines Rezepts zu einem Benutzer
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        description: Die ID des Benutzers, dem das Rezept hinzugefügt werden soll
-        schema:
-          type: string
-      - in: body
-        name: request
-        description: Das Rezept, das hinzugefügt werden soll
-        required: true
-        schema:
-          type: object
-          properties:
-            recipeId:
-              type: string
-              description: Die ID des Rezepts
-    responses:
-      '200':
-        description: Erfolgreich. Das Rezept wurde dem Benutzer erfolgreich hinzugefügt.
-      '404':
-        description: Nicht gefunden. Der Benutzer wurde nicht gefunden.
-      '500':
-        description: Interner Serverfehler. Ein Fehler ist aufgetreten.
-    produces:
-      - application/json
-    security:
-      - bearerAuth: []
-
-
-/dropRecipe/{userId}:
-  post:
-    summary: Entfernen eines Rezepts von einem Benutzer
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        description: Die ID des Benutzers, von dem das Rezept entfernt werden soll
-        schema:
-          type: string
-      - in: body
-        name: request
-        description: Das Rezept, das entfernt werden soll
-        required: true
-        schema:
-          type: object
-          properties:
-            recipeId:
-              type: string
-              description: Die ID des Rezepts
-    responses:
-      '200':
-        description: Erfolgreich. Das Rezept wurde erfolgreich vom Benutzer entfernt.
-      '404':
-        description: Nicht gefunden. Der Benutzer wurde nicht gefunden.
-      '500':
-        description: Interner Serverfehler. Ein Fehler ist aufgetreten.
-    produces:
-      - application/json
-    security:
-      - bearerAuth: []
 
 components:
   schemas:
@@ -375,3 +360,253 @@ components:
             type: string
             description: ID des Rezepts
           description: Liste der Rezepte des Benutzers
+
+  /setCookingTogetherDate:
+    put:
+      summary: Set cooking together date for a user
+      parameters: []
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              user:
+                $ref: "#/definitions/User"
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /removeCookingTogetherDate:
+    delete:
+      summary: Remove cooking together date for a user
+      parameters: []
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              user:
+                $ref: "#/definitions/User"
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /getEmailAddress/{userId}:
+    get:
+      summary: Get email address for a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              email:
+                type: string
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /getUserCTG:
+    get:
+      summary: Get users with cooking together date
+      parameters: []
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              users:
+                type: array
+                items:
+                  $ref: "#/definitions/User"
+        404:
+          description: No users found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /getUserNameById/{userId}:
+    get:
+      summary: Get username by ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              userName:
+                type: string
+        404:
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /getMyRecipes:
+    get:
+      summary: Get recipes for the authenticated user
+      parameters: []
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              myRecipes:
+                type: array
+                items:
+                  $ref: "#/definitions/Recipe"
+        404:
+          description: No recipes found for the user
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/Error"
+
+securityDefinitions:
+  cookieAuth:
+    type: apiKey
+    name: _auth
+    in: cookie
+
+
+definitions:
+  LoginRequest:
+    type: object
+    properties:
+      userName:
+        type: string
+      password:
+        type: string
+  LoginResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+      message:
+        type: string
+      userId:
+        type: string
+      token:
+        type: string
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+  RegisterRequest:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      userName:
+        type: string
+      emailAddress:
+        type: string
+      password:
+        type: string
+  RegisterResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      user:
+        $ref: "#/definitions/User"
+  User:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      userName:
+        type: string
+      emailAddress:
+        type: string
+      password:
+        type: string
+  Recipe:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      ingredients:
+        type: array
+        items:
+          type: string
+      instructions:
+        type: string
+  UpdateRequest:
+    type: object
+    properties:
+      passwordUnhash:
+        type: string
+      userName:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      emailAdrress:
+        type: string
+  UpdateResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      user:
+        $ref: "#/definitions/User"
