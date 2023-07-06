@@ -47,8 +47,10 @@ services:
     ports:
       - 20062:27017
     #command: mongod --logpath /var/log/mongodb/mongod.log --logappend --quiet --setParameter logLevel=2
+    #command: mongorestore --host localhost --port 27017 --db foodiemate /backup/foodiemate
     volumes:
       - ./database:/data/db
+      - ./mongorestore.sh:/docker-entrypoint-initdb.d/mongorestore.sh
       - ./mongodump:/backup
     networks:
       - ss2023_wa_foodiemate
