@@ -17,9 +17,6 @@ router.get("/allUsers", async (_req, res) => {
     res.json(data)
 })
 
-
-
-
 router.post("/login", async (req, res) => {
     try {
         const { userName, password } = req.body;
@@ -86,7 +83,6 @@ router.post("/register", async (req, res) => {
     }
 });
 
-
 router.put("/update", isAuthenticated, async (req, res) => {
     const saltRounds = 10
     try {
@@ -123,7 +119,6 @@ router.put("/update", isAuthenticated, async (req, res) => {
     }
 });
 
-
 router.get('/getByUserName/', async (req, res) => {
     try {
         const name = req.query.userName;
@@ -139,7 +134,6 @@ router.get('/getByUserName/', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' })
     }
 });
-
 
 router.get('/getUser', isAuthenticated, async (req, res) => {
     try {

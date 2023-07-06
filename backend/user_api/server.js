@@ -55,10 +55,6 @@ const port = 20063
     next();
 });*/
 
-
-
-
-
 const sessionStore = MongoStore.create({
     mongoUrl: 'mongodb://ss2023_wa_foodiemate_database/foodiemate', // MongoDB-Verbindungs-URL
     collectionName: 'sessions', // Name der MongoDB-Sessions-Sammlung
