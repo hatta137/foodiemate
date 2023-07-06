@@ -63,7 +63,7 @@ services:
       - 20061:20061
 
     environment:
-      - REACT_APP_IP_ADDR=localhost
+      - REACT_APP_IP_ADDR=194.94.204.27
 
     networks:
       - ss2023_wa_foodiemate

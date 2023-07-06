@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import {AuthProvider, RequireAuth} from "react-auth-kit";
 
 import App from './App';
-import Hallo from './components/Hallo'
 import Navbar from "./components/Navbar";
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -42,7 +41,6 @@ root.render(
               <Route path="/" element={<Navbar />}>
                   <Route path=""                element={ <Home />} />
                   <Route path="restaurants"     element={ <Restaurants />} />
-                  <Route path="hallo"           element={ <Hallo />} />
                   <Route path="login"           element={ <App />} />
                   <Route path="logOut"          element={ <Logout />} />
                   <Route path="feed"            element={ <RequireAuth loginPath={'/login'}><Feed /></RequireAuth>} />

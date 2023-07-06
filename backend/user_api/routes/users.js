@@ -441,7 +441,6 @@ router.get('/getUserCTG', async (req, res) => {
 router.get('/getUserNameById/:userId', async (req, res)=> {
 
     try {
-
         const userId = req.params.userId;
 
         const userName = User.findById(userId).select('userName')
@@ -451,13 +450,9 @@ router.get('/getUserNameById/:userId', async (req, res)=> {
         } else {
             res.status(404).json({ message: 'keine User mit dieser ID' })
         }
-
-
-
     }catch (error) {
         res.status(500).json({ error: 'Internal Server Error' })
     }
-
 })
 
 router.get('/getMyRecipes', isAuthenticated, async (req, res) => {
