@@ -155,9 +155,30 @@ Alle anderen Funktionen der user_api lassen sich besser über das Frontend teste
 
 ## recipe_api
 ```
+GET http://localhost:20064/recipe/allRecipes
+
+GET http://localhost:20064/recipe/recipeByTitle?title=Nudelsalat
+
+GET http://localhost:20064/recipe/recipeByCount
+Body:
+{
+    "count": 5
+}
+
+GET http://localhost:20064/recipe/recipesToDrink/Bier
+
+GET http://localhost:20064/recipe/recipeOfTheDay
 ```
 ## cookingTogetherApi
 ```
+GET http://localhost:20065/cookingTogether/findCookingBuddy
+
+GET http://localhost:20065/cookingTogether/inviteCookingBuddy
+Body
+{
+    "email": "EMAILADDRESS OF COOKINGBUDDY",
+    "contactData": "YOUR MESSAGE"
+}
 ```
 
 # Testen des Frontends
