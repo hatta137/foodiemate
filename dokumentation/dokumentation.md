@@ -193,6 +193,11 @@ Als Nächstes das Formular ausfüllen:
 
 ## Login
 Um die Funktionen der WebApp zu testen, muss sich der User zunächst Authentifizieren. Um zum Login zu gelangen, wählt man oben rechts das öffnende Tür-Symbol:
+Testuser:
+
+userName: h.lendeckel password: pass
+
+userName: m.engel password: pass
 
 ![Login.png](assets%2FLogin.png)
 
