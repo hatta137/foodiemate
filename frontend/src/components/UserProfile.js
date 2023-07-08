@@ -17,8 +17,7 @@ import {
 const UserProfile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const [follower, setFollower] = useState([])
-    const [date, setDate] = useState('')
+    const [date, setDate] = useState('');
 
     useEffect(() => {
         // Fetch user data from backend
@@ -38,11 +37,6 @@ const UserProfile = () => {
 
         fetchUser();
     }, []);
-
-    const handleUnfollow = (followerId) => {
-        // Handle unfollow logic here
-        console.log(`Unfollow user with ID: ${followerId}`);
-    };
 
     const handleDeleteProfile = async () => {
         try {

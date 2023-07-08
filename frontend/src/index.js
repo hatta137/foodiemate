@@ -17,6 +17,7 @@ import './styles/SearchBox.css'
 import './styles/Home.css'
 import './styles/UserProfile.css'
 import './styles/NewRecipe.css'
+import './styles/Grillomat.css'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Feed from "./components/Feed";
@@ -28,6 +29,7 @@ import Restaurants from "./components/Restaurants";
 import ShowProfile from "./components/ShowProfile";
 import Search from "./components/Search";
 import MyRecipes from "./components/MyRecipes";
+import ShowGrillomat from "./components/ShowGrillomat";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -43,6 +45,7 @@ root.render(
                   <Route path="restaurants"     element={ <Restaurants />} />
                   <Route path="login"           element={ <App />} />
                   <Route path="logOut"          element={ <Logout />} />
+                  <Route path="showGrillomat"   element={ <ShowGrillomat />} />
                   <Route path="feed"            element={ <RequireAuth loginPath={'/login'}><Feed /></RequireAuth>} />
                   <Route path="recipes"         element={ <RequireAuth loginPath={'/login'}><Recipes /></RequireAuth>} />
                   <Route path="newRecipe"       element={ <RequireAuth loginPath={'/login'}><RecipeForm /></RequireAuth>} />
