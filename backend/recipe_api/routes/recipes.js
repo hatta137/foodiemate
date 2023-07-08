@@ -11,7 +11,7 @@ const recipeUrl = 'https://api.spoonacular.com/recipes/analyze';
 const router = Router()
 
 router.get("/", async (req, res) => (
-    res.send("recipe entry")
+    res.status(200).send("recipe entry")
 ))
 
 router.post('/new/', async (req, res) => {
@@ -97,7 +97,7 @@ router.get('/allRecipes', async (req, res) => {
     try {
         const data = await Recipe.find()
 
-        res.json(data)
+        res.status(200).json(data)
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' })
     }
@@ -159,7 +159,7 @@ router.get('/recipeOfTheDay', async (req, res) => {
 
         const recipe = await Recipe.findOne().skip(randomIndex);
 
-        res.json(recipe);
+        res.status(200).json(recipe);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
     }

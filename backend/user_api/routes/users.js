@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 
 router.get("/allUsers", async (_req, res) => {
     const data = await User.find()
-    res.json(data)
+    res.status(200).json(data)
 })
 
 router.post("/login", async (req, res) => {
@@ -182,7 +182,7 @@ router.post('/follow', isAuthenticated, async (req, res) => {
 
         if (!user) {
             console.log("Benutzer nicht gefunden");
-            return res.status(401).json({ error: 'Benutzer nicht gefunden' });
+            return res.status(404).json({ error: 'Benutzer nicht gefunden' });
         }
 
         if(!user) {

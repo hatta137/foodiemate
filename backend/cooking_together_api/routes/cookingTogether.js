@@ -5,7 +5,7 @@ import sgMail from '@sendgrid/mail';
 const router = Router()
 
 router.get("/", async (req, res) => (
-    res.send("cookingTogether entry")
+    res.status(200).send("cookingTogether entry")
 ))
 
 router.get("/findCookingBuddy",async (req, res) => {
