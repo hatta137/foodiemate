@@ -25,7 +25,7 @@ import Recipes from "./components/Recipes";
 import EditUserProfile from "./components/EditUserProfile";
 import Logout from "./components/Logout";
 import UserProfile from "./components/UserProfile";
-import Restaurants from "./components/Restaurants";
+import Grillomat from "./components/Grillomat";
 import ShowProfile from "./components/ShowProfile";
 import Search from "./components/Search";
 import MyRecipes from "./components/MyRecipes";
@@ -42,7 +42,7 @@ root.render(
           <Routes>
               <Route path="/" element={<Navbar />}>
                   <Route path=""                element={ <Home />} />
-                  <Route path="restaurants"     element={ <Restaurants />} />
+                  <Route path="grillomat"     element={ <Grillomat />} />
                   <Route path="login"           element={ <App />} />
                   <Route path="logOut"          element={ <Logout />} />
                   <Route path="showGrillomat"   element={ <ShowGrillomat />} />

@@ -1,6 +1,7 @@
 # Projektgruppe: ss_2023_wa_foodiemate
 ## Maris Engel & Hendrik Lendeckel
 
+
 ## Installation
 
 1. git clone https://git.ai.fh-erfurt.de/ma4163sp1/wa/ss23/ss_2023_wa_foodieamte.git
@@ -243,7 +244,9 @@ Er kann diese über den "Speichern" Button zu seinen Rezepten hinzufügen:
 
 ![NeuesRezept.png](assets%2FNeuesRezept.png)
 
-
+## Grillomat der Gruppe AuroraTwo
+Über den Link Grillomat wird die API Grillomat der Projektgruppe Aurora Two eingebunden:
+![Grillomat.png](assets%2FGrillomat.png)
 
 
 ## Quellen

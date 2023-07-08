@@ -39,7 +39,7 @@ export default function Navbar() {
                         <MDBNavbarNav className="me-auto mb-2 mb-lg-0">
                             <MDBNavbarItem className="active"><MDBNavbarLink aria-current="page" href="/">Home</MDBNavbarLink></MDBNavbarItem>
                             {/*<MDBNavbarItem>     <MDBNavbarLink href="/home"><img className={"FM-Logo-HL"} src={FMLogo} alt="LogoFM"/></MDBNavbarLink></MDBNavbarItem>*/}
-                            <MDBNavbarItem>     <MDBNavbarLink href="/restaurants">Restaurants</MDBNavbarLink></MDBNavbarItem>
+                            <MDBNavbarItem>     <MDBNavbarLink href="/grillomat">Grillomat</MDBNavbarLink></MDBNavbarItem>
                             <MDBNavbarItem>     <MDBNavbarLink href="/login">Login</MDBNavbarLink></MDBNavbarItem>
                             <MDBNavbarItem>     <MDBNavbarLink href="/newRecipe">Neues Rezept</MDBNavbarLink></MDBNavbarItem>
                             <MDBNavbarItem>     <MDBNavbarLink href="/myRecipes">Meine Rezepte</MDBNavbarLink></MDBNavbarItem>

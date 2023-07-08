@@ -24,17 +24,18 @@ const UserProfile = () => {
         const fetchUser = async () => {
             try {
                 const ipAddr = process.env.REACT_APP_IP_ADDR
+
                 const response = await axios.get(`http://${ipAddr}:20063/users/getUser/`, {
                     withCredentials: true
                 });
                 setUser(response.data.user);
+
                 console.log(response.data.user)
 
             } catch (error) {
                 console.error(error);
             }
         };
-
         fetchUser();
     }, []);
 
