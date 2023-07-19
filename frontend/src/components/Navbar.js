@@ -44,7 +44,7 @@ export default function Navbar() {
                             <MDBNavbarItem>     <MDBNavbarLink href="/newRecipe">Neues Rezept</MDBNavbarLink></MDBNavbarItem>
                             <MDBNavbarItem>     <MDBNavbarLink href="/myRecipes">Meine Rezepte</MDBNavbarLink></MDBNavbarItem>
                             <MDBNavbarItem>     <MDBNavbarLink href="/recipes">Alle Rezepte</MDBNavbarLink></MDBNavbarItem>
-                            <MDBNavbarItem className="ms-auto"></MDBNavbarItem>
+                            <MDBNavbarItem  className="ms-auto"></MDBNavbarItem>
                             <MDBNavbarItem>     <Search></Search></MDBNavbarItem>
                             <MDBNavbarItem>     <MDBNavbarLink className="ms-auto" href="/profile"><MDBIcon fas icon="user" /></MDBNavbarLink></MDBNavbarItem>
                             <MDBNavbarItem>     <MDBNavbarLink href="/login"><MDBIcon fas icon="sign-in-alt" /></MDBNavbarLink></MDBNavbarItem>
