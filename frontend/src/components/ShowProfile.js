@@ -88,12 +88,12 @@ const ShowProfile = () => {
                         <MDBListGroupItem>Cooking Together Date: {user.cookingTogetherDate}</MDBListGroupItem>
                         <MDBListGroupItem>Invite Cooking Buddy?
                             <input type="text" onChange={(e) => setMessage(e.target.value)} placeholder={'Ihre Nachricht'}/>
-                            <button onClick={handleInviteCookingBuddy}>send</button>
+                            <button className={"button-HL"} onClick={handleInviteCookingBuddy}>send</button>
                         </MDBListGroupItem>
                     </MDBListGroup>
                     <MDBCardBody>
-                        <MDBListGroupItem> <button onClick={handleFollow}>Follow</button></MDBListGroupItem>
-                        <MDBListGroupItem> <button onClick={handleUnFollow}>unFollow</button></MDBListGroupItem>
+                        <MDBListGroupItem> <button className={"button-HL"} onClick={handleFollow}>Follow</button></MDBListGroupItem>
+                        <MDBListGroupItem> <button className={"button-HL"} onClick={handleUnFollow}>unFollow</button></MDBListGroupItem>
                     </MDBCardBody>
                 </MDBCard>
             </div>

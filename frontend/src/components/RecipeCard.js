@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {
     MDBCard,
     MDBCardBody,
     MDBCardTitle,
     MDBCardText,
-    MDBBtn, MDBTooltip, MDBListGroup, MDBListGroupItem
+    MDBCollapse, MDBTooltip, MDBListGroup, MDBListGroupItem
 } from 'mdb-react-ui-kit';
 import {useAuthHeader, useAuthUser} from "react-auth-kit";
 import axios from "axios";
@@ -14,6 +14,10 @@ const ipAddr = process.env.REACT_APP_IP_ADDR
 
 const RecipeCard = ({ recipe }) => {
     const authUser  = useAuthUser()
+
+    const [showShow, setShowShow] = useState(false);
+
+    const toggleShow = () => setShowShow(!showShow);
     
     const handleSaveToMyRecipes = async () => {
         try {
@@ -53,14 +57,19 @@ const RecipeCard = ({ recipe }) => {
 
                         </MDBListGroup>
                     <MDBCardText>Anleitung:</MDBCardText>
+                    <button className={"button-HL"} onClick={toggleShow}> Zeig Her </button>
+                    <MDBCollapse show={showShow}>
+
+
                     <MDBCardText>{recipe.instructions}</MDBCardText>
                     <MDBCardText>Drink: {recipe.drink}</MDBCardText>
                     <MDBCardText>Vegan: {recipe.vegan ? "Ja" : "Nein"}</MDBCardText>
                     <MDBCardText>Vegetarisch: {recipe.vegetarian ? "Ja" : "Nein"}</MDBCardText>
-                    <MDBTooltip tag='a' wrapperProps={{ href: '#' }} title="Füge mich zu deiner Rezeptliste hinzu!">
-                        <MDBBtn onClick={handleSaveToMyRecipes}>Speichern</MDBBtn>
-                    </MDBTooltip>
 
+                    </MDBCollapse>
+                    <MDBTooltip tag='a' wrapperProps={{ href: '#' }} title="Füge mich zu deiner Rezeptliste hinzu!">
+                        <button className={"button-HL"} onClick={handleSaveToMyRecipes}>Speichern</button>
+                    </MDBTooltip>
                 </MDBCardBody>
             </MDBCard>
 

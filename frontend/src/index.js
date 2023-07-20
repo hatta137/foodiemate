@@ -18,6 +18,7 @@ import './styles/Home.css'
 import './styles/UserProfile.css'
 import './styles/NewRecipe.css'
 import './styles/Grillomat.css'
+import './styles/General.css'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Feed from "./components/Feed";

@@ -27,9 +27,9 @@ const Grillomat = () => {
             <MDBCard>
             <MDBInputGroup>
                 <MDBInput label='Search' value={city} onChange={handleCityChange} />
-                <MDBBtn rippleColor='dark' onClick={handleGrillomat}>
+                <button className={"button-HL"} onClick={handleGrillomat}>
                     <MDBIcon icon='search' />
-                </MDBBtn>
+                </button>
             </MDBInputGroup>
             {grillData && <ShowGrillomat grillData={grillData} />}
             </MDBCard>
