@@ -15,7 +15,6 @@ const Grillomat = () => {
         try {
             const response = await axios.get(`http://194.94.204.27:20023/grillomat?city=${city}`);
             if (response.status === 200) {
-                console.log(response.data);
                 setGrillData(response.data);
             }
         } catch (error) {
