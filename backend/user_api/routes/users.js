@@ -287,6 +287,17 @@ router.delete("/deleteUser", isAuthenticated, async (req, res) => {
     const decoded = jwt.verify(token, 'sehr_geheimer_schluessel');
     const userId = decoded.userId;
 
+    const allUsers = await User.find({ _id: { $ne: userId } })
+
+    await Promise.all(
+        allUsers.map(async (user) => {
+            if (user.followers.includes(userId)) {
+                user.followers.pop(userId);
+                await user.save();
+            }
+        })
+    )
+
     User.findByIdAndDelete(userId)
         .then((updatedUser) => {
             if (updatedUser){
