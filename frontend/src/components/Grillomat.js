@@ -1,5 +1,5 @@
 import {useState} from "react"
-import {MDBBtn, MDBCard, MDBIcon, MDBInput, MDBInputGroup} from "mdb-react-ui-kit";
+import {MDBBtn, MDBCard, MDBCardTitle, MDBIcon, MDBInput, MDBInputGroup} from "mdb-react-ui-kit";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import ShowGrillomat from "./ShowGrillomat";
@@ -25,8 +25,12 @@ const Grillomat = () => {
     return (
         <div className={'Grillomat-Card-HL'}>
             <MDBCard>
+                <div className={'GrillomatTitle'}>
+
+                    <MDBCardTitle>Grillomat</MDBCardTitle>
+                </div>
             <MDBInputGroup>
-                <MDBInput label='Search' value={city} onChange={handleCityChange} />
+                <MDBInput label='Stadt eingeben' value={city} placeholder={"Stadt eingeben"} onChange={handleCityChange} />
                 <button className={"button-HL"} onClick={handleGrillomat}>
                     <MDBIcon icon='search' />
                 </button>
