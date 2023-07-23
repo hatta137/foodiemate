@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {useSignIn} from "react-auth-kit";
+import {useNavigate} from "react-router-dom";
 
 
 const Register = (props) => {
@@ -9,6 +11,10 @@ const Register = (props) => {
     const [userName, setUserName] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+
+    const signIn = useSignIn();
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -27,6 +33,15 @@ const Register = (props) => {
             if (response.status === 200) {
                 setUserName('')
                 setPassword('')
+
+                signIn({
+                    token: response.data.token,
+                    expiresIn: 3600,
+                    tokenType: 'Bearer',
+                    authState: {userId: response.data.userId}
+                })
+
+                navigate('/recipes')
             } else if (response.status === 401) {
                 alert("Fehler bei der Anmeldung")
             }
